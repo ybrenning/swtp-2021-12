@@ -1,7 +1,7 @@
 {
   "name": "greenide",
 	"displayName": "GreenIDE",
-	"description": "Extension zum erkennen von Energiehotspots",
+	"description": "VSCode Extension zum erkennen von Energiehotspots",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.62.0"
@@ -10,14 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:greenide.helloWorld"
+        "onCommand:greenIDE.start"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "greenide.helloWorld",
-				"title": "Hello World"
+				"command": "greenIDE.start",
+				"title": "GreenIDE"
 			}
 		]
 	},
