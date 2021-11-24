@@ -121,6 +121,8 @@ export class WebviewPanel {
 
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce();
+    const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
+    const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
 
     return `<!DOCTYPE html>
 		<html lang="en">
@@ -132,12 +134,13 @@ export class WebviewPanel {
       -->
       <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
 			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="" rel="stylesheet">
+      <link href="${stylesMainUri}" rel="stylesheet">
       <script nonce="${nonce}">
       </script>
 		</head>
     <body>
     <h1>Welcome to GreenIDE</h1>
+    <button> Rerun </button> <button> Compare </button>
 		</body>
 		</html>`;
   }
