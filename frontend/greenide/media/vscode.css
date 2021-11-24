@@ -89,3 +89,16 @@ input::placeholder,
 textarea::placeholder {
 	color: var(--vscode-input-placeholderForeground);
 }
+
+figure {
+	float: left;
+	text-align: left;
+	text-indent: 0;
+	margin: 0.5em;
+	padding: 0.5em;
+}
+
+figcaption {
+	margin-top: 1em;
+	margin-bottom: 1em;
+}
