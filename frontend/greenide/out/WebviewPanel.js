@@ -108,8 +108,22 @@ class WebviewPanel {
       </script>
 		</head>
     <body>
-    <h1>Welcome to GreenIDE</h1>
-    <button> Rerun </button> <button> Compare </button>
+    <h1> Welcome to GreenIDE. </h1>
+
+    <figure>
+      <p> <strong> Energy <strong> </p>
+      <img src="https://root.cern/doc/master/pict1_graph.C.png" width="300" />
+      <figcaption> Energy Total: 12374398274 mWs </figcaption>
+      <button> <strong> Rerun </strong> </button>
+    </figure>
+
+    <figure>
+    <p> <strong> Time <strong> </p>
+      <img src="https://root.cern/doc/master/pict1_bent.C.png" width="300" />
+      <figcaption> Time total: 739874192 ms </figcaption>
+      <button> <strong> Compare </strong> </button>
+    </figure>
+    
 		</body>
 		</html>`;
     }

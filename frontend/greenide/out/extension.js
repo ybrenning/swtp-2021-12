@@ -17,7 +17,7 @@ function activate(context) {
     let disposable = vscode.commands.registerCommand('greenIDE.start', () => {
         // The code you place here will be executed every time your command is executed
         // Display a message box to the user
-        vscode.window.showInformationMessage('Hello World from GreenIDE!');
+        vscode.window.showInformationMessage('GreenIDE is now active!');
         WebviewPanel_1.WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
