@@ -1,0 +1,49 @@
+{ 
+    "config":
+    {
+        "root":         false,
+        "BLOCKSIZE":    false,
+        "JOBS":         false,
+        "LEVEL":        false,
+        "CHECKSUM":     false,
+        "SKIP":         false,
+        "NoTransform":  false,
+        "Huffman":      false,
+        "ANS0":         false,
+        "ANS1":         false,
+        "Range":        false,
+        "FPAQ":         false,
+        "TPAQ":         false,
+        "CM":           false,
+        "NoEntropy":    false,
+        "BWTS":         false,
+        "ROLZ":         false,
+        "RLT":          false,
+        "ZRLT":         false,
+        "MTFT":         false,
+        "RANK":         false,
+        "TEXT":         false,
+        "X86":          false
+    },
+
+    "results": 
+    {
+        "energy_total": 0,
+        "time_total":   0,
+    
+        "funktion": [
+        {
+            "name":     "kanzi_1",
+            "location": ["foo.java", 0],
+            "time":     0,
+            "energy":   0
+        },
+        {
+            "name":     "kanzi_2",
+            "location": ["bar.java", 0],
+            "time":     0,
+            "energy":   0    
+        }
+        ]
+    } 
+}
