@@ -142,18 +142,70 @@ export class WebviewPanel {
     <h1> Welcome to GreenIDE. </h1>
 
     <figure>
-      <p> <strong> Energy <strong> </p>
+      <p> <strong> Energy </strong> </p>
       <img src="https://root.cern/doc/master/pict1_graph.C.png" width="300" />
       <figcaption> Energy Total: 12374398274 mWs </figcaption>
       <button> <strong> Rerun </strong> </button>
+    <p> <strong> Configuration settings: </strong> </p>
+    <form>
+    <input type="checkbox" name="root" /> root 
+    <br> </br>
+    <input type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
+    <br> </br>
+    <input type="checkbox" name="JOBS" /> JOBS 
+    <br> </br>
+    <input type="checkbox" name="LEVEL" /> LEVEL
+    <br> </br>
+    <input type="checkbox" name="CHECKSUM" /> CHECKSUM
+    <br> </br>
+    <input type="checkbox" name="SKIP" /> SKIP
+    <br> </br>
+    <input type="checkbox" name="NoTransform" /> NoTransform
+    <br> </br>
+    <input type="checkbox" name="Huffman" /> Huffman
+    <br> </br>
+    <input type="checkbox" name="ANS0" /> ANS0
+    <br> </br>
+    <input type="checkbox" name="ANS1" /> ANS1
+    <br> </br>
+    <input type="checkbox" name="Range" /> Range   
+    </form>
     </figure>
 
     <figure>
-    <p> <strong> Time <strong> </p>
+    <p> <strong> Time </strong> </p>
       <img src="https://root.cern/doc/master/pict1_bent.C.png" width="300" />
       <figcaption> Time total: 739874192 ms </figcaption>
       <button> <strong> Compare </strong> </button>
+    <form>
+    <br> </br>
+    <input type="checkbox" name="FPAQ" /> FPAQ 
+    <br> </br>
+    <input type="checkbox" name="TPAQ" /> TPAQ
+    <br> </br>
+    <input type="checkbox" name="CM" /> CM
+    <br> </br>
+    <input type="checkbox" name="NoEntropy" /> NoEntropy 
+    <br> </br>
+    <input type="checkbox" name="BWTS" /> BWTS
+    <br> </br>
+    <input type="checkbox" name="ROLZ" /> ROLZ
+    <br> </br>
+    <input type="checkbox" name="RLT" /> RLT
+    <br> </br>
+    <input type="checkbox" name="ZRLT" /> ZRLT
+    <br> </br>
+    <input type="checkbox" name="MTFT" /> MTFT
+    <br> </br>
+    <input type="checkbox" name="RANK" /> RANK
+    <br> </br>
+    <input type="checkbox" name="TEXT" /> TEXT
+    <br> </br>
+    <input type="checkbox" name="X86" /> X86
+    </form>
     </figure>
+
+    
     
 		</body>
 		</html>`;
