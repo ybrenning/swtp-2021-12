@@ -20,51 +20,28 @@ function activate(context) {
         vscode.window.showInformationMessage('GreenIDE is now active!');
         WebviewPanel_1.WebviewPanel.createOrShow(context.extensionUri);
     });
-    context.subscriptions.push(disposable);
-    // TODO: register function without having to execute it
-    // Provides command to rerun the analysis
-    let disposable1 = vscode.commands.registerCommand('greenIDE.rerun', () => {
-        //TODO: finish command register
-        // Starts procedure and updates webview panel
-        runAnalysis();
-        WebviewPanel_1.WebviewPanel.createOrShow(context.extensionUri);
-    });
-    context.subscriptions.push(disposable1);
-    // Start DocumentSymbolProvider to find methods
-    context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
+    context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "foo" }, new JavaDocumentSymbolProvider()));
 }
 exports.activate = activate;
-// Performs analysis
-// Procedure order: 1. retreive funtions, 2. provide methods to backend,
-// 3. retreive analysis from backend, 4. display analysis
-function runAnalysis() {
-    // TODO: do procedure order
-}
-// Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
     provideDocumentSymbols(document, token) {
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
             var symbols = [];
-            var containerNumber = 0;
-            // Find 'kanzi.' in document/code
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
-                // Add found kanzi location to object with line
-                if (line.text.includes("kanzi.")) {
+                if (line.text.startsWith("@")) {
                     symbols.push({
                         name: line.text.substr(1),
                         kind: vscode.SymbolKind.Field,
-                        containerName: containerNumber.toString(),
                         location: new vscode.Location(document.uri, line.range)
                     });
-                    containerNumber++;
                 }
             }
-            resolve(symbols);
+            Promise.resolve(symbols);
         });
     }
 }
 // this method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
-//# sourceMappingURL=extension.js.map
+//# sourceMappingURL=extension%20copy.js.map

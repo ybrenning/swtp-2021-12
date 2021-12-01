@@ -18,8 +18,16 @@
 			{
 				"command": "greenIDE.start",
 				"title": "GreenIDE"
+			},
+			{
+				"command": "greenIDE.rerun",
+				"title": "Rerun"
 			}
-		]
+		],
+		"languages": [{
+			"id": "java",
+			"extensions": [".java"]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
