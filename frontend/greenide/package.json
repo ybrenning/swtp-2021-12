@@ -10,16 +10,20 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:greenIDE.start"
+        "onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "greenIDE.start",
+				"command": "greenIDE.run",
 				"title": "GreenIDE"
 			}
-		]
+		],
+		"languages": [{
+			"id": "java",
+			"extensions": [".java"]
+		}]
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",
