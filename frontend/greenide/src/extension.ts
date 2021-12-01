@@ -40,9 +40,19 @@ export function activate(context: vscode.ExtensionContext) {
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis(){
+
+    // header for understanding methods output
+    console.log('Name, line, start pos, end pos');
+
+    // iterate over every saved method from code
     for(var i = 0; i < functions.length; i++){
-        console.log(functions[i].name, functions[i].location.range.start.character ,functions[i].location.range.end.character);
+        console.log(
+            functions[i].name,                              // name of found kanzi method
+            (functions[i].location.range.start.line)+1,     // line of found kanzi method
+            functions[i].location.range.start.character,    // starting column of found kanzi method
+            functions[i].location.range.end.character);     // ending column of found kanzi method
     }
+
     // TODO: do procedure order
 
 }
@@ -68,6 +78,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                                 if(line.text.substring(j-1, k).includes("(")){
                                     
                                     symbols.push({
+                                        // substring only grabbing kanzi method name without braces
                                         name: line.text.substr(j-1, (k-1) - (j-1)),
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
@@ -82,7 +93,10 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                     }
                 }
             }
+
+            // save symbols (all kanzi methods with metadata)
             functions = symbols;
+
             resolve(symbols);
         }); 
     }
