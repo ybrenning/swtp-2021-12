@@ -10,18 +10,14 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:greenIDE.start"
+        "onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "greenIDE.start",
+				"command": "greenIDE.run",
 				"title": "GreenIDE"
-			},
-			{
-				"command": "greenIDE.rerun",
-				"title": "Rerun"
 			}
 		],
 		"languages": [{
