@@ -59,8 +59,7 @@ function runAnalysis(){
 
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
-    public provideDocumentSymbols(document: vscode.TextDocument,
-            token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
+    public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         return new Promise((resolve) => {
             var symbols = [];
             var containerNumber = 0;
@@ -68,15 +67,14 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             // Find 'kanzi.' in document/code
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
-                // Add found kanzi location to object with line
                 if (line.text.includes("kanzi.")) {
+                    //Search line for kanzi method
                     for(var j = 0; j < line.text.length; j++){
-                        //Search line for kanzi method
                         if(!line.text.substring(j).includes("kanzi.")){
+                            //Search for end of full kanzi name
                             for(var k = j; k < line.text.length; k++){
-                                //Search for end of full kanzi name
                                 if(line.text.substring(j-1, k).includes("(")){
-                                    
+                                    // Add found kanzi name and location to object
                                     symbols.push({
                                         // substring only grabbing kanzi method name without braces
                                         name: line.text.substr(j-1, (k-1) - (j-1)),
@@ -93,10 +91,8 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                     }
                 }
             }
-
             // save symbols (all kanzi methods with metadata)
             functions = symbols;
-
             resolve(symbols);
         }); 
     }
