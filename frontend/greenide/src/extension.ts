@@ -48,7 +48,7 @@ function runAnalysis(){
     for(var i = 0; i < functions.length; i++){
         console.log(
             functions[i].name,                              // name of found kanzi method
-            (functions[i].location.range.start.line)+1,     // line of found kanzi method
+            functions[i].location.range.start.line,     // line of found kanzi method
             functions[i].location.range.start.character,    // starting column of found kanzi method
             functions[i].location.range.end.character);     // ending column of found kanzi method
     }
@@ -80,7 +80,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                                         name: line.text.substr(j-1, (k-1) - (j-1)),
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
-                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i, j), new vscode.Position(i, k)))
+                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i+1, j), new vscode.Position(i+1, k)))
                                     })
                                     containerNumber++;
                                     break;
