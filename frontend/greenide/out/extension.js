@@ -34,8 +34,14 @@ exports.activate = activate;
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis() {
+    // header for understanding methods output
+    console.log('Name, line, start pos, end pos');
+    // iterate over every saved method from code
     for (var i = 0; i < functions.length; i++) {
-        console.log(functions[i].name, functions[i].location.range.start.character, functions[i].location.range.end.character);
+        console.log(functions[i].name, // name of found kanzi method
+        (functions[i].location.range.start.line) + 1, // line of found kanzi method
+        functions[i].location.range.start.character, // starting column of found kanzi method
+        functions[i].location.range.end.character); // ending column of found kanzi method
     }
     // TODO: do procedure order
 }
@@ -48,15 +54,16 @@ class JavaDocumentSymbolProvider {
             // Find 'kanzi.' in document/code
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
-                // Add found kanzi location to object with line
                 if (line.text.includes("kanzi.")) {
+                    //Search line for kanzi method
                     for (var j = 0; j < line.text.length; j++) {
-                        //Search line for kanzi method
                         if (!line.text.substring(j).includes("kanzi.")) {
+                            //Search for end of full kanzi name
                             for (var k = j; k < line.text.length; k++) {
-                                //Search for end of full kanzi name
                                 if (line.text.substring(j - 1, k).includes("(")) {
+                                    // Add found kanzi name and location to object
                                     symbols.push({
+                                        // substring only grabbing kanzi method name without braces
                                         name: line.text.substr(j - 1, (k - 1) - (j - 1)),
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
@@ -71,6 +78,7 @@ class JavaDocumentSymbolProvider {
                     }
                 }
             }
+            // save symbols (all kanzi methods with metadata)
             functions = symbols;
             resolve(symbols);
         });
