@@ -31,6 +31,11 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(
         {language: "java"}, new JavaDocumentSymbolProvider()
     ));
+    
+    //Start Hover Provider to create hovers
+    context.subscriptions.push(vscode.languages.registerHoverProvider(
+        {language: "java"}, new GoHoverProvider()
+    ));        
 }
 
 // Performs analysis
@@ -48,7 +53,7 @@ function runAnalysis(){
     for(var i = 0; i < functions.length; i++){
         console.log(
             functions[i].name,                              // name of found kanzi method
-            functions[i].location.range.start.line,     // line of found kanzi method
+            functions[i].location.range.start.line,         // line of found kanzi method
             functions[i].location.range.start.character,    // starting column of found kanzi method
             functions[i].location.range.end.character);     // ending column of found kanzi method
     }
@@ -95,6 +100,25 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             functions = symbols;
             resolve(symbols);
         }); 
+    }
+}
+
+
+
+class GoHoverProvider implements vscode.HoverProvider {
+    public provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.Hover> {
+        //document: currently pen document, position current position of cursor
+        //both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
+        return new Promise((resolve)=> {
+            //Testimplementation of the Hover Provider and texthovers
+            var displaytext: string = "No."
+            
+            if(document.lineAt(position.line).text.includes("kanzi.")){
+                displaytext = "Yes!"
+            }
+
+            resolve(new vscode.Hover(displaytext))
+        });
     }
 }
 

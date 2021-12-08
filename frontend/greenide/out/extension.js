@@ -25,6 +25,8 @@ function activate(context) {
     context.subscriptions.push(disposable);
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
+    //Start Hover Provider to create hovers
+    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider()));
 }
 exports.activate = activate;
 // Performs analysis
@@ -81,6 +83,20 @@ class JavaDocumentSymbolProvider {
             // save symbols (all kanzi methods with metadata)
             functions = symbols;
             resolve(symbols);
+        });
+    }
+}
+class GoHoverProvider {
+    provideHover(document, position, token) {
+        //document: currently pen document, position current position of cursor
+        //both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
+        return new Promise((resolve) => {
+            //Testimplementation of the Hover Provider and texthovers
+            var displaytext = "No.";
+            if (document.lineAt(position.line).text.includes("kanzi.")) {
+                displaytext = "Yes!";
+            }
+            resolve(new vscode.Hover(displaytext));
         });
     }
 }
