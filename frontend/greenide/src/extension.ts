@@ -1,10 +1,23 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 'use strict';
+import { listenerCount } from 'cluster';
+import internal = require('stream');
 import * as vscode from 'vscode';
 import { WebviewPanel } from './WebviewPanel';
 
 var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[] = [];
+
+//Values of the Analysis
+
+type datum = {
+    energy: number,
+    time: number
+} 
+
+var function1: datum = {energy: 12, time: 19}
+var function2: datum = {energy: 5, time: 28}
+var function3: datum = {energy: 9, time: 23}
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -107,17 +120,25 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 
 class GoHoverProvider implements vscode.HoverProvider {
     public provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.Hover> {
-        //document: currently pen document, position current position of cursor
+        //document: currently open document, position: current position of cursor
         //both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve)=> {
             //Testimplementation of the Hover Provider and texthovers
-            var displaytext: string = "No."
-            
-            if(document.lineAt(position.line).text.includes("kanzi.")){
-                displaytext = "Yes!"
-            }
+            //TODO: [cheat method of changing configurations: insert empty newline in the java to change line values and add more linechecks here]
+            var displaytext: string = "test"
+                var line = position.line + 1;
 
-            resolve(new vscode.Hover(displaytext))
+                if(line == 5 ) {
+                    displaytext = ('Energy: ' + function1.energy.toString() + '  Time: ' + function1.time.toString())
+                }
+                if(line == 16) {
+                    displaytext = ('Energy: ' + function2.energy.toString() + '  Time: ' + function2.time.toString())
+                }
+                if(line == 22) {
+                    displaytext = ('Energy: ' + function3.energy.toString() + '  Time: ' + function3.time.toString())
+                }
+
+            resolve(new vscode.Hover(displaytext))  
         });
     }
 }

@@ -6,6 +6,9 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const WebviewPanel_1 = require("./WebviewPanel");
 var functions = [];
+var function1 = { energy: 12, time: 19 };
+var function2 = { energy: 5, time: 28 };
+var function3 = { energy: 9, time: 23 };
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -88,13 +91,21 @@ class JavaDocumentSymbolProvider {
 }
 class GoHoverProvider {
     provideHover(document, position, token) {
-        //document: currently pen document, position current position of cursor
+        //document: currently open document, position: current position of cursor
         //both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve) => {
             //Testimplementation of the Hover Provider and texthovers
-            var displaytext = "No.";
-            if (document.lineAt(position.line).text.includes("kanzi.")) {
-                displaytext = "Yes!";
+            //TODO: [cheat method of changing configurations: insert empty newline in the java to change line values and add more linechecks here]
+            var displaytext = "test";
+            var line = position.line + 1;
+            if (line == 5) {
+                displaytext = ('Energy: ' + function1.energy.toString() + '  Time: ' + function1.time.toString());
+            }
+            if (line == 16) {
+                displaytext = ('Energy: ' + function2.energy.toString() + '  Time: ' + function2.time.toString());
+            }
+            if (line == 22) {
+                displaytext = ('Energy: ' + function3.energy.toString() + '  Time: ' + function3.time.toString());
             }
             resolve(new vscode.Hover(displaytext));
         });
