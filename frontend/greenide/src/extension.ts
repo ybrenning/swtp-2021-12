@@ -8,16 +8,17 @@ import { WebviewPanel } from './WebviewPanel';
 
 var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[] = [];
 
-//Values of the Analysis
+// Values of the Analysis
+// TODO: [cheat method of changing configurations: insert empty newline in the java to change line values and add more linechecks in the textHoverProvider]
 
 type datum = {
     energy: number,
     time: number
-} 
+}; 
 
-var function1: datum = {energy: 12, time: 19}
-var function2: datum = {energy: 5, time: 28}
-var function3: datum = {energy: 9, time: 23}
+var function1Data: datum = {energy: 12, time: 19};
+var function2Data: datum = {energy: 5,  time: 28};
+var function3Data: datum = {energy: 9,  time: 23};
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -58,17 +59,17 @@ export function activate(context: vscode.ExtensionContext) {
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis(){
-
     // header for understanding methods output
     console.log('Name, line, start pos, end pos');
 
-    // iterate over every saved method from code
+    // display the found 'kantzi.' methods from the users '.java'-doc
     for(var i = 0; i < functions.length; i++){
         console.log(
             functions[i].name,                              // name of found kanzi method
             functions[i].location.range.start.line,         // line of found kanzi method
             functions[i].location.range.start.character,    // starting column of found kanzi method
-            functions[i].location.range.end.character);     // ending column of found kanzi method
+            functions[i].location.range.end.character       // ending column of found kanzi method
+        );     
     }
 
     // TODO: do procedure order
@@ -86,10 +87,10 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
                 if (line.text.includes("kanzi.")) {
-                    //Search line for kanzi method
+                    // Search line for kanzi method
                     for(var j = 0; j < line.text.length; j++){
                         if(!line.text.substring(j).includes("kanzi.")){
-                            //Search for end of full kanzi name
+                            //S earch for end of full kanzi name
                             for(var k = j; k < line.text.length; k++){
                                 if(line.text.substring(j-1, k).includes("(")){
                                     // Add found kanzi name and location to object
@@ -120,25 +121,24 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 
 class GoHoverProvider implements vscode.HoverProvider {
     public provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.Hover> {
-        //document: currently open document, position: current position of cursor
-        //both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
+        // document: currently open document, position current position of cursor
+        // both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve)=> {
-            //Testimplementation of the Hover Provider and texthovers
-            //TODO: [cheat method of changing configurations: insert empty newline in the java to change line values and add more linechecks here]
+            // determines what information to show and saves it to displaytext
             var displaytext: string = "test"
                 var line = position.line + 1;
 
                 if(line == 5 ) {
-                    displaytext = ('Energy: ' + function1.energy.toString() + '  Time: ' + function1.time.toString())
-                }
+                    displaytext = ('Energy: ' + function1Data.energy.toString() + '  Time: ' + function1Data.time.toString());
+                };
                 if(line == 16) {
-                    displaytext = ('Energy: ' + function2.energy.toString() + '  Time: ' + function2.time.toString())
-                }
+                    displaytext = ('Energy: ' + function2Data.energy.toString() + '  Time: ' + function2Data.time.toString());
+                };
                 if(line == 22) {
-                    displaytext = ('Energy: ' + function3.energy.toString() + '  Time: ' + function3.time.toString())
-                }
+                    displaytext = ('Energy: ' + function3Data.energy.toString() + '  Time: ' + function3Data.time.toString());
+                };
 
-            resolve(new vscode.Hover(displaytext))  
+            resolve(new vscode.Hover(displaytext));  
         });
     }
 }
