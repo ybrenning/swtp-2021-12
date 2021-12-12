@@ -1,12 +1,17 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 'use strict';
-import { listenerCount } from 'cluster';
-import internal = require('stream');
 import * as vscode from 'vscode';
 import { WebviewPanel } from './WebviewPanel';
 
-var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[] = [];
+var functions: {
+    name: string;
+    kind: vscode.SymbolKind;
+    containerName: string;
+    location: vscode.Location;
+}[] = [];
+
+var config: number = 0;
 
 // Values of the Analysis
 // TODO: [cheat method of changing configurations: insert empty newline in the java to change line values and add more linechecks in the textHoverProvider]
@@ -16,9 +21,9 @@ type datum = {
     time: number
 }; 
 
-var function1Data: datum = {energy: 12, time: 19};
-var function2Data: datum = {energy: 5,  time: 28};
-var function3Data: datum = {energy: 9,  time: 23};
+var function1Data: datum;
+var function2Data: datum;
+var function3Data: datum;
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -40,6 +45,32 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
     context.subscriptions.push(disposable);
+
+    let cmd1 = vscode.commands.registerCommand('greenIDE.config1', () => {
+        config = 1;
+
+        function1Data = {time: 2567.38007840983203, energy: 1823.4644462499255};
+        function2Data = {time: -28.9912719904026845, energy: -36.3591803758968134};
+        function3Data = {time: 7581.1371722107123, energy: 5083.3294949688236};
+	});
+    let cmd2 = vscode.commands.registerCommand('greenIDE.config2', () => {
+        config = 2
+
+        function1Data = {time: 3605.0363865159459, energy: 2630.4899197729041};
+        function2Data = {time: 23.627126336485886, energy: 65.8686502751974591};
+        function3Data = {time: 2586.4107633147395, energy: 1383.4203191503289};
+	});
+    let cmd3 = vscode.commands.registerCommand('greenIDE.config3', () => {
+        config = 3;
+
+        function1Data = {time: 3444.99055318259663, energy: 2384.124905294016};
+        function2Data = {time: 63.650126336456219, energy: 104.0431691254021741};
+        function3Data = {time: 3595.3478944504973, energy: 2100.9496143911896};
+	});
+
+    context.subscriptions.push(cmd1);
+    context.subscriptions.push(cmd2);
+    context.subscriptions.push(cmd3);
 
     // Start DocumentSymbolProvider to find methods
 	context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(
@@ -124,8 +155,35 @@ class GoHoverProvider implements vscode.HoverProvider {
         // document: currently open document, position current position of cursor
         // both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve)=> {
+            var displaytext: string = ""
+            
+            //keep here for actual implementation
+            /*
+            switch(config) { 
+                case 1: { 
+                    for(var funct in functions) {
+                        if(funct.location.line == position.line) {
+                            displaytext = function1Data
+                        }
+                    }
+                    break; 
+                } 
+                case 2: { 
+                   //statements; 
+                   break; 
+                } 
+                case 3: {
+        
+                    break;
+                }
+                default: { 
+                    
+                   break; 
+                } 
+            } 
+            */
+            
             // determines what information to show and saves it to displaytext
-            var displaytext: string = "test"
                 var line = position.line + 1;
 
                 if(line == 5 ) {
@@ -133,7 +191,7 @@ class GoHoverProvider implements vscode.HoverProvider {
                 };
                 if(line == 16) {
                     displaytext = ('Energy: ' + function2Data.energy.toString() + '  Time: ' + function2Data.time.toString());
-                };
+                }; 
                 if(line == 22) {
                     displaytext = ('Energy: ' + function3Data.energy.toString() + '  Time: ' + function3Data.time.toString());
                 };

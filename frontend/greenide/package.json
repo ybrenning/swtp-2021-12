@@ -21,6 +21,17 @@
 			{
 				"command": "greenIDE.run",
 				"title": "GreenIDE"
+			},
+			{
+				"command": "greenIDE.config1",
+				"title": "config 1"
+			},
+			{
+				"command": "greenIDE.config2",
+				"title": "config 2"
+			},{
+				"command": "greenIDE.config3",
+				"title": "config 3"
 			}
 		],
 		"languages": [{

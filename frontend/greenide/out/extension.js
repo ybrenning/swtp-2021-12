@@ -6,9 +6,10 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const WebviewPanel_1 = require("./WebviewPanel");
 var functions = [];
-var function1Data = { energy: 12, time: 19 };
-var function2Data = { energy: 5, time: 28 };
-var function3Data = { energy: 9, time: 23 };
+var config = 0;
+var function1Data;
+var function2Data;
+var function3Data;
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -26,6 +27,27 @@ function activate(context) {
         WebviewPanel_1.WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
+    let cmd1 = vscode.commands.registerCommand('greenIDE.config1', () => {
+        config = 1;
+        function1Data = { time: 2567.38007840983203, energy: 1823.4644462499255 };
+        function2Data = { time: -28.9912719904026845, energy: -36.3591803758968134 };
+        function3Data = { time: 7581.1371722107123, energy: 5083.3294949688236 };
+    });
+    let cmd2 = vscode.commands.registerCommand('greenIDE.config2', () => {
+        config = 2;
+        function1Data = { time: 3605.0363865159459, energy: 2630.4899197729041 };
+        function2Data = { time: 23.627126336485886, energy: 65.8686502751974591 };
+        function3Data = { time: 2586.4107633147395, energy: 1383.4203191503289 };
+    });
+    let cmd3 = vscode.commands.registerCommand('greenIDE.config3', () => {
+        config = 3;
+        function1Data = { time: 3444.99055318259663, energy: 2384.124905294016 };
+        function2Data = { time: 63.650126336456219, energy: 104.0431691254021741 };
+        function3Data = { time: 3595.3478944504973, energy: 2100.9496143911896 };
+    });
+    context.subscriptions.push(cmd1);
+    context.subscriptions.push(cmd2);
+    context.subscriptions.push(cmd3);
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     //Start Hover Provider to create hovers
@@ -95,8 +117,33 @@ class GoHoverProvider {
         // document: currently open document, position current position of cursor
         // both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve) => {
+            var displaytext = "";
+            //keep here for actual implementation
+            /*
+            switch(config) {
+                case 1: {
+                    for(var funct in functions) {
+                        if(funct.location.line == position.line) {
+                            displaytext = function1Data
+                        }
+                    }
+                    break;
+                }
+                case 2: {
+                   //statements;
+                   break;
+                }
+                case 3: {
+        
+                    break;
+                }
+                default: {
+                    
+                   break;
+                }
+            }
+            */
             // determines what information to show and saves it to displaytext
-            var displaytext = "test";
             var line = position.line + 1;
             if (line == 5) {
                 displaytext = ('Energy: ' + function1Data.energy.toString() + '  Time: ' + function1Data.time.toString());
