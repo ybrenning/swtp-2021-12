@@ -10,8 +10,8 @@ var config = 0;
 var function1Data;
 var function2Data;
 var function3Data;
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
+// This method is called when your extension is activated
+// Your extension is activated the very first time the command is executed
 function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -51,7 +51,7 @@ function activate(context) {
     context.subscriptions.push(cmd3);
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
-    //Start Hover Provider to create hovers
+    // Start Hover Provider to create hovers
     context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider()));
 }
 exports.activate = activate;
@@ -65,7 +65,7 @@ function runAnalysis() {
     // header for understanding methods output
     console.log('Found Kanzi Methods');
     console.log('Name, line, start pos, end pos');
-    // display the found 'kantzi.' methods from the users '.java'-doc
+    // Display the found "kanzi." methods from java source code
     for (var i = 0; i < functions.length; i++) {
         console.log(functions[i].name, // name of found kanzi method
         functions[i].location.range.start.line, // line of found kanzi method
@@ -81,19 +81,19 @@ class JavaDocumentSymbolProvider {
         return new Promise((resolve) => {
             var symbols = [];
             var containerNumber = 0;
-            // Find 'kanzi.' in document/code
+            // Find "kanzi." in document/code
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
                 if (line.text.includes("kanzi.")) {
                     // Search line for kanzi method
                     for (var j = 0; j < line.text.length; j++) {
                         if (!line.text.substring(j).includes("kanzi.")) {
-                            //S earch for end of full kanzi name
+                            // Search for end of full kanzi name
                             for (var k = j; k < line.text.length; k++) {
                                 if (line.text.substring(j - 1, k).includes("(")) {
                                     // Add found kanzi name and location to object
                                     symbols.push({
-                                        // substring only grabbing kanzi method name without braces
+                                        // Substring only grabbing kanzi method name without braces
                                         name: line.text.substr(j - 1, (k - 1) - (j - 1)),
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
@@ -108,7 +108,7 @@ class JavaDocumentSymbolProvider {
                     }
                 }
             }
-            // save symbols (all kanzi methods with metadata)
+            // Save symbols (all kanzi methods with metadata)
             functions = symbols;
             resolve(symbols);
         });
@@ -116,11 +116,11 @@ class JavaDocumentSymbolProvider {
 }
 class GoHoverProvider {
     provideHover(document, position, token) {
-        // document: currently open document, position current position of cursor
-        // both change dynamicaly as the user interacts with VSC so the methods also have to be dynamic
+        // document: currently open document, position: current position of cursor
+        // Both change dynamically as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve) => {
             var displaytext = "";
-            //keep here for actual implementation
+            // Keep here for actual implementation
             /*
             switch(config) {
                 case 1: {
@@ -145,21 +145,21 @@ class GoHoverProvider {
                 }
             }
             */
-            // determines what information to show and saves it to displaytext
+            // Determines what information to show and saves it to displaytext
             var line = position.line + 1;
-            if (line == 29) {
+            if (line === 29) {
                 displaytext = ('Energy: ' + function1Data.energy.toString() + 'mWs   Time: ' + function1Data.time.toString() + 'ms');
             }
             ;
-            if (line == 30) {
+            if (line === 30) {
                 displaytext = ('Energy: ' + function1Data.energy.toString() + 'mWs   Time: ' + function1Data.time.toString() + 'ms');
             }
             ;
-            if (line == 36) {
+            if (line === 36) {
                 displaytext = ('Energy: ' + function2Data.energy.toString() + 'mWs   Time: ' + function2Data.time.toString() + 'ms');
             }
             ;
-            if (line == 37) {
+            if (line === 37) {
                 displaytext = ('Energy: ' + function2Data.energy.toString() + 'mWs   Time: ' + function2Data.time.toString() + 'ms');
             }
             ;
@@ -167,7 +167,7 @@ class GoHoverProvider {
         });
     }
 }
-// this method is called when your extension is deactivated
+// This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
 //# sourceMappingURL=extension.js.map

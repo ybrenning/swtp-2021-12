@@ -8,7 +8,7 @@ class WebviewPanel {
         this._disposables = [];
         this._panel = panel;
         this._extensionUri = extensionUri;
-        // Set the webview's initial html content
+        // Set the webview's initial HTML content
         this._update();
         // Listen for when the panel is disposed
         // This happens when the user closes the panel or when the panel is closed programatically
@@ -30,13 +30,13 @@ class WebviewPanel {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
             : undefined;
-        // If we already have a panel, show it.
+        // If we already have a panel, show it
         if (WebviewPanel.currentPanel) {
             WebviewPanel.currentPanel._panel.reveal(column);
             WebviewPanel.currentPanel._update();
             return;
         }
-        // Otherwise, create a new panel.
+        // Otherwise, create a new panel
         const panel = vscode.window.createWebviewPanel(WebviewPanel.viewType, "GreenIDE", column || vscode.ViewColumn.One, {
             // Enable javascript in the webview
             enableScripts: true,
@@ -91,8 +91,10 @@ class WebviewPanel {
     _getHtmlForWebview(webview) {
         // Use a nonce to only allow specific scripts to be run
         const nonce = (0, getNonce_1.getNonce)();
+        // Get path of css file to be used within the Webview's HTML
         const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
         const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
+        // Return HTML to be rendered within the Webview
         return `<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -108,6 +110,7 @@ class WebviewPanel {
       </script>
 		</head>
     <body>
+    
     <h1> Welcome to GreenIDE. </h1>
 
     <figure>
@@ -174,8 +177,6 @@ class WebviewPanel {
     </form>
     </figure>
 
-    
-    
 		</body>
 		</html>`;
     }

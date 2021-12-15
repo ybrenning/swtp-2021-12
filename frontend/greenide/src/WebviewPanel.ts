@@ -2,9 +2,7 @@ import * as vscode from "vscode";
 import { getNonce } from "./getNonce";
 
 export class WebviewPanel {
-  /**
-   * Track the current panel. Only allow a single panel to exist at a time.
-   */
+  // Track the current panel. Only allow a single panel to exist at a time.
   public static currentPanel: WebviewPanel | undefined;
 
   public static readonly viewType = "green-ide";
@@ -18,14 +16,14 @@ export class WebviewPanel {
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
 
-    // If we already have a panel, show it.
+    // If we already have a panel, show it
     if (WebviewPanel.currentPanel) {
       WebviewPanel.currentPanel._panel.reveal(column);
       WebviewPanel.currentPanel._update();
       return;
     }
 
-    // Otherwise, create a new panel.
+    // Otherwise, create a new panel
     const panel = vscode.window.createWebviewPanel(
       WebviewPanel.viewType,
       "GreenIDE",
@@ -58,7 +56,7 @@ export class WebviewPanel {
     this._panel = panel;
     this._extensionUri = extensionUri;
 
-    // Set the webview's initial html content
+    // Set the webview's initial HTML content
     this._update();
 
     // Listen for when the panel is disposed
@@ -121,9 +119,12 @@ export class WebviewPanel {
 
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce();
+
+    // Get path of css file to be used within the Webview's HTML
     const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
     const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
 
+    // Return HTML to be rendered within the Webview
     return `<!DOCTYPE html>
 		<html lang="en">
 		<head>
@@ -139,6 +140,7 @@ export class WebviewPanel {
       </script>
 		</head>
     <body>
+    
     <h1> Welcome to GreenIDE. </h1>
 
     <figure>
@@ -205,8 +207,6 @@ export class WebviewPanel {
     </form>
     </figure>
 
-    
-    
 		</body>
 		</html>`;
   }
