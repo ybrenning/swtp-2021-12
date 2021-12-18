@@ -22,4 +22,4 @@ DevOPs: Yannick & Jonas
         - Berechnung von Daten aus csv (zb MongoDB)
 
 ##### Credits
-Yannick B, Maxim Z, Jonas B, Louis R, Maxim Z, Ferris K
+Yannick B, Maxim Z, Jonas B, Louis R, Maxim L, Ferris K
