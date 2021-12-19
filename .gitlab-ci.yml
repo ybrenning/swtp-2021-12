@@ -25,6 +25,9 @@ build-job:       # This job runs in the build stage, which runs first.
     - mkdir build
     - touch build/info.txt
     - echo "Compile complete."
+  artifacts:
+    paths:
+      - build/
 
 unit-test-job:   # This job runs in the test stage.
   stage: test    # It only starts when the job in the build stage completes successfully.
