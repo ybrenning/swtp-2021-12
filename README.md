@@ -1,25 +1,23 @@
-# swtp-2021-12
+# GreenIDE
 
-GreenIDE Plugin für VSCode
-Version 0.1 (MVP)
+---
 
-zur Messung von Stromverbrauch bestimmter Methoden
-Darstellung mittels Syntax Highlighting und Daten
+### Current version: 0.1 (MVP)
 
-##### Teams
-Frontend: Ferris & Maxim Z
-Backend: Maxim L & Louis
-DevOPs: Yannick & Jonas
+GreenIDE is an eco-friendly plugin for VSCode built by Eonar Softworks on behalf of GreenSoft.
 
-##### Milestone: V0.2
-- TODOs:
-    - Kanzi Methoden erkennen aus Liste aller Kanzi Methoden und speichern
-    - Config (mit Checkboxen) aus Webview übergeben
-    - Neues Design: Sidepanel
-    - Highlighting von Kanzi Methoden & Hover Text anpassen
-    - Backend Beginn
-        - Empfang von Kanzi Methoden
-        - Berechnung von Daten aus csv (zb MongoDB)
+## Running with Node.js and VSCode
+> GreenIDE is still a work in progress. As a result, the plugin is not yet available on the VSCode marketplace.
 
-##### Credits
-Yannick B, Maxim Z, Jonas B, Louis R, Maxim L, Ferris K
+
+In order to run the current version of GreenIDE, clone this repository locally using `git clone`.
+
+Navigate into `swtp-2021-12/frontend/greenide` and open the project with VSCode. 
+
+Press `F5` or click `Run Extension` to open the Extension Development Host.
+
+Open the command palette with `Ctrl + Shift + P` and type `greenIDE.run` to start the current version 
+of GreenIDE within the Extension Development Host.
+
+## Contributors 
+Maxim Lemel, Ferris Kleier, Jonas Buhrand, Louis Roth, Maxim Zapke, Yannick Brenning
