@@ -1,6 +1,7 @@
 # Organisation
 
-> Next online meeting: 04.01.2022
+> Next Friday-Meeting: 07.01.2022 (14:00) \
+> Next Tuesday-Meeting: 11.01.2022 (11:00)
 
 ## Groups
 * **Front End:** Ferris Kleier, Maxim Zapke
@@ -21,11 +22,9 @@ Protocols from previous meetings can now be found in `swtp-2021/_orga/_protocols
 
 ## Login Details
 ### MongoDB
-E-Mail: the13kdu@studserv.uni-leipzig.de
-
+E-Mail: the13kdu@studserv.uni-leipzig.de \
 Password: EonarSoftworks
 
 ### Heroku
-E-Mail: j.buhrand@studserv.uni-leipzig.de
-
+E-Mail: j.buhrand@studserv.uni-leipzig.de \
 Password: ferpix-hymkig-3kYpke
