@@ -19,6 +19,13 @@
 ## Protocols
 Protocols from previous meetings can now be found in `swtp-2021/_orga/_protocols`.
 
-## MongoDB
+## Login Details
+### MongoDB
 E-Mail: the13kdu@studserv.uni-leipzig.de
+
 Password: EonarSoftworks
+
+### Heroku
+E-Mail: j.buhrand@studserv.uni-leipzig.de
+
+Password: ferpix-hymkig-3kYpke
