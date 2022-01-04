@@ -4,7 +4,9 @@
 	"description": "VSCode Extension zum erkennen von Energiehotspots",
 	"version": "0.0.1",
 	"engines": {
-		"vscode": "^1.62.0"
+		"vscode": "^1.62.0",
+		"node": "11.10.0",
+  		"npm": "6.7.0"
 	},
 	"categories": [
 		"Other"
@@ -40,6 +42,7 @@
 		}]
 	},
 	"scripts": {
+		"start": "node index.js",
 		"vscode:prepublish": "npm run compile",
 		"compile": "tsc -p ./",
 		"watch": "tsc -watch -p ./",
