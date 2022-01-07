@@ -65,12 +65,12 @@ staging:
   stage: deploy
   script:
     - gem install dpl
-    - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_APP_STAGING
+    - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
 
 production:
   stage: deploy
   script:
     - gem install dpl
-    - dpl --provider=heroku --app=stwp-2021-12-production --api_key=$HEROKU_APP_PRODUCTION
+    - dpl --provider=heroku --app=stwp-2021-12-production --api_key=$HEROKU_API_KEY
   only:
     - tags
