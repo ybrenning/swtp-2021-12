@@ -60,3 +60,17 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+
+staging:
+  stage: deploy
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_APP_STAGING
+
+production:
+  stage: deploy
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=stwp-2021-12-production --api_key=$HEROKU_APP_PRODUCTION
+  only:
+    - tags
