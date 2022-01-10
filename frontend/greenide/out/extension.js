@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const WebviewPanel_1 = require("./WebviewPanel");
+var foundMethods = [];
 var functions = [];
 var config = 0;
 var function1Data;
@@ -73,7 +74,12 @@ function runAnalysis() {
         functions[i].location.range.end.character // ending column of found kanzi method
         );
     }
+    console.log('Start Test');
     // TODO: do procedure order
+    for (var j = 0; j < foundMethods.length; j++) {
+        console.log(foundMethods[j]);
+    }
+    console.log('End Test');
 }
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
@@ -81,32 +87,37 @@ class JavaDocumentSymbolProvider {
         return new Promise((resolve) => {
             var symbols = [];
             var containerNumber = 0;
+            // TODO: replace kanzilist elements with all elements of method_list.txt (all kanzi methods)
+            var kanzilist = ['InsertionSort()', 'HeapSort()'];
             // Find "kanzi." in document/code
+            // for each line in code
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
-                if (line.text.includes("kanzi.")) {
-                    // Search line for kanzi method
-                    for (var j = 0; j < line.text.length; j++) {
-                        if (!line.text.substring(j).includes("kanzi.")) {
-                            // Search for end of full kanzi name
-                            for (var k = j; k < line.text.length; k++) {
-                                if (line.text.substring(j - 1, k).includes("(")) {
-                                    // Add found kanzi name and location to object
-                                    symbols.push({
-                                        // Substring only grabbing kanzi method name without braces
-                                        name: line.text.substr(j - 1, (k - 1) - (j - 1)),
-                                        kind: vscode.SymbolKind.Method,
-                                        containerName: containerNumber.toString(),
-                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j), new vscode.Position(i + 1, k)))
-                                    });
-                                    containerNumber++;
-                                    break;
-                                }
+                // find kanzi method
+                for (var temp = 0; temp < kanzilist.length; temp++)
+                    // TODO: cut from kanzi.[...] to namely method with _function()
+                    // if kanzi method is in line
+                    if (line.text.includes(' ' + kanzilist[temp])) {
+                        for (var j = 0; j < line.text.length; j++) {
+                            if (!line.text.substring(j).includes(' ' + kanzilist[temp])) {
+                                // // Search for end of full kanzi name
+                                // for (var k = j; k < line.text.length; k++) {
+                                //     if (line.text.substring(j-1, k).includes(";")) {
+                                //         // Add found kanzi name and location to object
+                                symbols.push({
+                                    // Substring only grabbing kanzi method name without braces
+                                    // name: line.text.substr(j-1, (k-1) - (j-1)),
+                                    name: kanzilist[temp],
+                                    kind: vscode.SymbolKind.Method,
+                                    containerName: containerNumber.toString(),
+                                    location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilist[temp].length + 1)))
+                                });
+                                foundMethods[containerNumber] = kanzilist[temp];
+                                containerNumber++;
+                                break;
                             }
-                            break;
                         }
                     }
-                }
             }
             // Save symbols (all kanzi methods with metadata)
             functions = symbols;
