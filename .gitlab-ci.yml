@@ -64,8 +64,10 @@ deploy-job:      # This job runs in the deploy stage.
 staging:
   stage: deploy
   script:
-    - gem install dpl
-    - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
+    - git remote add heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/swtp-2021-12-staging
+    - git subtree push --prefix backend/demo heroku main
+    # - gem install dpl
+    # - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
 
 production:
   stage: deploy
