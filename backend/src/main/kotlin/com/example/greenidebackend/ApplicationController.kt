@@ -6,23 +6,21 @@ import com.example.greenidebackend.supportdata.Request
 @RestController
 @RequestMapping
 class ApplicationController(
-    val kanziService: KanziService
+    val functionService: FunctionValueCalculatorService
 ) {
 
-
-    @GetMapping("/{program}/")
-    fun kanziInput( @PathVariable program: String,
-                    @RequestBody request: Request
-                   ): Unit? {
-        var test: String = ""
-        when (program) {
-            "kanzi" -> test = kanziService.kanzi()
-            "density-converter" -> test = kanziService.dConv()
-            else -> return null
-        }
-        return null
+    //return the calculated values for the provided functions
+    @GetMapping("/calculateValues/{program}/")
+    fun functionValueProvider(
+        @PathVariable program: String,
+        @RequestBody request: Request
+    ) {
+        return functionService.calcFunctionValues(program, request.functions, request.konfigs)
     }
 
-
-
+    //return a list of all functions of the software
+    @GetMapping("/listOfFunctions/{program}/")
+    fun functionListProvider(@PathVariable program: String): ArrayList<String>?{
+        return functionService.getAllFunctions(program)
+    }
 }
