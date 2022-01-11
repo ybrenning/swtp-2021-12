@@ -1,0 +1,6 @@
+#SWE Meeting
+2022-01-11
+
+##### Frontend/Backend
+- Änderungen durch neue csv-Datei: density converter
+- Unterschied in Länge von Configs zu brücksichtigen
