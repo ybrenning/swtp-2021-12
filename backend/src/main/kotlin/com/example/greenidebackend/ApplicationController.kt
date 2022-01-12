@@ -10,7 +10,7 @@ class ApplicationController(
 ) {
 
     //return the calculated values for the provided functions
-    @GetMapping("/calculateValues/{program}/")
+    @PostMapping("/calculateValues/{program}")
     fun functionValueProvider(
         @PathVariable program: String,
         @RequestBody request: Request
@@ -19,7 +19,7 @@ class ApplicationController(
     }
 
     //return a list of all functions of the software
-    @GetMapping("/listOfFunctions/{program}/")
+    @GetMapping("/listOfFunctions/{program}")
     fun functionListProvider(@PathVariable program: String): ArrayList<String>?{
         return functionService.getAllFunctions(program)
     }

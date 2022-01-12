@@ -6,11 +6,14 @@ import org.springframework.stereotype.Service
 class FunctionValueCalculatorService(
     val repository: Repository
 ) {
-
-    fun calcFunctionValues(program: String, functions: ArrayList<String>, konfigs: ArrayList<Boolean>) {
+    fun calcFunctionValues(
+        program: String,
+        functions: ArrayList<String>,
+        konfigs: ArrayList<Boolean>
+    ) {
 
     }
-cd Ccd
+
 // functions related to getting all available functions in the programs
     fun getAllFunctions(program: String): ArrayList<String>?{
         val functions: ArrayList<String>? = when(program) {
@@ -21,13 +24,15 @@ cd Ccd
         return functions
     }
 
-    fun getAllKanziFunctions(): ArrayList<String> {
+    fun getAllKanziFunctions(): ArrayList<String>? {
         //TODO: get all kanzi function names from the repository and then remove all duplicates
-        // (search all in repo and remove dupes in service)
+        //      (search all in repo and remove dupes in service)
+        return null
     }
 
-    fun getAllDCFunctions(): ArrayList<String> {
+    fun getAllDCFunctions(): ArrayList<String>? {
         //TODO: get all density converter function names from the repository and then remove all duplicates
         // (search all in repo and remove dupes in service)
+        return null
     }
 }
