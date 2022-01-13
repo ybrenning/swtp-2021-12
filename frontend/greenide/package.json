@@ -7,6 +7,7 @@
 		"vscode": "^1.62.0"
 
 	},
+	
 	"categories": [
 		"Other"
 	],
@@ -15,6 +16,29 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+
+		"viewsContainers": {
+            "activitybar": [
+                {
+                    "id": "greenide",
+                    "title": "GreenIDE",
+                    "icon": "resources/greenide-icon.svg"
+                }
+            ]
+        },
+        "views": {
+            "greenide": [
+                {
+                    "id": "greenide-extension",
+                    "name": "GreenIDE"
+                },
+                {
+                    "id": "greenide-configs",
+                    "name": "Configurations"
+                }
+            ]
+        },
+
 		"capabilities": {
 			"hoverProvider": "true"	
 		},
