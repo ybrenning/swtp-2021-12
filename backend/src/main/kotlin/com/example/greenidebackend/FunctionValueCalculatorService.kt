@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 class FunctionValueCalculatorService(
     val repository: Repository
 ) {
+    // functions related to calculating the required values from the given configurations
     fun calcFunctionValues(
         program: String,
         functions: ArrayList<String>,
@@ -14,8 +15,9 @@ class FunctionValueCalculatorService(
 
     }
 
-// functions related to getting all available functions in the programs
+    // functions related to getting all available functions in the programs
     fun getAllFunctions(program: String): ArrayList<String>?{
+        //switch to choose selected program
         val functions: ArrayList<String>? = when(program) {
             "kanzi" -> getAllKanziFunctions()
             "density-converter" -> getAllDCFunctions()
@@ -32,7 +34,7 @@ class FunctionValueCalculatorService(
 
     fun getAllDCFunctions(): ArrayList<String>? {
         //TODO: get all density converter function names from the repository and then remove all duplicates
-        // (search all in repo and remove dupes in service)
+        //      (search all in repo and remove dupes in service)
         return null
     }
 }
