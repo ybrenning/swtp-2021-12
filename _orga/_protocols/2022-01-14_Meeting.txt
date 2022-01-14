@@ -1,0 +1,17 @@
+#SWE Meeting
+2022-01-14
+
+##### Besprochene Themen
+- nachbesprechung der ideen aus dem codecentric Meeting
+	(bessere nutzung des git issue boards;
+	 issues aktueller halten;
+	 übersicht für alle wer woran arbeitet;
+	 softe 'sprints' einplanen damit alle auf dem stand gehalten werden)
+- dev-ops steigt auf mongodb um damit back-end die funktionalität einbauen kann
+- frontend bleibt bei roadmap (aktuell 1.1)
+
+
+##### bis 18.01
+	- teams aktuallisieren ihre issues in den boards
+	- (festlegen von epics um struktur zu erkennen)
+	- am dienstag dann anfangen mit den 'sprints'
