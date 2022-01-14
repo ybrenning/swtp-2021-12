@@ -64,7 +64,7 @@ deploy-job:      # This job runs in the deploy stage.
 staging:
   stage: deploy
   script:
-    - git remote add heroku https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12.git
+    # - git remote add heroku https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12.git
     - git remote set-url heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/swtp-2021-12-staging.git
     - git push heroku `git subtree split --prefix backend/demo main`:main --force
      - git subtree push --prefix backend/demo heroku main
