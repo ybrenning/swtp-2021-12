@@ -18,7 +18,6 @@ class ApplicationController(
         return functionService.calcFunctionValues(program, request.functions, request.konfigs)
     }
 
-
     @GetMapping("/listOfFunctions/{program}")
     fun functionListProvider(@PathVariable program: String): ArrayList<String>?{
         //return a list of all functions of the given program
