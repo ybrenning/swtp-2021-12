@@ -15,7 +15,7 @@
 
 # Specifies base version against which tests will run
 # image: node:latest
-# image: ruby:latest
+image: ruby:latest
 
 # Eliminates redundant downloading of dependency libraries
 # cache:
@@ -61,20 +61,20 @@ deploy-job:      # This job runs in the deploy stage.
     - echo "Deploying application..."
     - echo "Application successfully deployed."
 
-#staging:
-#  stage: deploy
-#  script:
-#    - git remote add heroku https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12.git
-#    - git remote set-url heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/swtp-2021-12-staging.git
-#    - git push heroku `git subtree split --prefix backend/demo main`:main --force
-    # - git subtree push --prefix backend/demo heroku main
-    # - gem install dpl
-    # - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
+staging:
+  stage: deploy
+  script:
+    - git remote add heroku https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12.git
+    - git remote set-url heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/swtp-2021-12-staging.git
+    - git push heroku `git subtree split --prefix backend/demo main`:main --force
+     - git subtree push --prefix backend/demo heroku main
+     - gem install dpl
+     - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
 
-#production:
-#  stage: deploy
-#  script:
-#    - gem install dpl
-#    - dpl --provider=heroku --app=stwp-2021-12-production --api_key=$HEROKU_API_KEY
-#  only:
-#    - tags
+production:
+  stage: deploy
+  script:
+    - gem install dpl
+    - dpl --provider=heroku --app=stwp-2021-12-production --api_key=$HEROKU_API_KEY
+  only:
+    - tags
