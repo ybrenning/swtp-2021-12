@@ -12,8 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:greenIDE.run",
-		"onView:greenide.help"
+        "onView:greenIDE.help",
+		"onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -21,25 +21,27 @@
 		"viewsContainers": {
             "activitybar": [
                 {
-                    "id": "greenide",
+                    "id": "greenIDE",
                     "title": "GreenIDE",
                     "icon": "resources/greenide-icon.svg"
                 }
             ]
         },
         "views": {
-            "greenide": [
+            "greenIDE": [
                 {
-                    "id": "greenide.extension",
-                    "name": "GreenIDE"
+                    "id": "greenIDE.extension",
+                    "name": "GreenIDE",
+					"contextualTitle": "GreenIDE"
                 },
                 {
-                    "id": "greenide.configs",
+                    "id": "greenIDE.configs",
                     "name": "Configurations",
+					"contextualTitle": "Configuration",
 					"type": "tree"
                 },
 				{
-					"id": "greenide.help",
+					"id": "greenIDE.help",
 					"name": "Help",
 					"contextualTitle": "Help & Feedback",
 					"visibility": "collapsed",

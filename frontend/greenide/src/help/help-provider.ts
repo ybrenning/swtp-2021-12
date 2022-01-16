@@ -33,7 +33,7 @@ export class HelpProvider implements vscode.TreeDataProvider<HelpItem> {
     }
 
     registerProviders() {
-        const help = vscode.window.createTreeView('greenide.help', {
+        const help = vscode.window.createTreeView('greenIDE.help', {
             treeDataProvider: this
         });
         this.context.subscriptions.push(help);
