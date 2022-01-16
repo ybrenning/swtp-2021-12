@@ -12,7 +12,6 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onView:greenIDE.help",
 		"onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
@@ -30,29 +29,32 @@
         "views": {
             "greenIDE": [
                 {
-                    "id": "greenIDE.extension",
+                    "id": "greenIDE-extension",
                     "name": "GreenIDE",
 					"contextualTitle": "GreenIDE"
                 },
                 {
-                    "id": "greenIDE.configs",
+                    "id": "greenIDE-configs",
                     "name": "Configurations",
 					"contextualTitle": "Configuration",
 					"type": "tree"
+
                 },
 				{
-					"id": "greenIDE.help",
+					"id": "greenIDE-help",
 					"name": "Help",
 					"contextualTitle": "Help & Feedback",
-					"visibility": "collapsed",
-					"type": "tree"
+					"visibility": "collapsed"
 				}
             ]
         },
 
+		
+
 		"capabilities": {
 			"hoverProvider": "true"	
 		},
+
 		"commands": [
 			{
 				"command": "greenIDE.run",

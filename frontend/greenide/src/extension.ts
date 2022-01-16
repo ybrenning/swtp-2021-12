@@ -138,7 +138,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                     // TODO: cut from kanzi.[...] to namely method with _function()
 
                     // if kanzi method is in line
-                    if (line.text.includes(' ' + kanzilist[temp])) {
+                    {if (line.text.includes(' ' + kanzilist[temp])) {
 
                         for (var j = 0; j < line.text.length; j++) {
                             if (!line.text.substring(j).includes(' ' + kanzilist[temp])) {
@@ -161,7 +161,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                                 break;
                             }
                         }
-                    }
+                    }}
             }
             // Save symbols (all kanzi methods with metadata)
             functions = symbols;

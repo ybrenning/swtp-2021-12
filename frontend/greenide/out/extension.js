@@ -94,9 +94,10 @@ class JavaDocumentSymbolProvider {
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
                 // find kanzi method
-                for (var temp = 0; temp < kanzilist.length; temp++)
-                    // TODO: cut from kanzi.[...] to namely method with _function()
-                    // if kanzi method is in line
+                for (var temp = 0; temp < kanzilist.length; temp++) 
+                // TODO: cut from kanzi.[...] to namely method with _function()
+                // if kanzi method is in line
+                {
                     if (line.text.includes(' ' + kanzilist[temp])) {
                         for (var j = 0; j < line.text.length; j++) {
                             if (!line.text.substring(j).includes(' ' + kanzilist[temp])) {
@@ -118,6 +119,7 @@ class JavaDocumentSymbolProvider {
                             }
                         }
                     }
+                }
             }
             // Save symbols (all kanzi methods with metadata)
             functions = symbols;
