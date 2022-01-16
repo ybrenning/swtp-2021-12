@@ -12,7 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
-        "onCommand:greenIDE.run"
+        "onCommand:greenIDE.run",
+		"onView:greenide.help"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
@@ -29,13 +30,21 @@
         "views": {
             "greenide": [
                 {
-                    "id": "greenide-extension",
+                    "id": "greenide.extension",
                     "name": "GreenIDE"
                 },
                 {
-                    "id": "greenide-configs",
-                    "name": "Configurations"
-                }
+                    "id": "greenide.configs",
+                    "name": "Configurations",
+					"type": "tree"
+                },
+				{
+					"id": "greenide.help",
+					"name": "Help",
+					"contextualTitle": "Help & Feedback",
+					"visibility": "collapsed",
+					"type": "tree"
+				}
             ]
         },
 
