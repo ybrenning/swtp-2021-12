@@ -65,11 +65,11 @@ staging:
     # - git remote add heroku https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12.git
     - git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/test-heroku-deployment
     - git remote set-url heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/swtp-2021-12-staging.git
-    - git subtree split --prefix backend/demo -b testing-heroku-deployment
-    - git push heroku testing-heroku-deployment --force-with-lease
+    #- git subtree split --prefix backend/demo -b testing-heroku-deployment
+    #- git push heroku testing-heroku-deployment --force-with-lease
 
-    #- git push heroku `git subtree split --prefix backend/demo test-heroku-deployment`:test-heroku-deployment --force
-    #- git subtree push --prefix backend/demo heroku test-heroku-deployment
+    - git push heroku `git subtree split --prefix backend/demo -b testing-heroku-deployment`:testing-heroku-deployment --force
+    - git subtree push --prefix backend/demo heroku testing-heroku-deployment
 
     - gem install dpl
     - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
