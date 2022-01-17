@@ -47,7 +47,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 
-
     // Hardcode to set data for output
     let cmd1 = vscode.commands.registerCommand('greenIDE.config1', () => {
         config = 1;

@@ -12,6 +12,8 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onView:greenIDE.home",
+		"onView:greenIDE.configs",
 		"onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
@@ -20,36 +22,32 @@
 		"viewsContainers": {
             "activitybar": [
                 {
-                    "id": "greenIDE",
+                    "id": "greenIDE-explorer",
                     "title": "GreenIDE",
                     "icon": "resources/greenide-icon.svg"
                 }
             ]
         },
         "views": {
-            "greenIDE": [
+            "greenIDE-explorer": [
                 {
-                    "id": "greenIDE-extension",
+                    "id": "greenIDE.home",
                     "name": "GreenIDE",
-					"contextualTitle": "GreenIDE"
+					"contextualTitle": "GreenIDE Home"
                 },
                 {
-                    "id": "greenIDE-configs",
+                    "id": "greenIDE.configs",
                     "name": "Configurations",
-					"contextualTitle": "Configuration",
-					"type": "tree"
-
+					"contextualTitle": "Configuration"
                 },
 				{
-					"id": "greenIDE-help",
+					"id": "greenIDE.help",
 					"name": "Help",
 					"contextualTitle": "Help & Feedback",
 					"visibility": "collapsed"
 				}
             ]
         },
-
-		
 
 		"capabilities": {
 			"hoverProvider": "true"	
@@ -70,6 +68,10 @@
 			},{
 				"command": "greenIDE.config3",
 				"title": "Config 3 - true statements: SKIP, RLT"
+			},
+			{
+				"command": "configsView.reveal",
+				"title": "Configs View: Reveal"
 			}
 		],
 		"languages": [{
