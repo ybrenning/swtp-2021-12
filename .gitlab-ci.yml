@@ -21,13 +21,13 @@ build:
       - build
       - .gradle
 
-heroku:
+heroku-production:
   stage: deploy
   image: ruby:latest
   needs: ["build"]
   script:
     - cd backend/demo
     - gem install dpl
-    - dpl --app=swtp2022 --provider=heroku --api-key=$HEROKU_API_KEY
+    - dpl --app=stwp-2021-12-production --provider=heroku --api-key=$HEROKU_API_KEY
     - cd ..
 
