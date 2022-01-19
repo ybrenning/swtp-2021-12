@@ -28,6 +28,6 @@ heroku-production:
   script:
     - cd backend/demo
     - gem install dpl
-    - dpl --app=stwp-2021-12-production --provider=heroku --api-key=$HEROKU_API_KEY
+    - dpl --app=swtp-2021-12-production --provider=heroku --api-key=$HEROKU_API_KEY
     - cd ..
 
