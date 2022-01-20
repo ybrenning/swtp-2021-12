@@ -12,8 +12,6 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onView:greenIDE.home",
-		"onView:greenIDE.configs",
 		"onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
