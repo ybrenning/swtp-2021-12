@@ -96,8 +96,7 @@
 			"view/item/context": [
 				{
 					"command": "greenIDE-home.helloworld",
-					"when": "view == greenIDE-home",
-					"group": "inline"
+					"when": "view == greenIDE-home"
 				}
 			]
 		},

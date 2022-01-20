@@ -3,6 +3,7 @@
 'use strict';
 import * as vscode from 'vscode';
 import { WebviewPanel } from './WebviewPanel';
+import { HomeProvider } from './providers/home';
 
 var foundMethods: string[] = [];
 var functions: {
@@ -33,7 +34,9 @@ export function activate(context: vscode.ExtensionContext) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    vscode.window.showInformationMessage('GreenIDE is now active!');
+
+    const homeData = new HomeProvider();
+    vscode.window.registerTreeDataProvider('greenIDE-home', homeData);
 
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
@@ -45,11 +48,6 @@ export function activate(context: vscode.ExtensionContext) {
         WebviewPanel.createOrShow(context.extensionUri);
     });
 
-    let homeStart = vscode.commands.registerCommand('greenIDE-home.refreshEntry', () => {
-        console.log('Works');
-    });
-
-    context.subscriptions.push(homeStart);
     context.subscriptions.push(disposable);
 
     // Hardcode to set data for output

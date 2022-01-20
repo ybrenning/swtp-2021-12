@@ -5,6 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const WebviewPanel_1 = require("./WebviewPanel");
+const home_1 = require("./providers/home");
 var foundMethods = [];
 var functions = [];
 var config = 0;
@@ -17,7 +18,8 @@ function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    vscode.window.showInformationMessage('GreenIDE is now active!');
+    const homeData = new home_1.HomeProvider();
+    vscode.window.registerTreeDataProvider('greenIDE-home', homeData);
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
@@ -27,10 +29,6 @@ function activate(context) {
         runAnalysis();
         WebviewPanel_1.WebviewPanel.createOrShow(context.extensionUri);
     });
-    let homeStart = vscode.commands.registerCommand('greenIDE-home.refreshEntry', () => {
-        console.log('Works');
-    });
-    context.subscriptions.push(homeStart);
     context.subscriptions.push(disposable);
     // Hardcode to set data for output
     let cmd1 = vscode.commands.registerCommand('greenIDE.config1', () => {
