@@ -12,6 +12,9 @@
 		"Other"
 	],
 	"activationEvents": [
+		"onView:greenIDE-home",
+		"onView:greenIDE-configs",
+		"onView:greenIDE-help",
 		"onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
@@ -29,17 +32,17 @@
         "views": {
             "greenIDE-explorer": [
                 {
-                    "id": "greenIDE.home",
+                    "id": "greenIDE-home",
                     "name": "GreenIDE",
 					"contextualTitle": "GreenIDE Home"
                 },
                 {
-                    "id": "greenIDE.configs",
+                    "id": "greenIDE-configs",
                     "name": "Configurations",
 					"contextualTitle": "Configuration"
                 },
 				{
-					"id": "greenIDE.help",
+					"id": "greenIDE-help",
 					"name": "Help",
 					"contextualTitle": "Help & Feedback",
 					"visibility": "collapsed"
@@ -54,7 +57,15 @@
 		"commands": [
 			{
 				"command": "greenIDE.run",
-				"title": "GreenIDE"
+				"title": "GreenIDE",
+				"icon": {
+					"light": "resources/light/refresh.svg",
+					"dark": "resources/dark/refresh.svg"
+				}
+			},
+			{
+				"command": "greenIDE-home.helloworld",
+				"title": "test views"
 			},
 			{
 				"command": "greenIDE.config1",
@@ -72,6 +83,25 @@
 				"title": "Configs View: Reveal"
 			}
 		],
+
+		"menus": {
+			
+			"view/title": [
+				{
+					"command": "greenIDE.run",
+					"when": "view == greenIDE-home",
+					"group": "navigation"
+				}
+			],
+			"view/item/context": [
+				{
+					"command": "greenIDE-home.helloworld",
+					"when": "view == greenIDE-home",
+					"group": "inline"
+				}
+			]
+		},
+
 		"languages": [{
 			"id": "java",
 			"extensions": [".java"]

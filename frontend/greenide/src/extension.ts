@@ -45,6 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
         WebviewPanel.createOrShow(context.extensionUri);
     });
 
+    let homeStart = vscode.commands.registerCommand('greenIDE-home.refreshEntry', () => {
+        console.log('Works');
+    });
+
+    context.subscriptions.push(homeStart);
     context.subscriptions.push(disposable);
 
     // Hardcode to set data for output
