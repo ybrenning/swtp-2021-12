@@ -39,7 +39,7 @@ test-backend:
 heroku-production:
   stage: deploy
   image: ruby:latest
-  needs: ["build", "test"]
+  needs: ["build"]
   script:
     - cd backend/demo
     - gem install dpl
@@ -47,6 +47,8 @@ heroku-production:
     - cd ..
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      when: on_success
+      allow_failure: false
 
 #heroku-staging:
 #  stage: deploy
