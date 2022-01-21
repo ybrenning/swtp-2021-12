@@ -2,7 +2,6 @@ stages:
   - build
   - test
   - deploy
-  
 
 before_script:
   - chmod +x ./backend/demo/gradlew
@@ -39,7 +38,7 @@ test-backend:
 heroku-production:
   stage: deploy
   image: ruby:latest
-  needs: ["build"]
+  # needs: ["build"]
   script:
     - cd backend/demo
     - gem install dpl
@@ -47,12 +46,6 @@ heroku-production:
     - cd ..
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
-      when: on_success
-    - if: '$skip_integration == "true"'
-      when: never
-    - if: '$skip_integration == "false"'
-      when: on_success
-    - when: on_success
 
 #heroku-staging:
 #  stage: deploy
