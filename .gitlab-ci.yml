@@ -30,14 +30,16 @@ heroku-production:
     - gem install dpl
     - dpl --app=swtp-2021-12-production --provider=heroku --api-key=$HEROKU_API_KEY
     - cd ..
+  rules:
+    - if '$CI_COMMIT_BRANCH == "main"'
 
-heroku-staging:
-  stage: deploy
-  image: ruby:latest
-  needs: ["build"]
-  script:
-    - cd backend/demo
-    - gem install dpl
-    - dpl --app=swtp-2021-12-staging --provider=heroku --api-key=$HEROKU_API_KEY
-    - cd ..
+#heroku-staging:
+#  stage: deploy
+#  image: ruby:latest
+#  needs: ["build"]
+#  script:
+#    - cd backend/demo
+#    - gem install dpl
+#    - dpl --app=swtp-2021-12-staging --provider=heroku --api-key=$HEROKU_API_KEY
+#    - cd ..
 
