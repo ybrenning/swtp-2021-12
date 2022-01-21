@@ -38,7 +38,6 @@ test-backend:
 heroku-production:
   stage: deploy
   image: ruby:latest
-  # needs: ["build"]
   script:
     - cd backend/demo
     - gem install dpl
@@ -56,4 +55,3 @@ heroku-production:
 #    - gem install dpl
 #    - dpl --app=swtp-2021-12-staging --provider=heroku --api-key=$HEROKU_API_KEY
 #    - cd ..
-
