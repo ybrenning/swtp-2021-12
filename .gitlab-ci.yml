@@ -1,78 +1,60 @@
-# This file is a template, and might need editing before it works on your project.
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/Getting-Started.gitlab-ci.yml
-
-# This is a sample GitLab CI/CD configuration file that should run without any modifications.
-# It demonstrates a basic 3 stage CI/CD pipeline. Instead of real tests or scripts,
-# it uses echo commands to simulate the pipeline execution.
-#
-# A pipeline is composed of independent jobs that run scripts, grouped into stages.
-# Stages run in sequential order, but jobs within stages run in parallel.
-#
-# For more information, see: https://docs.gitlab.com/ee/ci/yaml/index.html#stages
-
-# Specifies base version against which tests will run
-# image: node:latest
-image: ruby:latest
-
-# Eliminates redundant downloading of dependency libraries
-# cache:
-#   paths:
-#   - frontend/greenide/node_modules/
-
-stages:          # List of stages for jobs, and their order of execution
+stages:
   - build
   - test
   - deploy
+  
 
-build-job:       # This job runs in the build stage, which runs first.
+before_script:
+  - chmod +x ./backend/demo/gradlew
+  - export GRADLE_USER_HOME=`pwd`/backend/demo/.gradle
+
+build:
   stage: build
-  script:
-    - echo "Compiling the code..."
-    - mkdir build
-    - touch build/info.txt
-    - echo "Compile complete."
-  artifacts:
-    paths:
-      - build/
+  image: gradle:jdk11-alpine
+  script: 
+    - cd ./backend/demo
+    - ./gradlew --build-cache assemble
+    - cd ..
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: push
+    paths: 
+      - build
+      - .gradle
 
-unit-test-job:   # This job runs in the test stage.
-  stage: test    # It only starts when the job in the build stage completes successfully.
+test-backend:
+  stage: test
+  image: gradle:jdk11-alpine
   script:
-    - echo "Running unit tests..."
-    - test -f "build/info.txt"
-    # - npm install
-    # - node ./frontend/greenide/out/test/suite/extension.test.js
-    - echo "Code coverage is 90%"
+    - cd backend/demo
+    - ./gradlew test
+    - cd ..
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
+    paths: 
+      - build
+      - .gradle
 
-lint-test-job:   # This job also runs in the test stage.
-  stage: test    # It can run at the same time as unit-test-job (in parallel).
+heroku-production:
+  stage: deploy
+  image: ruby:latest
+  needs: ["build"]
   script:
-    - echo "Linting code..."
-    - echo "No lint issues found."
+    - cd backend/demo
+    - gem install dpl
+    - dpl --app=swtp-2021-12-production --provider=heroku --api-key=$HEROKU_API_KEY
+    - cd ..
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
-deploy-job:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
-  script:
-    - echo "Deploying application..."
-    - echo "Application successfully deployed."
-
-#staging:
+#heroku-staging:
 #  stage: deploy
+#  image: ruby:latest
+#  needs: ["build"]
 #  script:
-    # - git remote add heroku https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12.git
-    # - git remote set-url heroku https://heroku:$HEROKU_API_KEY@git.heroku.com/swtp-2021-12-staging.git
-    # - git push heroku `git subtree split --prefix backend/demo main`:main --force-with-lease
-    # - git subtree push --prefix backend/demo heroku main
-    # - gem install dpl
-    # - dpl --provider=heroku --app=swtp-2021-12-staging --api_key=$HEROKU_API_KEY
+#    - cd backend/demo
+#    - gem install dpl
+#    - dpl --app=swtp-2021-12-staging --provider=heroku --api-key=$HEROKU_API_KEY
+#    - cd ..
 
-# production:
-#  stage: deploy
-#  script:
-    # - gem install dpl
-    # - dpl --provider=heroku --app=stwp-2021-12-production --api_key=$HEROKU_API_KEY
-#  only:
-    # - tags
