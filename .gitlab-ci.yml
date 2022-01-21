@@ -39,7 +39,7 @@ test-backend:
 heroku-production:
   stage: deploy
   image: ruby:latest
-  needs: ["build"]
+  needs: ["build", "test"]
   script:
     - cd backend/demo
     - gem install dpl
