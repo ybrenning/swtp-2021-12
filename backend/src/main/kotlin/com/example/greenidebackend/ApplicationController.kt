@@ -1,5 +1,6 @@
 package com.example.greenidebackend
 
+import com.example.greenidebackend.supportdata.ConfiguredFunction
 import org.springframework.web.bind.annotation.*
 import com.example.greenidebackend.supportdata.Request
 
@@ -13,7 +14,7 @@ class ApplicationController(
     fun functionValueProvider(
         @PathVariable program: String,
         @RequestBody request: Request
-    ) {
+    ): ArrayList<ConfiguredFunction> {
         //return the calculated values for the provided functions of the specified program
         return functionService.calcFunctionValues(program, request.functions, request.configs)
     }

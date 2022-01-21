@@ -9,7 +9,7 @@ data class DBEntity(
     val id:             String,                     // primary key
     val softwareSystem: String,                     // to what software system the function belongs
     val functionName:   String,                     //
-    val configs:        Map<String, Boolean>,       // Map of confings; different software systems have different number
-    val energy:         Number,                     //
-    val time:           Number,                     //
+    val configs:        Map<String, Boolean>,       // Map of configs; different software systems have different number
+    val energy:         Double,                     //
+    val time:           Double,                     //
     )
