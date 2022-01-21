@@ -6,6 +6,8 @@ exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
 const WebviewPanel_1 = require("./WebviewPanel");
 const home_1 = require("./providers/home");
+const configs_1 = require("./providers/configs");
+const help_1 = require("./providers/help");
 var foundMethods = [];
 var functions = [];
 var config = 0;
@@ -18,8 +20,32 @@ function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    const homeData = new home_1.HomeProvider();
-    vscode.window.registerTreeDataProvider('greenIDE-home', homeData);
+    // creates tree view for first segment of side panel, home of extension actions
+    var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
+        treeDataProvider: new home_1.HomeProvider
+    });
+    // creates tree view for second segment of side panel, place for configs
+    var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
+        treeDataProvider: new configs_1.ConfigsProvider
+    });
+    // creates tree view for third segment of side panel, get instructions, commands, help links etc
+    var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
+        treeDataProvider: new help_1.HelpProvider
+    });
+    context.subscriptions.push(homeTreeView);
+    context.subscriptions.push(configsTreeView);
+    context.subscriptions.push(helpTreeView);
+    // Set name for first segment
+    homeTreeView.title = 'GREENIDE';
+    homeTreeView.description = 'Run GreenIDE:';
+    // Set name for second segment
+    configsTreeView.title = 'CONFIGURATIONS';
+    // Set name for third segment
+    helpTreeView.title = 'HELP';
+    // Test Messages for each segment
+    homeTreeView.message = 'Found Methods:';
+    configsTreeView.message = 'Choose Configs:';
+    helpTreeView.message = 'How To use';
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json

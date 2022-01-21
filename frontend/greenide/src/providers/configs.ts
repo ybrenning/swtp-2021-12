@@ -1,5 +1,5 @@
-// provider for first tab in side panel, home
-// start/reload greenIDE, see found methods, get data, activate syntax highlighting
+// provider for second tab in side panel, configs
+// drop down / tree view for all methods to apply, save methods in favorites
 
 import * as vscode from 'vscode';
 
@@ -7,7 +7,7 @@ export interface Signature {
     name: string;
 }
 
-export class HomeProvider implements vscode.TreeDataProvider<Signature> {
+export class ConfigsProvider implements vscode.TreeDataProvider<Signature> {
     
     onDidChangeTreeData?: vscode.Event<void | Signature | null | undefined> | undefined;
     
