@@ -47,8 +47,12 @@ heroku-production:
     - cd ..
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
+      when: on_success
+    - if: '$skip_integration == "true"'
+      when: never
+    - if: '$skip_integration == "false"'
+      when: on_success
     - when: on_success
-    - allow_failure: false
 
 #heroku-staging:
 #  stage: deploy
