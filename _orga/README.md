@@ -1,7 +1,6 @@
 # Organisation
 
-> Next Friday-Meeting: 14.01.2022 (14:00) \
-> Next Tuesday-Meeting: 18.01.2022 (11:00)
+> Next Tuesday-Meeting: 25.01.2022 (11:00)
 
 ## Groups
 * **Front End:** Ferris Kleier, Maxim Zapke
