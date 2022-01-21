@@ -15,7 +15,7 @@ class ApplicationController(
         @RequestBody request: Request
     ) {
         //return the calculated values for the provided functions of the specified program
-        return functionService.calcFunctionValues(program, request.functions, request.konfigs)
+        return functionService.calcFunctionValues(program, request.functions, request.configs)
     }
 
     @GetMapping("/listOfFunctions/{program}")

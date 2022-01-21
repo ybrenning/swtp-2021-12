@@ -4,7 +4,7 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 
 @Document
-data class KanziConfig(
+data class DBEntity(
     @Id
     val id:             String,                     // primary key
     val softwareSystem: String,                     // to what software system the function belongs

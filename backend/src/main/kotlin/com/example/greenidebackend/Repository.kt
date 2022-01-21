@@ -1,10 +1,12 @@
 package com.example.greenidebackend
 
+import com.example.greenidebackend.supportdata.DBEntity
+import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-class Repository {
-    //TODO: get all function names
+interface Repository: MongoRepository<DBEntity, String> {
 
-    //TODO: get all values for a function name
+    fun findBySoftwareSystem(softwareSystem: String): List<DBEntity>
+    fun findConfigsForFunction(functionName: String): List<DBEntity>
 }
