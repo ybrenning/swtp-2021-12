@@ -1,5 +1,6 @@
 stages:
   - build
+  - test
   - deploy
   
 
@@ -17,6 +18,20 @@ build:
   cache:
     key: "$CI_COMMIT_REF_NAME"
     policy: push
+    paths: 
+      - build
+      - .gradle
+
+test-backend:
+  stage: test
+  image: gradle:jdk11-alpine
+  script:
+    - cd backend/demo
+    - ./gradlew test
+    - cd ..
+  cache:
+    key: "$CI_COMMIT_REF_NAME"
+    policy: pull
     paths: 
       - build
       - .gradle
