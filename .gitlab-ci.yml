@@ -31,7 +31,7 @@ heroku-production:
     - dpl --app=swtp-2021-12-production --provider=heroku --api-key=$HEROKU_API_KEY
     - cd ..
   rules:
-    - if '$CI_COMMIT_BRANCH == "cicd"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
 
 #heroku-staging:
 #  stage: deploy
