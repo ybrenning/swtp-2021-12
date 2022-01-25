@@ -31,6 +31,9 @@ class FunctionValueCalculatorService(
 
                     //is this config #requested AND #the one in this database entry
                     if(configToFind && functionConfigRaw.configs[configurationNameFromNumber(requestedConfigNr, functionConfigRaw.softwareSystem)] == true) {
+                        // TODO: this doesn't currently work because of the changes in the repo data structure
+                        //       (see DBEntity and DBConfig).
+
                         functionResultEnergy += functionConfigRaw.energy
                         functionResultTime   += functionConfigRaw.time
                         break
