@@ -1,8 +1,8 @@
 package com.example.greenidebackend
 
-import com.example.greenidebackend.supportdata.ConfiguredFunction
+import com.example.greenidebackend.dataclasses.ConfiguredFunction
 import org.springframework.web.bind.annotation.*
-import com.example.greenidebackend.supportdata.Request
+import com.example.greenidebackend.dataclasses.Request
 
 @RestController
 @RequestMapping

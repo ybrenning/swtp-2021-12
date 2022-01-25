@@ -1,7 +1,7 @@
 package com.example.greenidebackend
 
-import com.example.greenidebackend.supportdata.ConfiguredFunction
-import com.example.greenidebackend.supportdata.DBEntity
+import com.example.greenidebackend.dataclasses.ConfiguredFunction
+import com.example.greenidebackend.dataclasses.DBEntity
 import org.springframework.stereotype.Service
 
 @Service
