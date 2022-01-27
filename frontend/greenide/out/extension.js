@@ -4,7 +4,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
-const WebviewPanel_1 = require("./WebviewPanel");
 const home_1 = require("./providers/home");
 const configs_1 = require("./providers/configs");
 const help_1 = require("./providers/help");
@@ -20,10 +19,18 @@ function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    // creates tree view for first segment of side panel, home of extension actions
-    var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
-        treeDataProvider: new home_1.HomeProvider
+    // The command has been defined in the package.json file
+    // Now provide the implementation of the command with registerCommand
+    // The commandId parameter must match the command field in package.json
+    let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
+        // The code you place here will be executed every time your command is executed
+        // Starts procedure and updates webview panel
+        runAnalysis();
+        runSidePanel();
+        // old webview panel
+        // WebviewPanel.createOrShow(context.extensionUri);
     });
+    context.subscriptions.push(disposable);
     // creates tree view for second segment of side panel, place for configs
     var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
         treeDataProvider: new configs_1.ConfigsProvider
@@ -32,52 +39,15 @@ function activate(context) {
     var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
         treeDataProvider: new help_1.HelpProvider
     });
-    context.subscriptions.push(homeTreeView);
     context.subscriptions.push(configsTreeView);
     context.subscriptions.push(helpTreeView);
-    // Set name for first segment
-    homeTreeView.title = 'GREENIDE';
-    homeTreeView.description = 'Run GreenIDE:';
     // Set name for second segment
     configsTreeView.title = 'CONFIGURATIONS';
     // Set name for third segment
     helpTreeView.title = 'HELP';
     // Test Messages for each segment
-    homeTreeView.message = 'Found Methods:';
     configsTreeView.message = 'Choose Configs:';
     helpTreeView.message = 'How To use';
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
-        // The code you place here will be executed every time your command is executed
-        // Starts procedure and updates webview panel
-        runAnalysis();
-        WebviewPanel_1.WebviewPanel.createOrShow(context.extensionUri);
-    });
-    context.subscriptions.push(disposable);
-    // Hardcode to set data for output
-    let cmd1 = vscode.commands.registerCommand('greenIDE.config1', () => {
-        config = 1;
-        console.log('Active Configuration: TPAQ, ROLZ');
-        function1Data = { time: 2567.38007840983203, energy: 1823.4644462499255 };
-        function2Data = { time: -28.9912719904026845, energy: -36.3591803758968134 };
-    });
-    let cmd2 = vscode.commands.registerCommand('greenIDE.config2', () => {
-        config = 2;
-        console.log('Active Configuration: ANSI1, RLT');
-        function1Data = { time: 3605.0363865159459, energy: 2630.4899197729041 };
-        function2Data = { time: 23.627126336485886, energy: 65.8686502751974591 };
-    });
-    let cmd3 = vscode.commands.registerCommand('greenIDE.config3', () => {
-        config = 3;
-        console.log('Active Configuration: SKIP, RLT');
-        function1Data = { time: 3444.99055318259663, energy: 2384.124905294016 };
-        function2Data = { time: 63.650126336456219, energy: 104.0431691254021741 };
-    });
-    context.subscriptions.push(cmd1);
-    context.subscriptions.push(cmd2);
-    context.subscriptions.push(cmd3);
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     // Start Hover Provider to create hovers
@@ -108,6 +78,15 @@ function runAnalysis() {
         console.log(foundMethods[j]);
     }
     console.log('End Test');
+}
+function runSidePanel() {
+    // creates tree view for first segment of side panel, home of extension actions
+    var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
+        treeDataProvider: new home_1.HomeProvider(functions)
+    });
+    // Set name for first segment
+    homeTreeView.title = 'GREENIDE';
+    homeTreeView.description = 'Run GreenIDE:';
 }
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {

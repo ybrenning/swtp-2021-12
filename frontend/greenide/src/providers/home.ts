@@ -2,24 +2,55 @@
 // start/reload greenIDE, see found methods, get data, activate syntax highlighting
 
 import * as vscode from 'vscode';
+import { Hover, HoverProvider, ProviderResult } from 'vscode';
+import { MessagePort, TransferListItem } from 'worker_threads';
 
-export interface Signature {
-    name: string;
+
+
+export class HomeProvider implements vscode.TreeDataProvider<TreeItem> {
+    
+    onDidChangeTreeData?: vscode.Event<TreeItem|null|undefined>|undefined;
+  
+    data: TreeItem[];
+
+    constructor(functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[]) {
+
+        if (functions.length > 0) {
+            this.data = [new TreeItem('Found Methods:', [
+            
+                new TreeItem(functions[1].name),
+                new TreeItem(functions[2].name)
+
+            ])];
+        } else {
+            this.data = [new TreeItem('No Methods found')];
+        }
+    }
+    
+    getTreeItem(element: TreeItem): vscode.TreeItem|Thenable<vscode.TreeItem> {
+        
+        return element;
+    }
+    
+    getChildren(element?: TreeItem|undefined): vscode.ProviderResult<TreeItem[]> {
+        
+        if (element === undefined) {
+          return this.data;
+        }
+        return element.children;
+      }
 }
 
-export class HomeProvider implements vscode.TreeDataProvider<Signature> {
+  
+class TreeItem extends vscode.TreeItem {
     
-    onDidChangeTreeData?: vscode.Event<void | Signature | null | undefined> | undefined;
-    
-    getTreeItem(element: Signature): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        
-        throw new Error('Method not implemented.');
+    children: TreeItem[]|undefined;
+  
+    constructor(label: string, children?: TreeItem[]) {
+      super(
+          label,
+          children === undefined ? vscode.TreeItemCollapsibleState.None :
+                                   vscode.TreeItemCollapsibleState.Expanded);
+      this.children = children;
     }
-    
-    getChildren(element?: Signature): vscode.ProviderResult<Signature[]> {
-        
-        throw new Error('Method not implemented.');
-    }
-
-    
 }
