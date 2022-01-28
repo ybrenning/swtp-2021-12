@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
-class DemoApplicationTests {
+class GreenIdeBackendApplicationTests {
 
-	@Test
-	fun contextLoads() {
-		assertEquals(0, 1 - 1)
-	}
+    @Test
+    fun contextLoads() {
+        assertEquals(0, 1 - 1)
+    }
 
 }
