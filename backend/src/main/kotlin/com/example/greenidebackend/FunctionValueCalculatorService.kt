@@ -12,7 +12,7 @@ class FunctionValueCalculatorService(
     fun calcFunctionValues(
         softwareSystem: String,
         functionsToFind: ArrayList<String>,
-        configsToFind: ArrayList<Boolean>
+        configsToFind: ArrayList<String>
     ): ArrayList<ConfiguredFunction> {
         val configuredFunctions: ArrayList<ConfiguredFunction> = ArrayList()
 
