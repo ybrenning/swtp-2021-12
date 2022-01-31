@@ -35,8 +35,19 @@ test-backend:
       - build
       - .gradle
 
+heroku-staging:
+  stage: deploy
+  image: ruby:latest
+  needs: ["build"]
+  script:
+    - cd backend/demo
+    - gem install dpl
+    - dpl --app=swtp-2021-12-staging --provider=heroku --api-key=$HEROKU_API_KEY
+    - cd ..
+
 heroku-production:
   stage: deploy
+  needs: ["heroku-staging"]
   image: ruby:latest
   script:
     - cd backend/demo
@@ -45,13 +56,3 @@ heroku-production:
     - cd ..
   rules:
     - if: '$CI_COMMIT_BRANCH == "main"'
-
-#heroku-staging:
-#  stage: deploy
-#  image: ruby:latest
-#  needs: ["build"]
-#  script:
-#    - cd backend/demo
-#    - gem install dpl
-#    - dpl --app=swtp-2021-12-staging --provider=heroku --api-key=$HEROKU_API_KEY
-#    - cd ..
