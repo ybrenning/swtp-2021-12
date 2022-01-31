@@ -16,9 +16,12 @@ var function3Data;
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
+    // auto start extension
+    vscode.commands.executeCommand('greenIDE.run');
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
+    // TODO: Auto run extension / command on startup
     // The command has been defined in the package.json file
     // Now provide the implementation of the command with registerCommand
     // The commandId parameter must match the command field in package.json
@@ -26,28 +29,49 @@ function activate(context) {
         // The code you place here will be executed every time your command is executed
         // Starts procedure and updates webview panel
         runAnalysis();
-        runSidePanel();
+        // side panel segments loading
+        sidePanelHome();
+        sidePanelConfigs();
+        sidePanelHelp();
         // old webview panel
         // WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
-    // creates tree view for second segment of side panel, place for configs
-    var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
-        treeDataProvider: new configs_1.ConfigsProvider
-    });
-    // creates tree view for third segment of side panel, get instructions, commands, help links etc
-    var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
-        treeDataProvider: new help_1.HelpProvider
-    });
-    context.subscriptions.push(configsTreeView);
-    context.subscriptions.push(helpTreeView);
-    // Set name for second segment
-    configsTreeView.title = 'CONFIGURATIONS';
-    // Set name for third segment
-    helpTreeView.title = 'HELP';
-    // Test Messages for each segment
-    configsTreeView.message = 'Choose Configs:';
-    helpTreeView.message = 'How To use';
+    function sidePanelHome() {
+        // creates tree view for first segment of side panel, home of extension actions
+        var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
+            treeDataProvider: new home_1.HomeProvider(functions)
+        });
+        // Set name for first segment
+        homeTreeView.title = 'GREENIDE';
+        homeTreeView.description = 'Run GreenIDE:';
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (url) => {
+            // TODO: implement reveal on click, url should be parsed in home.ts command
+            vscode.env.openExternal(vscode.Uri.parse(url));
+        });
+        context.subscriptions.push(clickEvent);
+        context.subscriptions.push(homeTreeView);
+    }
+    function sidePanelConfigs() {
+        // creates tree view for second segment of side panel, place for configs
+        var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
+            treeDataProvider: new configs_1.ConfigsProvider
+        });
+        // Set name for second segment
+        configsTreeView.title = 'CONFIGURATIONS';
+        configsTreeView.message = 'Choose Configs:';
+        context.subscriptions.push(configsTreeView);
+    }
+    function sidePanelHelp() {
+        // creates tree view for third segment of side panel, get instructions, commands, help links etc
+        var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
+            treeDataProvider: new help_1.HelpProvider
+        });
+        // Set name for third segment
+        helpTreeView.title = 'HELP';
+        helpTreeView.message = 'How To use';
+        context.subscriptions.push(helpTreeView);
+    }
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     // Start Hover Provider to create hovers
@@ -78,15 +102,6 @@ function runAnalysis() {
         console.log(foundMethods[j]);
     }
     console.log('End Test');
-}
-function runSidePanel() {
-    // creates tree view for first segment of side panel, home of extension actions
-    var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
-        treeDataProvider: new home_1.HomeProvider(functions)
-    });
-    // Set name for first segment
-    homeTreeView.title = 'GREENIDE';
-    homeTreeView.description = 'Run GreenIDE:';
 }
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {

@@ -15,6 +15,7 @@
 		"onView:greenIDE-home",
 		"onView:greenIDE-configs",
 		"onView:greenIDE-help",
+		"onView:greenIDE-explorer",
 		"onCommand:greenIDE.run"
 	],
 	"main": "./out/extension.js",
@@ -64,8 +65,12 @@
 				}
 			},
 			{
-				"command": "greenIDE-home.helloworld",
-				"title": "test views"
+				"command": "greenIDE-home.rightClick",
+				"title": "Highlight Item"
+			},
+			{
+				"command": "greenIDE-home.click",
+				"title": "Reveal"
 			},
 			{
 				"command": "greenIDE.config1",
@@ -95,8 +100,8 @@
 			],
 			"view/item/context": [
 				{
-					"command": "greenIDE-home.helloworld",
-					"when": "view == greenIDE-home"
+					"command": "greenIDE-home.rightClick",
+					"when": "viewItem == treeItem"
 				}
 			]
 		},
