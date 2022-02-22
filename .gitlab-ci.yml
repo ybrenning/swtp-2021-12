@@ -26,7 +26,7 @@ test-backend:
   image: gradle:jdk11-alpine
   script:
     - cd backend/demo
-    - ./gradlew test
+    - ./gradlew test --info
     - cd ..
   cache:
     key: "$CI_COMMIT_REF_NAME"
