@@ -1,6 +1,6 @@
-package com.example.greenidebackend
+package com.example.demo
 
-import com.example.greenidebackend.dataclasses.DBEntity
+import com.example.demo.dataclasses.DBEntity
 import org.springframework.data.mongodb.repository.MongoRepository
 import org.springframework.stereotype.Repository
 

@@ -1,4 +1,4 @@
-package com.example.greenidebackend.dataclasses
+package com.example.demo.dataclasses
 
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -13,3 +13,4 @@ data class DBEntity(
     val energy:         Double,                     //
     val time:           Double,                     //
     )
+

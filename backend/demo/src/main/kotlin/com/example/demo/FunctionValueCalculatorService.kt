@@ -1,7 +1,7 @@
-package com.example.greenidebackend
+package com.example.demo
 
-import com.example.greenidebackend.dataclasses.ConfiguredFunction
-import com.example.greenidebackend.dataclasses.DBEntity
+import com.example.demo.dataclasses.ConfiguredFunction
+import com.example.demo.dataclasses.DBEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -58,3 +58,4 @@ class FunctionValueCalculatorService(
     }
 
 }
+
