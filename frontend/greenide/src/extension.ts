@@ -2,11 +2,13 @@
 // Import the module and reference it with the alias vscode in your code below
 'use strict';
 import * as vscode from 'vscode';
+import * as methodlist from './method_list.json';
 import { WebviewPanel } from './WebviewPanel';
 import { HomeProvider } from './providers/home';
 import { ConfigsProvider } from './providers/configs';
 import { HelpProvider } from './providers/help';
 import { removeAllListeners } from 'process';
+import { kMaxLength } from 'buffer';
 
 var foundMethods: string[] = [];
 var functions: {
@@ -162,8 +164,19 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             var containerNumber = 0;
 
             // TODO: replace kanzilist elements with all elements of method_list.txt (all kanzi methods)
-            
-            var kanzilist = ['InsertionSort()', 'HeapSort()'];
+            // Find from list imported Kanzi, e.g. kanzi.util.hash.XXHash32
+            // then find implemented method, e.g. from kanzi...hash32 --> .hash()
+                // Problem: if object is created, find method applied to that object, just that object
+                // idea: top down brackets, search for created objects with second last segment (e.g. XXHash32 created as hash, save name of object)
+                // then search for method applied to that object inside of brackets (count closing brackets, +1 if opening, -1 if closing, if <0 break)
+                // if method is found applied to object (e.g. 'hash.hash(' ) this is the wanted method
+
+
+            // TODO: convert method_list.txt to array to iterate
+            // trying with json-file, next step: iterating search over kanzilist
+
+            var kanzilist = [];
+            kanzilist.push(methodlist);
 
             // Find "kanzi." in document/code
             // for each line in code

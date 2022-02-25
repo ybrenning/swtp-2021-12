@@ -6,7 +6,6 @@ import { Hover, HoverProvider, ProviderResult } from 'vscode';
 import { MessagePort, TransferListItem } from 'worker_threads';
 
 
-
 export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
     
     onDidChangeTreeData?: vscode.Event<HomeItem|null|undefined>|undefined;
