@@ -24,6 +24,7 @@ build:
 test-backend:
   stage: test
   image: gradle:jdk11-alpine
+  needs: ["build"]
   script:
     - cd backend/demo
     - ./gradlew test --info
@@ -38,7 +39,7 @@ test-backend:
 heroku-staging:
   stage: deploy
   image: ruby:latest
-  needs: ["build"]
+  needs: ["test-backend"]
   script:
     - cd backend/demo
     - gem install dpl
