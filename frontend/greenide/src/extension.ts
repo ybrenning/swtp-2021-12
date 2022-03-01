@@ -203,22 +203,28 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                 kanzilistMET[n2] = kanzilistFULL[n2].slice(index + 1);
             }
 
-            // Two dimensional list of kanzi methods to find methods after implementation
-            var kanzilist: string[][] = [kanzilistIMP,kanzilistMET];
-
             // purge duplicates in kanzilistIMP
-            let kanzilistIMPwD: string[] = [];
+            /*let kanzilistIMPwD: string[] = [];
             kanzilistIMP.forEach((i) => {
                 if (!kanzilistIMPwD.includes(i)) {
                     kanzilistIMPwD.push(i);
                 }
-            });
+            });*/
 
-            for (var t = 0; t < kanzilistIMPwD.length; t++) {
-                console.log(kanzilistIMPwD[t]);
+            // Two dimensional list of kanzi methods to find methods after implementation
+            var kanzilist = [];
+            for (var k = 0; k < kanzilistIMP.length; k++) {
+                kanzilist.push([kanzilistIMP[k],kanzilistMET[k]]);
             }
 
+            // test kanzilist
+            var kanziOutput: any = [];
+            for (var t = 0; t < kanzilist.length; t++) {
+                console.log(kanzilist[t][0] + ' ' + kanzilist[t][1]);
+            }
             console.log('End of Kanzilist');
+
+            // MECHANIC
 
             // Find "kanzi." in document/code
             // for each line in code
