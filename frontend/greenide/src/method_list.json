@@ -1,5 +1,5 @@
 {
-    "kanzimethods": [
+    "kanzimethods" : [
         "kanzi.Global$1.compare()",
         "kanzi.Global.<clinit>()",
         "kanzi.Global.computeHistogramOrder0()",
@@ -256,6 +256,6 @@
         "kanzi.transform.DivSufSort.trSort()",
         "kanzi.transform.SBRT.<init>()",
         "kanzi.transform.SBRT.forward()",
-        "kanzi.util.hash.XXHash32.hash()"
+        "kanzi.util.hash.XXHash32.hash()"  
     ]
 }
