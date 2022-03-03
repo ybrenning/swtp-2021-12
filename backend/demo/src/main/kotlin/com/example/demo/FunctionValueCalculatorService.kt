@@ -2,6 +2,7 @@ package com.example.demo
 
 import com.example.demo.dataclasses.ConfiguredFunction
 import com.example.demo.dataclasses.DBEntity
+import com.example.demo.parser.Parser
 import org.springframework.stereotype.Service
 
 @Service
@@ -57,5 +58,9 @@ class FunctionValueCalculatorService(
         return functionsNoDupes
     }
 
+    // function to create parse object
+        fun parseFileToDB(softwareSystem: String, repository: Repository) {
+            val parseObject = Parser
+            parseObject.parseFile(softwareSystem, repository)
+    }
 }
-

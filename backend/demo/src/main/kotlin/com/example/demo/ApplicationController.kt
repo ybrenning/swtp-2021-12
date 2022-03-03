@@ -9,19 +9,23 @@ import com.example.demo.dataclasses.Request
 class ApplicationController(
     val functionService: FunctionValueCalculatorService
 ) {
-
-    @PostMapping("/calculateValues/{program}")
+    @PostMapping("/calculateValues/{softwareSystem}")
     fun functionValueProvider(
-        @PathVariable program: String,
+        @PathVariable softwareSystem: String,
         @RequestBody request: Request
     ): ArrayList<ConfiguredFunction> {
         //return the calculated values for the provided functions of the specified program
-        return functionService.calcFunctionValues(program, request.functions, request.configs)
+        return functionService.calcFunctionValues(softwareSystem, request.functions, request.configs)
     }
 
-    @GetMapping("/listOfFunctions/{program}")
-    fun functionListProvider(@PathVariable program: String): ArrayList<String>?{
+    @GetMapping("/listOfFunctions/{softwareSystem}")
+    fun functionListProvider(@PathVariable softwareSystem: String): ArrayList<String>?{
         //return a list of all functions of the given program
-        return functionService.getAllFunctions(program)
+        return functionService.getAllFunctions(softwareSystem)
+    }
+
+    @PostMapping("/parseFile/{softwareSystem}")
+    fun parseFileToDB(@PathVariable softwareSystem:String) {
+        functionService.parseFileToDB(softwareSystem)
     }
 }
