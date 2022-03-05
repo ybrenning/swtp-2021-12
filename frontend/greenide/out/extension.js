@@ -108,6 +108,7 @@ function runAnalysis() {
 class JavaDocumentSymbolProvider {
     provideDocumentSymbols(document, token) {
         return new Promise((resolve) => {
+            foundMethods = [];
             var symbols = [];
             var containerNumber = 0;
             // TODO: replace kanzilist elements with all elements of method_list.txt (all kanzi methods)
@@ -149,11 +150,6 @@ class JavaDocumentSymbolProvider {
             for (var k = 0; k < kanzilistIMP.length; k++) {
                 kanzilist.push([kanzilistIMP[k], kanzilistMET[k]]);
             }
-            // test kanzilist
-            for (var t = 0; t < kanzilist.length; t++) {
-                console.log(kanzilist[t][0] + ' ' + kanzilist[t][1]);
-            }
-            console.log('End of Kanzilist');
             // MECHANIC
             // Find "kanzi." in document/code
             // for each line in code

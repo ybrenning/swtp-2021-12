@@ -162,6 +162,8 @@ function runAnalysis() {
 class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         return new Promise((resolve) => {
+
+            foundMethods = [];
             var symbols = [];
             var containerNumber = 0;
 
@@ -209,13 +211,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             var kanzilist = [];
             for (var k = 0; k < kanzilistIMP.length; k++) {
                 kanzilist.push([kanzilistIMP[k],kanzilistMET[k]]);
-            }
-
-            // test kanzilist
-            for (var t = 0; t < kanzilist.length; t++) {
-                console.log(kanzilist[t][0] + ' ' + kanzilist[t][1]);
-            }
-            console.log('End of Kanzilist');
+            } 
 
             // MECHANIC
 
