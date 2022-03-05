@@ -2,7 +2,7 @@
   "name": "greenide",
   "displayName": "GreenIDE",
   "description": "VSCode Extension zum erkennen von Energiehotspots",
-  "version": "0.0.1",
+  "version": "0.1.2",
   "engines": {
     "vscode": "^1.62.0"
   },
