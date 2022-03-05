@@ -86,6 +86,10 @@ exports.activate = activate;
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis() {
+    // make space
+    for (var t = 0; t < 100; t++) {
+        console.log('\n');
+    }
     // header for understanding methods output
     console.log('Found Kanzi Methods');
     console.log('Name, line, start pos, end pos');
@@ -97,18 +101,13 @@ function runAnalysis() {
         functions[i].location.range.end.character // ending column of found kanzi method
         );
     }
-    console.log('Start Test');
-    // TODO: do procedure order
-    for (var j = 0; j < foundMethods.length; j++) {
-        console.log(foundMethods[j]);
-    }
-    console.log('End Test');
 }
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
     provideDocumentSymbols(document, token) {
         return new Promise((resolve) => {
             foundMethods = [];
+            functions = [];
             var symbols = [];
             var containerNumber = 0;
             // TODO: replace kanzilist elements with all elements of method_list.txt (all kanzi methods)
@@ -163,7 +162,6 @@ class JavaDocumentSymbolProvider {
                 // if kanzi method is in line
                 {
                     if (line.text.includes('import ' + kanzilistIMPwD[temp])) {
-                        console.log('PART1 WORKS');
                         for (var j = 0; j < line.text.length; j++) {
                             if (!line.text.substring(j).includes(' ' + kanzilistIMPwD[temp])) {
                                 // // Search for end of full kanzi name
