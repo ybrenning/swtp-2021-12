@@ -237,7 +237,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                         console.log('PART1 WORKS');
 
                         for (var j = 0; j < line.text.length; j++) {
-                            
+
                             if (!line.text.substring(j).includes(' ' + kanzilistIMPwD[temp])) {
                                 // // Search for end of full kanzi name
                                 // for (var k = j; k < line.text.length; k++) {
