@@ -157,8 +157,24 @@ class JavaDocumentSymbolProvider {
                 // find kanzi method
                 for (var temp = 0; temp < kanzilistFULL.length; temp++) 
                 // TODO: find implemented Kanzi and the location of their method implementation
-                // [ ] Kanzi Implementation detected
+                // [X] Kanzi Implementation detected
                 // [ ] Corresponding Methods found (also for created Objects)
+                /*
+                pseudocode to find both objects and plain methods from imported kanzi:
+
+                bracketcounter = 0
+                if (before kanziMET[k] is 'new ') {
+                    var target = name
+                        where name is extracted from = ..% name = kanziMET[k](%..
+                    do {
+                        search for target
+                        if (opening bracket is found): bracketcounter +1
+                        if (closing bracket is found): bracketcounter -1
+                    } while (bracketcounter >= 0)
+                } else {
+                    search for kanziMET[k]
+                }
+                */
                 // if kanzi method is in line
                 {
                     if (line.text.includes('import ' + kanzilistIMPwD[temp])) {
