@@ -108,6 +108,7 @@ class JavaDocumentSymbolProvider {
         return new Promise((resolve) => {
             foundMethods = [];
             functions = [];
+            var containedKanzis = [];
             var symbols = [];
             var containerNumber = 0;
             // TODO: replace kanzilist elements with all elements of method_list.txt (all kanzi methods)
@@ -145,46 +146,51 @@ class JavaDocumentSymbolProvider {
                 }
             });
             // Two dimensional list of kanzi methods to find methods after implementation
+            // kanzilist = [implemented][method]
             var kanzilist = [];
             for (var k = 0; k < kanzilistIMP.length; k++) {
                 kanzilist.push([kanzilistIMP[k], kanzilistMET[k]]);
             }
             // MECHANIC
+            // TODO: find implemented Kanzi and the location of their method implementation
+            // [X] Kanzi Implementation detected
+            // [ ] Corresponding Methods found (also for created Objects)
+            /*
+            pseudocode to find both objects and plain methods from imported kanzi:
+
+            bracketcounter = 0
+            if (before kanziMET[k] is 'new ') {
+                var target = name
+                    where name is extracted from = ..% name = kanziMET[k](%..
+                do {
+                    search for target
+                    if (opening bracket is found): bracketcounter +1
+                    if (closing bracket is found): bracketcounter -1
+                } while (bracketcounter >= 0)
+            } else {
+                search for kanziMET[k]
+            }
+            */
             // Find "kanzi." in document/code
             // for each line in code
             for (var i = 0; i < document.lineCount; i++) {
                 var line = document.lineAt(i);
-                // find kanzi method
-                for (var temp = 0; temp < kanzilistFULL.length; temp++) 
-                // TODO: find implemented Kanzi and the location of their method implementation
-                // [X] Kanzi Implementation detected
-                // [ ] Corresponding Methods found (also for created Objects)
-                /*
-                pseudocode to find both objects and plain methods from imported kanzi:
-
-                bracketcounter = 0
-                if (before kanziMET[k] is 'new ') {
-                    var target = name
-                        where name is extracted from = ..% name = kanziMET[k](%..
-                    do {
-                        search for target
-                        if (opening bracket is found): bracketcounter +1
-                        if (closing bracket is found): bracketcounter -1
-                    } while (bracketcounter >= 0)
-                } else {
-                    search for kanziMET[k]
-                }
-                */
-                // if kanzi method is in line
-                {
-                    if (line.text.includes('import ' + kanzilistIMPwD[temp])) {
+                // loop 1: find kanzi implementations
+                for (var temp = 0; temp < kanzilist.length; temp++) {
+                    // if kanzi is in line ...
+                    if (line.text.includes('import ' + kanzilist[temp][0])) {
+                        /*
+                        // for the whole line fro beginning to end ...
                         for (var j = 0; j < line.text.length; j++) {
+                            // mark location of kanzi
                             if (!line.text.substring(j).includes(' ' + kanzilistIMPwD[temp])) {
+
                                 // // Search for end of full kanzi name
                                 // for (var k = j; k < line.text.length; k++) {
                                 //     if (line.text.substring(j-1, k).includes(";")) {
                                 //         // Add found kanzi name and location to object
                                 symbols.push({
+
                                     // Substring only grabbing kanzi method name without braces
                                     // name: line.text.substr(j-1, (k-1) - (j-1)),
                                     name: kanzilistIMPwD[temp],
@@ -192,7 +198,80 @@ class JavaDocumentSymbolProvider {
                                     containerName: containerNumber.toString(),
                                     location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilistIMPwD[temp].length + 1)))
                                 });
+
                                 foundMethods[containerNumber] = kanzilistIMPwD[temp];
+                                containerNumber++;
+
+                                break;
+                            }
+                        }*/
+                        containedKanzis.push(kanzilist[temp]);
+                    }
+                }
+                // TODO: A lot of Bugs
+                // not stopping to print found method
+                // extension doesn't start when object finder is in code
+                // loop 2: find objects / methods from imported kanzi
+                for (var temp = 0; temp < containedKanzis.length; temp++) {
+                    var impKanzi = containedKanzis[temp][0].slice(containedKanzis[temp][0].lastIndexOf('.'), containedKanzis[temp][0].length - 1);
+                    // if imported method is in line ...
+                    if (line.text.includes(containedKanzis[temp][1]) || impKanzi) {
+                        // for the whole line from beginning to end ...
+                        for (var j = 0; j < line.text.length; j++) {
+                            // mark location of method
+                            if (!line.text.substring(j).includes(' new ' + impKanzi + '(')) {
+                                // check where name starts
+                                var k = 2;
+                                do {
+                                    k++;
+                                } while (!line.text.substring(j - k - 1, j - 2).includes(' '));
+                                // Hash32 name = new hash32(99) // j = 16, k = 6 --> substring(16-6,16-2) = substring(11,15) = 'name'
+                                var target = line.text.substring(j - k, j - 2);
+                                // search for target
+                                var iCopy = i + 1; // logically stay at line i but search in segment between brackets
+                                var bracketCounter = 0; // to count brackets for instance
+                                do {
+                                    // search for method application, like target.hash()
+                                    if (document.lineAt(iCopy).text.includes(target + '.' + containedKanzis[temp][1])) {
+                                        for (var j2 = 0; j2 < document.lineAt(iCopy).text.length; j2++) {
+                                            if (!document.lineAt(iCopy).text.substring(j2).includes(target + '.' + containedKanzis[temp][1])) {
+                                                symbols.push({
+                                                    // Substring only grabbing kanzi method name without braces
+                                                    // name: line.text.substr(j-1, (k-1) - (j-1)),
+                                                    name: kanzilist[temp][1],
+                                                    kind: vscode.SymbolKind.Method,
+                                                    containerName: containerNumber.toString(),
+                                                    location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + 1), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length + 1)))
+                                                });
+                                                foundMethods[containerNumber] = kanzilist[temp][1];
+                                                containerNumber++;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    // count brackets to ensure we are still inside possible instance of target
+                                    if (document.lineAt(iCopy).text.includes('{')) {
+                                        bracketCounter++;
+                                    }
+                                    if (document.lineAt(iCopy).text.includes('}')) {
+                                        bracketCounter--;
+                                    }
+                                } while (bracketCounter >= 0);
+                            }
+                            else if (!line.text.substring(j).includes(containedKanzis[temp][1] + '(')) {
+                                // // Search for end of full kanzi name
+                                // for (var k = j; k < line.text.length; k++) {
+                                //     if (line.text.substring(j-1, k).includes(";")) {
+                                //         // Add found kanzi name and location to object
+                                symbols.push({
+                                    // Substring only grabbing kanzi method name without braces
+                                    // name: line.text.substr(j-1, (k-1) - (j-1)),
+                                    name: kanzilist[temp][1],
+                                    kind: vscode.SymbolKind.Method,
+                                    containerName: containerNumber.toString(),
+                                    location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilist[temp][1].length + 1)))
+                                });
+                                foundMethods[containerNumber] = kanzilist[temp][1];
                                 containerNumber++;
                                 break;
                             }
