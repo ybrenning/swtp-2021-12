@@ -31,7 +31,6 @@ object Parser {
 
                 repository.save(
                     DBEntity (
-                        id,
                         softwareSystem,
                         csvLineElements[0],
                         configMap,
@@ -39,20 +38,8 @@ object Parser {
                         csvLineElements[csvLineElements.size-1].toDouble()
                     )
                 )
-                /*
-                var entry = DBEntity(
-                    id,
-                    softwareSystem,
-                    csvLineElements[0],
-                    configMap,
-                    csvLineElements[csvLineElements.size-2].toDouble(),
-                    csvLineElements[csvLineElements.size-1].toDouble()
-                )
-                */
-                //TODO: submit to Repository for DB
             }
             i = 1
         }
     }
-
 }

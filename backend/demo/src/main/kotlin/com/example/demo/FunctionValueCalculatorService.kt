@@ -59,8 +59,7 @@ class FunctionValueCalculatorService(
     }
 
     // function to create parse object
-        fun parseFileToDB(softwareSystem: String, repository: Repository) {
-            val parseObject = Parser
-            parseObject.parseFile(softwareSystem, repository)
+    fun parseFileToDB(softwareSystem: String) {
+        Parser.parseFile(softwareSystem, repository)
     }
 }
