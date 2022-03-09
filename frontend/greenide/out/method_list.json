@@ -256,6 +256,8 @@
         "kanzi.transform.DivSufSort.trSort()",
         "kanzi.transform.SBRT.<init>()",
         "kanzi.transform.SBRT.forward()",
-        "kanzi.util.hash.XXHash32.hash()"
+        "kanzi.util.hash.XXHash32.hash()",
+        "kanzi.util.sort.HeapSort.test()",
+        "kanzi.util.sort.InsertionSort.test()"
     ]
 }

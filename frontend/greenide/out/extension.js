@@ -250,7 +250,7 @@ class JavaDocumentSymbolProvider {
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
                                                         kind: vscode.SymbolKind.Method,
                                                         containerName: containerNumber.toString(),
-                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + 1), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length + 1)))
+                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + (containedKanzis[temp][1]).length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length)))
                                                     });
                                                     foundMethods[containerNumber] = kanzilist[temp][1];
                                                     containerNumber++;
@@ -280,7 +280,7 @@ class JavaDocumentSymbolProvider {
                                         name: impKanzi + '()',
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
-                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilist[temp][1].length + 1)))
+                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impKanzi.length + 4)))
                                     });
                                     foundMethods[containerNumber] = kanzilist[temp][1];
                                     containerNumber++;
