@@ -136,6 +136,17 @@ function runAnalysis() {
     // make space
     for (var t = 0; t < 100; t++) { console.log('\n'); }
 
+    // remove duplicates
+    for (var j = 0; j<functions.length; j++) {
+        for (var i = 0; i<functions.length; i++) {
+            if (!(functions[j].containerName.match(functions[i].containerName))
+            && (functions[j].location.range.start.line === functions[i].location.range.start.line)
+            && (functions[j].location.range.start.character === functions[i].location.range.start.character)) {
+                functions.splice(j,1);
+            }
+        }
+    }
+
     // header for understanding methods output
     console.log('Found Kanzi Methods');
     console.log('Name, line, start pos, end pos');

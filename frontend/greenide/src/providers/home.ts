@@ -12,15 +12,22 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
 
     data: HomeItem[];
 
+    // Set the tree elements for side panel
     constructor(functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[]) {
 
+        // if there are functions
         if (functions.length > 0) {
-            this.data = [new HomeItem('Found Methods:', [
 
-                new HomeItem(functions[1].name),
-                new HomeItem(functions[2].name)
+            // collect all functions found
+            var sendData = [];
+            for (var j = 0; j<functions.length; j++) {
+                sendData.push(new HomeItem(functions[j].name));
+            }
 
-            ])];
+            // TEST suite
+            console.log(functions);
+
+            this.data = [new HomeItem('Found Methods:', sendData)];
         } else {
             this.data = [new HomeItem('Run or Reload Extension')];
         }
