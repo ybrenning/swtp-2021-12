@@ -90,6 +90,16 @@ function runAnalysis() {
     for (var t = 0; t < 100; t++) {
         console.log('\n');
     }
+    // remove duplicates
+    for (var j = 0; j < functions.length; j++) {
+        for (var i = 0; i < functions.length; i++) {
+            if (!(functions[j].containerName.match(functions[i].containerName))
+                && (functions[j].location.range.start.line === functions[i].location.range.start.line)
+                && (functions[j].location.range.start.character === functions[i].location.range.start.character)) {
+                functions.splice(j, 1);
+            }
+        }
+    }
     // header for understanding methods output
     console.log('Found Kanzi Methods');
     console.log('Name, line, start pos, end pos');
@@ -112,13 +122,7 @@ class JavaDocumentSymbolProvider {
             var containedKanzis = [];
             var symbols = [];
             var containerNumber = 0;
-            // TODO: replace kanzilist elements with all elements of method_list.txt (all kanzi methods)
-            // Find from list imported Kanzi, e.g. kanzi.util.hash.XXHash32
-            // then find implemented method, e.g. from kanzi...hash32 --> .hash()
-            // Problem: if object is created, find method applied to that object, just that object
-            // idea: top down brackets, search for created objects with second last segment (e.g. XXHash32 created as hash, save name of object)
-            // then search for method applied to that object inside of brackets (count closing brackets, +1 if opening, -1 if closing, if <0 break)
-            // if method is found applied to object (e.g. 'hash.hash(' ) this is the wanted method
+            // TODO: get methods from dynamic JSON, not only hardcoded JSON
             // SEVERAL KANZI LISTS TO OPERATE
             // – kanzilistFULL: original kanzi list, imported from file (e.g. JSON)
             // – kanzilistIMP: sliced off after last dot to find implementations
@@ -246,7 +250,7 @@ class JavaDocumentSymbolProvider {
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
                                                         kind: vscode.SymbolKind.Method,
                                                         containerName: containerNumber.toString(),
-                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + 1), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length + 1)))
+                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + (containedKanzis[temp][1]).length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length)))
                                                     });
                                                     foundMethods[containerNumber] = kanzilist[temp][1];
                                                     containerNumber++;
@@ -276,7 +280,7 @@ class JavaDocumentSymbolProvider {
                                         name: impKanzi + '()',
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
-                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilist[temp][1].length + 1)))
+                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impKanzi.length + 4)))
                                     });
                                     foundMethods[containerNumber] = kanzilist[temp][1];
                                     containerNumber++;
