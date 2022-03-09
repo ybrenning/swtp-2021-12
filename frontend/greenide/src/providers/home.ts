@@ -55,7 +55,7 @@ class HomeItem extends vscode.TreeItem {
     // TODO: parse location when command is executed
     command = {
         "title": "Reveal Method",
-        "command": "greenIDE-home.click"
+        "command": "greenIDE-home.click",
     };
 
     constructor(label: string, children?: HomeItem[]) {

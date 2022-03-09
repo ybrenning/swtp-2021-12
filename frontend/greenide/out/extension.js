@@ -46,9 +46,12 @@ function activate(context) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (url) => {
-            // TODO: implement reveal on click, url should be parsed in home.ts command
-            vscode.env.openExternal(vscode.Uri.parse(url));
+        // TODO: change for any function in functions[i]
+        // for test use only, adjust so dynamic functions[i] data can be parsed
+        var functionPosition = new vscode.Position(functions[0].location.range.start.line - 1, functions[0].location.range.start.character);
+        // when clicking on homeItem
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', () => {
+            vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
         });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(homeTreeView);
