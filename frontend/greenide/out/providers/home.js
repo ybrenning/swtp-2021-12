@@ -43,17 +43,19 @@ class HomeItem extends vscode.TreeItem {
         this.children = children;
         this.line = line;
         this.character = character;
-        // the command that is executed when clicking on the HomeItem
-        this.command = {
-            title: "Reveal Method",
-            command: "greenIDE-home.click",
-            arguments: [line, character]
-        };
+        // the command that is executed when clicking on the HomeItem (if it is a child)
+        if (line) {
+            this.command = {
+                title: "Reveal Method",
+                command: "greenIDE-home.click",
+                arguments: [line, character]
+            };
+        }
     }
 }
 class HomeHighlight {
-    resolveWebviewView(webviewView, context, token) {
-        webviewView.show();
+    show(preserveFocus) {
+        throw new Error('Method not implemented.');
     }
 }
 //# sourceMappingURL=home.js.map
