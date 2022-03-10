@@ -1,6 +1,28 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 
+// TODO: Patches
+/*
+[X] 1.1 - further functional things
+1.2 - sidepanel basics (show methods, toggle highlighting, select configuration)
+[X] 1.2.1 - kanzi locator
+[X] 1.2.2 - sidepanel show all found methods
+[X] 1.2.3 - click on sidepanel method to jump to location
+[ ] 1.2.4 - button in sidepanel to toggle highlighting at all locations
+[ ] 1.2.5 - configuration menu in sidepanel
+[ ] 1.2.6 - save configuration to favorites with button in sidepanel
+1.3 - backend communication
+[ ] 1.3.1 - save config and methods in JSON
+[ ] 1.3.2 - send/receive JSON via backend api
+[ ] 1.3.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
+1.4 - apply response
+[ ] 1.4.1 - ...
+1.5 - colorcode highlighting & detailed statistics
+[ ] 1.5.1 - ...
+1.6 - graphical data & comparison (graphs)
+[ ] 1.6.1 - ...
+*/
+
 'use strict';
 import * as vscode from 'vscode';
 import { WebviewPanel } from './WebviewPanel';
@@ -12,6 +34,8 @@ import { kMaxLength } from 'buffer';
 import * as kanziJSON from './method_list.json';
 import lineReader = require('line-reader');
 import { Test } from 'mocha';
+import { cursorTo, moveCursor } from 'readline';
+import { url } from 'inspector';
 
 var foundMethods: string[] = [];
 
@@ -76,11 +100,18 @@ export function activate(context: vscode.ExtensionContext) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
+        
+        // TODO: change for any function in functions[i]
+        // for test use only, adjust so dynamic functions[i] data can be parsed
+        //var functionPosition = new vscode.Position(functions[0].location.range.start.line-1,functions[0].location.range.start.character);
 
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (url) => {
-            // TODO: implement reveal on click, url should be parsed in home.ts command
-            vscode.env.openExternal(vscode.Uri.parse(url));
-        });
+        // when clicking on homeItem
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line: number, character: number) => {
+
+            // execute vscode commandto jump to location at (line,character)
+            const functionPosition = new vscode.Position(line,character);
+            vscode.window.activeTextEditor!.selections = [new vscode.Selection(functionPosition, functionPosition)];
+        }); 
 
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(homeTreeView);
@@ -282,8 +313,8 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                     }
                 }
 
-                // TODO: set search for non-objects before objects, block1 before block2
-                // Issue: if object for certain kanzi is found, do not search for plain method any longer
+                // TODO: fix kanzi finding
+                // Issue: second object in Hash32 too long and not correct
 
                 // loop 2: find objects / methods from imported kanzi
                 for (var temp = 0; temp < containedKanzis.length; temp++) {
@@ -331,7 +362,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
                                                         kind: vscode.SymbolKind.Method,
                                                         containerName: containerNumber.toString(),
-                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + (containedKanzis[temp][1]).length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length)))
+                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
                                                     });
 
                                                     foundMethods[containerNumber] = kanzilist[temp][1];
