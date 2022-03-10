@@ -81,10 +81,15 @@ export function activate(context: vscode.ExtensionContext) {
         
         // TODO: change for any function in functions[i]
         // for test use only, adjust so dynamic functions[i] data can be parsed
-        var functionPosition = new vscode.Position(functions[0].location.range.start.line-1,functions[0].location.range.start.character);
+        //var functionPosition = new vscode.Position(functions[0].location.range.start.line-1,functions[0].location.range.start.character);
 
         // when clicking on homeItem
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', () => {
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line: number, character: number) => {
+
+            // TEST suite
+            console.log('line ' + line + ', character: ' + character);
+
+            const functionPosition = new vscode.Position(line,character);
             vscode.window.activeTextEditor!.selections = [new vscode.Selection(functionPosition, functionPosition)];
         }); 
 
@@ -288,8 +293,8 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                     }
                 }
 
-                // TODO: set search for non-objects before objects, block1 before block2
-                // Issue: if object for certain kanzi is found, do not search for plain method any longer
+                // TODO: fix kanzi finding
+                // Issue: second object in Hash32 too long and not correct
 
                 // loop 2: find objects / methods from imported kanzi
                 for (var temp = 0; temp < containedKanzis.length; temp++) {
@@ -337,7 +342,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
                                                         kind: vscode.SymbolKind.Method,
                                                         containerName: containerNumber.toString(),
-                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + (containedKanzis[temp][1]).length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length)))
+                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + (containedKanzis[temp][1]).length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
                                                     });
 
                                                     foundMethods[containerNumber] = kanzilist[temp][1];
