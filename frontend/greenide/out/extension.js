@@ -1,5 +1,26 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+// TODO: Patches
+/*
+[X] 1.1 - further functional things
+1.2 - sidepanel basics (show methods, toggle highlighting, select configuration)
+[X] 1.2.1 - kanzi locator
+[X] 1.2.2 - sidepanel show all found methods
+[X] 1.2.3 - click on sidepanel method to jump to location
+[ ] 1.2.4 - button in sidepanel to toggle highlighting at all locations
+[ ] 1.2.5 - configuration menu in sidepanel
+[ ] 1.2.6 - save configuration to favorites with button in sidepanel
+1.3 - backend communication
+[ ] 1.3.1 - save config and methods in JSON
+[ ] 1.3.2 - send/receive JSON via backend api
+[ ] 1.3.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
+1.4 - apply response
+[ ] 1.4.1 - ...
+1.5 - colorcode highlighting & detailed statistics
+[ ] 1.5.1 - ...
+1.6 - graphical data & comparison (graphs)
+[ ] 1.6.1 - ...
+*/
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
