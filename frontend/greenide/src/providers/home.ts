@@ -4,13 +4,18 @@
 import * as vscode from 'vscode';
 import { Hover, HoverProvider, ProviderResult } from 'vscode';
 import { MessagePort, TransferListItem } from 'worker_threads';
+import { getNonce } from '../getNonce';
 
 
 export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
 
     onDidChangeTreeData?: vscode.Event<HomeItem | null | undefined> | undefined;
 
+    // Tree for home segment
     data: HomeItem[];
+
+    // button for toggling of Highlight
+    button: HomeHighlight;
 
     // Set the tree elements for side panel
     constructor(functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[]) {
@@ -26,10 +31,15 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
 
             // show methods or ...
             this.data = [new HomeItem('Found Methods:', sendData)];
+
         } else {
+
             // prompt to run/reload
             this.data = [new HomeItem('Run or Reload Extension')];
         }
+
+        // button to toggle Highlighting
+        this.button = new HomeHighlight();
     }
 
     getTreeItem(element: HomeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
@@ -74,4 +84,12 @@ class HomeItem extends vscode.TreeItem {
     }
 
     contextValue = 'treeItem';
+}
+
+class HomeHighlight implements vscode.WebviewViewProvider {
+
+    resolveWebviewView(webviewView: vscode.WebviewView, context: vscode.WebviewViewResolveContext<unknown>, token: vscode.CancellationToken): void | Thenable<void> {
+        
+        webviewView.show();
+    }
 }

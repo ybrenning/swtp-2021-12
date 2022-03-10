@@ -21,6 +21,8 @@ class HomeProvider {
             // prompt to run/reload
             this.data = [new HomeItem('Run or Reload Extension')];
         }
+        // button to toggle Highlighting
+        this.button = new HomeHighlight();
     }
     getTreeItem(element) {
         return element;
@@ -47,6 +49,11 @@ class HomeItem extends vscode.TreeItem {
             command: "greenIDE-home.click",
             arguments: [line, character]
         };
+    }
+}
+class HomeHighlight {
+    resolveWebviewView(webviewView, context, token) {
+        webviewView.show();
     }
 }
 //# sourceMappingURL=home.js.map

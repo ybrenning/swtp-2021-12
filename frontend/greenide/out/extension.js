@@ -66,9 +66,6 @@ function activate(context) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
-        // TODO: change for any function in functions[i]
-        // for test use only, adjust so dynamic functions[i] data can be parsed
-        //var functionPosition = new vscode.Position(functions[0].location.range.start.line-1,functions[0].location.range.start.character);
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line, character) => {
             // execute vscode commandto jump to location at (line,character)
