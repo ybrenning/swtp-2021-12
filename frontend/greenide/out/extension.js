@@ -51,8 +51,7 @@ function activate(context) {
         //var functionPosition = new vscode.Position(functions[0].location.range.start.line-1,functions[0].location.range.start.character);
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line, character) => {
-            // TEST suite
-            console.log('line ' + line + ', character: ' + character);
+            // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
         });
@@ -256,7 +255,7 @@ class JavaDocumentSymbolProvider {
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
                                                         kind: vscode.SymbolKind.Method,
                                                         containerName: containerNumber.toString(),
-                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + (containedKanzis[temp][1]).length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
+                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
                                                     });
                                                     foundMethods[containerNumber] = kanzilist[temp][1];
                                                     containerNumber++;

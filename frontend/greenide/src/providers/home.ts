@@ -24,8 +24,10 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
                 sendData.push(new HomeItem(functions[j].name, undefined, functions[j].location.range.start.line-1, functions[j].location.range.start.character));
             }
 
+            // show methods or ...
             this.data = [new HomeItem('Found Methods:', sendData)];
         } else {
+            // prompt to run/reload
             this.data = [new HomeItem('Run or Reload Extension')];
         }
     }
@@ -52,13 +54,18 @@ class HomeItem extends vscode.TreeItem {
     character: number | undefined;
 
     constructor(label: string, children?: HomeItem[], line?: number, character?: number) {
+
         super(
             label,
             children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded
         );
+
+        // variables for each HomeItem
         this.children = children;
         this.line = line;
         this.character = character;
+
+        // the command that is executed when clicking on the HomeItem
         this.command = {
             title: "Reveal Method",
             command: "greenIDE-home.click",
