@@ -8,6 +8,7 @@
 [X] 1.2.1 - kanzi locator
 [X] 1.2.2 - sidepanel show all found methods
 [X] 1.2.3 - click on sidepanel method to jump to location
+    [X] 1.2.3.1 - reset list of methods when opening new file
 [ ] 1.2.4 - button in sidepanel to toggle highlighting at all locations
 [ ] 1.2.5 - configuration menu in sidepanel
 [ ] 1.2.6 - save configuration to favorites with button in sidepanel
@@ -66,10 +67,7 @@ export function activate(context: vscode.ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
 
-    // TODO: Auto run extension / command on startup
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
+    // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
 
         // The code you place here will be executed every time your command is executed
@@ -190,6 +188,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             // redunant functions saved for iteration
             var functionsR: {name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
             functionsR = [];
+            functions = [];
             var containedKanzis = [];
             var symbols = [];
             var containerNumber = 0;
