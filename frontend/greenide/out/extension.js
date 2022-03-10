@@ -30,6 +30,7 @@ const configs_1 = require("./providers/configs");
 const help_1 = require("./providers/help");
 const kanziJSON = require("./method_list.json");
 var foundMethods = [];
+// functionsWD = functions /wo duplicates
 var functions = [];
 var config = 0;
 var function1Data;
@@ -75,6 +76,7 @@ function activate(context) {
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
+            vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
         });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(homeTreeView);
@@ -116,16 +118,6 @@ function runAnalysis() {
     for (var t = 0; t < 100; t++) {
         console.log('\n');
     }
-    // remove duplicates
-    for (var j = 0; j < functions.length; j++) {
-        for (var i = 0; i < functions.length; i++) {
-            if (!(functions[j].containerName.match(functions[i].containerName))
-                && (functions[j].location.range.start.line === functions[i].location.range.start.line)
-                && (functions[j].location.range.start.character === functions[i].location.range.start.character)) {
-                functions.splice(j, 1);
-            }
-        }
-    }
     // header for understanding methods output
     console.log('Found Kanzi Methods');
     console.log('Name, line, start pos, end pos');
@@ -144,7 +136,9 @@ class JavaDocumentSymbolProvider {
     provideDocumentSymbols(document, token) {
         return new Promise((resolve) => {
             foundMethods = [];
-            functions = [];
+            // redunant functions saved for iteration
+            var functionsR = [];
+            functionsR = [];
             var containedKanzis = [];
             var symbols = [];
             var containerNumber = 0;
@@ -342,7 +336,28 @@ class JavaDocumentSymbolProvider {
                 }*/
             }
             // Save symbols (all kanzi methods with metadata)
-            functions = symbols;
+            functionsR = symbols;
+            // checkmark for iteration to eliminate duplicates
+            var checkDup = false;
+            // for every entry in functions ...
+            for (var j = 0; j < functionsR.length; j++) {
+                // check if for every entry in functionsWD ...
+                for (var i = 0; i < functions.length; i++) {
+                    // ... if some element already shares the same location ...
+                    if ((functionsR[j].location.range.start.line === functions[i].location.range.start.line)
+                        && (functionsR[j].location.range.start.character === functions[i].location.range.start.character)) {
+                        // ... if so, this is a duplicate (checkDup = true)
+                        checkDup = true;
+                    }
+                }
+                // if there was no duplicate while iterating in functionsWD ...
+                if (checkDup === false) {
+                    // ... add this element from functions to functionsWD
+                    functions.push(functionsR[j]);
+                }
+                // reset checkDup for next iteration
+                checkDup = false;
+            }
             resolve(symbols);
         });
     }
