@@ -85,6 +85,9 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 
+
+    // TODO: fix right click, logs data from LAST item, not current item as expected
+    // maybe: homeTreeView.onDidChangeSelection or else
     function sidePanelHome() {
 
         // creates tree view for first segment of side panel, home of extension actions
@@ -99,7 +102,7 @@ export function activate(context: vscode.ExtensionContext) {
         // TEST suite
         var lineA: number = 0;
         var characterA: number = 0;
-        var isParent: boolean = false;
+        var isParentA: boolean = false;
 
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line: number, character: number) => {
@@ -107,7 +110,7 @@ export function activate(context: vscode.ExtensionContext) {
             // TEST suite
             lineA = line;
             characterA = character;
-            isParent = false;
+            isParentA = false;
 
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line,character);
@@ -117,22 +120,23 @@ export function activate(context: vscode.ExtensionContext) {
 
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
 
-            // register parent
-            isParent = true;
-        }); 
+            // TEST suite
+            console.log('TEST FOR CLICKING PARENT');
+            isParentA = true;
+        });
 
-        let rightClickEvent = vscode.commands.registerCommand('greenIDE-home.rightClick', () => {
-
-            if (isParent === false) {
+        let highlightEvent = vscode.commands.registerCommand('greenIDE-home.highlight', () => {
+            
+            if (isParentA === false) {
                 console.log('Line: ' + lineA + ', Position: ' + characterA);
             } else {
                 console.log(functions);
             }
-        }); 
+        });
 
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
-        context.subscriptions.push(rightClickEvent);
+        context.subscriptions.push(highlightEvent);
         context.subscriptions.push(homeTreeView);
     }
 

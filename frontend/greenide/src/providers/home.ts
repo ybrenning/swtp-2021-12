@@ -75,6 +75,11 @@ class HomeItem extends vscode.TreeItem {
                 title: "Reveal Method",
                 command: "greenIDE-home.click",
                 arguments: [line,character]
+            },
+            {
+                title: "Highlight Method",
+                command: "greenIDE-home.highlight",
+                arguments: [line,character]
             };
         } else {
             this.command = {

@@ -58,6 +58,8 @@ function activate(context) {
         // WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
+    // TODO: fix right click, logs data from LAST item, not current item as expected
+    // maybe: homeTreeView.onDidChangeSelection or else
     function sidePanelHome() {
         // creates tree view for first segment of side panel, home of extension actions
         var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
@@ -69,24 +71,25 @@ function activate(context) {
         // TEST suite
         var lineA = 0;
         var characterA = 0;
-        var isParent = false;
+        var isParentA = false;
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line, character) => {
             // TEST suite
             lineA = line;
             characterA = character;
-            isParent = false;
+            isParentA = false;
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
         });
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
-            // register parent
-            isParent = true;
+            // TEST suite
+            console.log('TEST FOR CLICKING PARENT');
+            isParentA = true;
         });
-        let rightClickEvent = vscode.commands.registerCommand('greenIDE-home.rightClick', () => {
-            if (isParent === false) {
+        let highlightEvent = vscode.commands.registerCommand('greenIDE-home.highlight', () => {
+            if (isParentA === false) {
                 console.log('Line: ' + lineA + ', Position: ' + characterA);
             }
             else {
@@ -95,7 +98,7 @@ function activate(context) {
         });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
-        context.subscriptions.push(rightClickEvent);
+        context.subscriptions.push(highlightEvent);
         context.subscriptions.push(homeTreeView);
     }
     function sidePanelConfigs() {

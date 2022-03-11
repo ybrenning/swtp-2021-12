@@ -60,7 +60,7 @@
         }
       },
       {
-        "command": "greenIDE-home.rightClick",
+        "command": "greenIDE-home.highlight",
         "title": "Highlight Method"
       },
       {
@@ -94,7 +94,7 @@
       ],
       "view/item/context": [
         {
-          "command": "greenIDE-home.rightClick",
+          "command": "greenIDE-home.highlight",
           "when": "viewItem == treeItem"
         }
       ]
