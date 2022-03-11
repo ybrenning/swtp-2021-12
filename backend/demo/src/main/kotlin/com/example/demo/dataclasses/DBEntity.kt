@@ -11,5 +11,6 @@ data class DBEntity(
     val configs: Map<String, Boolean>,
     val energy: Double,
     val time: Double,
-    @Id val id: String = ObjectId.get().toString(),
+    @Id
+    val id: String = ObjectId.get().toString(),
 )
