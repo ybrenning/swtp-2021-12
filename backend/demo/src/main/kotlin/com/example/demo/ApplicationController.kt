@@ -1,27 +1,31 @@
-package com.example.greenidebackend
+package com.example.demo
 
-import com.example.greenidebackend.supportdata.ConfiguredFunction
+import com.example.demo.dataclasses.ConfiguredFunction
 import org.springframework.web.bind.annotation.*
-import com.example.greenidebackend.supportdata.Request
+import com.example.demo.dataclasses.Request
 
 @RestController
 @RequestMapping
 class ApplicationController(
     val functionService: FunctionValueCalculatorService
 ) {
-
-    //return the calculated values for the provided functions
-    @PostMapping("/calculateValues/{program}")
+    @PostMapping("/calculateValues/{softwareSystem}")
     fun functionValueProvider(
-        @PathVariable program: String,
+        @PathVariable softwareSystem: String,
         @RequestBody request: Request
-    ): List<ConfiguredFunction> {
-        return functionService.calcFunctionValues(program, request.functions, request.konfigs).toList()
+    ): ArrayList<ConfiguredFunction> {
+        //return the calculated values for the provided functions of the specified program
+        return functionService.calcFunctionValues(softwareSystem, request.functions, request.configs)
     }
 
-    //return a list of all functions of the software
-    @GetMapping("/listOfFunctions/{program}")
-    fun functionListProvider(@PathVariable program: String): List<String>{
-        return functionService.getAllFunctions(program)
+    @GetMapping("/listOfFunctions/{softwareSystem}")
+    fun functionListProvider(@PathVariable softwareSystem: String): ArrayList<String>?{
+        //return a list of all functions of the given program
+        return functionService.getAllFunctions(softwareSystem)
+    }
+
+    @PostMapping("/parseFile/{softwareSystem}")
+    fun parseFileToDB(@PathVariable softwareSystem:String) {
+        functionService.parseFileToDB(softwareSystem)
     }
 }

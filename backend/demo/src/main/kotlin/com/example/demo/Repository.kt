@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository
 interface Repository: MongoRepository<DBEntity, String> {
 
     fun findBySoftwareSystem(softwareSystem: String): List<DBEntity>
-    fun findConfigsForFunction(functionName: String): List<DBEntity>
+    fun findByFunctionName(functionName: String): List<DBEntity>
 }
