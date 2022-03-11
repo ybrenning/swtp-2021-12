@@ -10,6 +10,7 @@ class FunctionValueCalculatorService(
     val repository: Repository
 ) {
     // functions related to calculating the required values from the given configurations
+
     fun calcFunctionValues(
         softwareSystem: String,
         functionsToFind: ArrayList<String>,
@@ -19,7 +20,7 @@ class FunctionValueCalculatorService(
 
         //repeat for all functions that are requested
         for(function in functionsToFind) {
-            val functionConfigsRaw: List<DBEntity> = repository.findConfigsForFunction(function)
+            val functionConfigsRaw: List<DBEntity> = repository.findByFunctionName(function)
             var functionResultEnergy = 0.0
             var functionResultTime   = 0.0
 
@@ -41,6 +42,7 @@ class FunctionValueCalculatorService(
             //add the function with its calculated values to the return list
             configuredFunctions.add(ConfiguredFunction(function, functionResultEnergy, functionResultTime))
         }
+
         return configuredFunctions
     }
 
@@ -58,7 +60,7 @@ class FunctionValueCalculatorService(
         return functionsNoDupes
     }
 
-    // function to create parse object
+    // function to connect to parser object
     fun parseFileToDB(softwareSystem: String) {
         Parser.parseFile(softwareSystem, repository)
     }

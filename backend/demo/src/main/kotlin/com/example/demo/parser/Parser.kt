@@ -5,9 +5,9 @@ import com.example.demo.dataclasses.DBEntity
 import java.io.File
 
 object Parser {
-    val csvFileFolder:String = ""     // location of the folder containing the .csv files
+    private const val csvFileFolder:String = ""     // location of the folder containing the .csv files
 
-    fun String.toBoolean(): Boolean {
+    private fun String.toBoolean(): Boolean {
         return (this.toInt() != 0)
     }
 

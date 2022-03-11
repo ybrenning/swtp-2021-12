@@ -6,11 +6,10 @@ import org.springframework.data.annotation.Id
 
 @Document
 data class DBEntity(
-    val softwareSystem: String,                     // to what software system the function belongs
-    val functionName: String,                     //
-    val configs: Map<String, Boolean>,       // Map of configs; different software systems have different number
-    val energy: Double,                     //
-    val time: Double, //
+    val softwareSystem: String,
+    val functionName: String,
+    val configs: Map<String, Boolean>,
+    val energy: Double,
+    val time: Double,
     @Id val id: String = ObjectId.get().toString(),
 )
-
