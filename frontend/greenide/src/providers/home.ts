@@ -14,9 +14,6 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
     // Tree for home segment
     data: HomeItem[];
 
-    // button for toggling of Highlight
-    button: HomeHighlight;
-
     // Set the tree elements for side panel
     constructor(functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[]) {
 
@@ -37,9 +34,6 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
             // prompt to run/reload
             this.data = [new HomeItem('Run or Reload Extension')];
         }
-
-        // button to toggle Highlighting
-        this.button = new HomeHighlight();
     }
 
     getTreeItem(element: HomeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
@@ -82,23 +76,13 @@ class HomeItem extends vscode.TreeItem {
                 command: "greenIDE-home.click",
                 arguments: [line,character]
             };
+        } else {
+            this.command = {
+                title: "Reveal Method",
+                command: "greenIDE-home.clickAll",
+            };
         }
     }
 
     contextValue = 'treeItem';
-}
-
-class HomeHighlight implements vscode.WebviewView {
-
-    viewType!: string;
-    webview!: vscode.Webview;
-    title?: string | undefined;
-    description?: string | undefined;
-    onDidDispose!: vscode.Event<void>;
-    visible!: boolean;
-    onDidChangeVisibility!: vscode.Event<void>;
-    
-    show(preserveFocus?: boolean): void {
-        throw new Error('Method not implemented.');
-    }
 }

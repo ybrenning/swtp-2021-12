@@ -96,8 +96,18 @@ export function activate(context: vscode.ExtensionContext) {
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
 
+        // TEST suite
+        var lineA: number = 0;
+        var characterA: number = 0;
+        var isParent: boolean = false;
+
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line: number, character: number) => {
+
+            // TEST suite
+            lineA = line;
+            characterA = character;
+            isParent = false;
 
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line,character);
@@ -105,7 +115,24 @@ export function activate(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
         }); 
 
+        let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
+
+            // register parent
+            isParent = true;
+        }); 
+
+        let rightClickEvent = vscode.commands.registerCommand('greenIDE-home.rightClick', () => {
+
+            if (isParent === false) {
+                console.log('Line: ' + lineA + ', Position: ' + characterA);
+            } else {
+                console.log(functions);
+            }
+        }); 
+
         context.subscriptions.push(clickEvent);
+        context.subscriptions.push(clickEventAll);
+        context.subscriptions.push(rightClickEvent);
         context.subscriptions.push(homeTreeView);
     }
 

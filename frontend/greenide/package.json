@@ -61,7 +61,7 @@
       },
       {
         "command": "greenIDE-home.rightClick",
-        "title": "Highlight Item"
+        "title": "Highlight Method"
       },
       {
         "command": "greenIDE-home.click",

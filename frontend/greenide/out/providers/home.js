@@ -21,8 +21,6 @@ class HomeProvider {
             // prompt to run/reload
             this.data = [new HomeItem('Run or Reload Extension')];
         }
-        // button to toggle Highlighting
-        this.button = new HomeHighlight();
     }
     getTreeItem(element) {
         return element;
@@ -51,11 +49,12 @@ class HomeItem extends vscode.TreeItem {
                 arguments: [line, character]
             };
         }
-    }
-}
-class HomeHighlight {
-    show(preserveFocus) {
-        throw new Error('Method not implemented.');
+        else {
+            this.command = {
+                title: "Reveal Method",
+                command: "greenIDE-home.clickAll",
+            };
+        }
     }
 }
 //# sourceMappingURL=home.js.map

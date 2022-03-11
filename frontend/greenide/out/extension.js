@@ -66,14 +66,36 @@ function activate(context) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
+        // TEST suite
+        var lineA = 0;
+        var characterA = 0;
+        var isParent = false;
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line, character) => {
+            // TEST suite
+            lineA = line;
+            characterA = character;
+            isParent = false;
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
         });
+        let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
+            // register parent
+            isParent = true;
+        });
+        let rightClickEvent = vscode.commands.registerCommand('greenIDE-home.rightClick', () => {
+            if (isParent === false) {
+                console.log('Line: ' + lineA + ', Position: ' + characterA);
+            }
+            else {
+                console.log(functions);
+            }
+        });
         context.subscriptions.push(clickEvent);
+        context.subscriptions.push(clickEventAll);
+        context.subscriptions.push(rightClickEvent);
         context.subscriptions.push(homeTreeView);
     }
     function sidePanelConfigs() {
