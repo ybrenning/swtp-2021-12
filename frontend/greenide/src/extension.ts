@@ -9,7 +9,7 @@
 [X] 1.2.2 - sidepanel show all found methods
 [X] 1.2.3 - click on sidepanel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
-[ ] 1.2.4 - button in sidepanel to toggle highlighting at all locations
+[ ] 1.2.4 - toggle highlighting at specific / all methods
 [ ] 1.2.5 - configuration menu in sidepanel
 [ ] 1.2.6 - save configuration to favorites with button in sidepanel
 1.3 - backend communication
@@ -37,6 +37,7 @@ import lineReader = require('line-reader');
 import { Test } from 'mocha';
 import { cursorTo, moveCursor } from 'readline';
 import { url } from 'inspector';
+import { MethodHighlight } from './providers/highlight';
 
 var foundMethods: string[] = [];
 
@@ -103,7 +104,11 @@ export function activate(context: vscode.ExtensionContext) {
         homeTreeView.description = 'Run GreenIDE:';
 
         // when clicking on homeItem
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (name: string, line: number, character: number) => {
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }) => {
+
+            var line = functionI.location.range.start.line - 1;
+            var character = functionI.location.range.start.character;
+            var name = functionI.name;
 
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line,character);
@@ -114,7 +119,8 @@ export function activate(context: vscode.ExtensionContext) {
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
 
-            decorate(name,line,character);
+            let testHighlight = new MethodHighlight(functionI);
+            testHighlight.decorate;
 
             // what to do with this? may be useful
             //let testHighlight = new vscode.DocumentHighlight(functions[0].location.range);
@@ -127,43 +133,17 @@ export function activate(context: vscode.ExtensionContext) {
                 console.log('Method: ' + functions[j].name + ' - Line: ' + functions[j].location.range.start.line + ', Position: ' + functions[j].location.range.start.character);
             }
             console.log('');
+
+            for (var i = 0; i < functions.length; i++) {
+
+                let testHighlight = new MethodHighlight(functions[i]);
+                testHighlight.decorate;
+            }
         });
 
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
         context.subscriptions.push(homeTreeView);
-    }
-
-    // does the syntax highlighting at provided location
-    function decorate(name: string, line: number, character: number) {
-
-        // TODO: implement from example online
-            
-            // seems to be the right implementation for background color
-
-            // the type, what color and other stuff
-            var decorationType = vscode.window.createTextEditorDecorationType({
-                backgroundColor: 'green',
-                border: '2px solid white',
-            });
-
-            // has to be an array
-            let decorationsArray: vscode.DecorationOptions[] = [];
-
-            // range for decoration
-            let range = new vscode.Range(
-                new vscode.Position(line, character),
-                new vscode.Position(line, character + name.length)
-            );
-
-            // declara declaration unit
-            let decoration = { range };
-
-            // add range to decorations
-            decorationsArray.push(decoration);
-
-            // execute decoration
-            vscode.window.activeTextEditor?.setDecorations(decorationType , decorationsArray);
     }
 
     function sidePanelConfigs() {
