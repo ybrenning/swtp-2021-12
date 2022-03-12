@@ -3,23 +3,68 @@
 
 import * as vscode from 'vscode';
 
-export interface Signature {
-    name: string;
+export class HelpProvider implements vscode.TreeDataProvider<HelpItem> {
+    
+    onDidChangeTreeData?: vscode.Event<HelpItem | null | undefined> | undefined;
+
+    // Tree for home segment
+    data: HelpItem[];
+
+    // Set the tree elements for side panel
+    constructor() {
+
+        // Create three items
+        this.data = [
+            new HelpItem('[↪︎] GitLab',0),
+            new HelpItem('[↪︎] How To Use',1),
+            new HelpItem('[↪︎] Contact',2)
+        ];
+    }
+    
+    getTreeItem(element: HelpItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
+        return element;
+    }
+    
+    getChildren(element?: HelpItem | undefined): vscode.ProviderResult<HelpItem[]> {
+        return this.data;
+    }
 }
 
-export class HelpProvider implements vscode.TreeDataProvider<Signature> {
-    
-    onDidChangeTreeData?: vscode.Event<void | Signature | null | undefined> | undefined;
-    
-    getTreeItem(element: Signature): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        
-        throw new Error('Method not implemented.');
-    }
-    
-    getChildren(element?: Signature): vscode.ProviderResult<Signature[]> {
-        
-        throw new Error('Method not implemented.');
+// Class to create each item
+class HelpItem extends vscode.TreeItem {
+
+    constructor(label: string, nr: number) {
+
+        // Set the label for each element
+        super(label);
+
+        // depending on which item, execute different command
+        switch (nr) {
+            case 0:
+                this.command = {
+                    title: "Help Item",
+                    command: "greenIDE-help.click",
+                    arguments: ['https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12']
+                };
+                break;
+            case 1:
+                this.command = {
+                    title: "Help Item",
+                    command: "greenIDE-help.click",
+                    arguments: ['https://sites.google.com/view/eonar/help']
+                };
+                break;
+            case 2:
+                this.command = {
+                    title: "Help Item",
+                    command: "greenIDE-help.click",
+                    arguments: ['https://sites.google.com/view/eonar/contact']
+                };
+                break;
+            default:
+                break;
+        }
     }
 
-    
+    contextValue = 'treeItem';
 }

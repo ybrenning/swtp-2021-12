@@ -91,7 +91,7 @@ function activate(context) {
             // TEST suite see if arguments pass
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
-            let testHighlight = new highlight_1.MethodHighlight(functionI);
+            let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character);
             testHighlight.decorate;
             // what to do with this? may be useful
             //let testHighlight = new vscode.DocumentHighlight(functions[0].location.range);
@@ -103,7 +103,7 @@ function activate(context) {
             }
             console.log('');
             for (var i = 0; i < functions.length; i++) {
-                let testHighlight = new highlight_1.MethodHighlight(functions[i]);
+                let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character);
                 testHighlight.decorate;
             }
         });
@@ -128,7 +128,11 @@ function activate(context) {
         });
         // Set name for third segment
         helpTreeView.title = 'HELP';
-        helpTreeView.message = 'How To use';
+        let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link) => {
+            // open the link when clicking item number nr
+            vscode.env.openExternal(vscode.Uri.parse(link));
+        });
+        context.subscriptions.push(clickEvent);
         context.subscriptions.push(helpTreeView);
     }
     // Start DocumentSymbolProvider to find methods

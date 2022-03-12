@@ -127,7 +127,7 @@ export function activate(context: vscode.ExtensionContext) {
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
 
-            let testHighlight = new MethodHighlight(functionI);
+            let testHighlight = new MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character);
             testHighlight.decorate;
 
             // what to do with this? may be useful
@@ -144,7 +144,7 @@ export function activate(context: vscode.ExtensionContext) {
 
             for (var i = 0; i < functions.length; i++) {
 
-                let testHighlight = new MethodHighlight(functions[i]);
+                let testHighlight = new MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character);
                 testHighlight.decorate;
             }
         });
@@ -177,8 +177,14 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Set name for third segment
         helpTreeView.title = 'HELP';
-        helpTreeView.message = 'How To use';
 
+        let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link: string) => {
+
+            // open the link when clicking item number nr
+            vscode.env.openExternal(vscode.Uri.parse(link));
+        });
+
+        context.subscriptions.push(clickEvent);
         context.subscriptions.push(helpTreeView);
     }
 
