@@ -17,7 +17,7 @@ class HelpProvider {
     getTreeItem(element) {
         return element;
     }
-    getChildren(element) {
+    getChildren() {
         return this.data;
     }
 }

@@ -9,7 +9,7 @@
 [X] 1.2.2 - side panel show all found methods
 [X] 1.2.3 - click on side panel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
-[ ] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
+[X] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
 [ ] 1.2.5 - configuration menu in side panel
 [ ] 1.2.6 - save configuration to favorites with button in side panel
 1.3 - backend communication
@@ -29,6 +29,7 @@
 /*
 TODO: open ISSUES
 [ ] - refresh methods when switching file
+[ ] - edit commands, missing commands from helpProvider and configProvider
 */
 
 'use strict';
@@ -93,6 +94,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 
+    // This creates the side panel segment 'GreenIDE' where the user sees the found methods, refresh for new found methods and select items
+    // to highlight them
     // TODO: tune highlighting
     // [X] - make new colors / borders, experiment with decoration
     // [ ] - reset for every new item
@@ -154,6 +157,8 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(homeTreeView);
     }
 
+    // This creates the side panel segment 'Configs' where the user can see which config elements are active
+    // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
     function sidePanelConfigs() {
 
         // creates tree view for second segment of side panel, place for configs
@@ -163,11 +168,19 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Set name for second segment
         configsTreeView.title = 'CONFIGURATIONS';
-        configsTreeView.message = 'Choose Configs:';
 
+        let clickEvent = vscode.commands.registerCommand('greenIDE-config.click', () => {
+
+            // TEST suite
+            console.log('CONFIG TEST');
+        });
+
+        context.subscriptions.push(clickEvent);
         context.subscriptions.push(configsTreeView);
     }
 
+    // This creates the side panel segment 'Help' which provides three elements to get
+    // further into our extension, get help in a Q&A or contact us
     function sidePanelHelp() {
 
         // creates tree view for third segment of side panel, get instructions, commands, help links etc

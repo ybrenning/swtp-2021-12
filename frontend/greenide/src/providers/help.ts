@@ -7,7 +7,7 @@ export class HelpProvider implements vscode.TreeDataProvider<HelpItem> {
     
     onDidChangeTreeData?: vscode.Event<HelpItem | null | undefined> | undefined;
 
-    // Tree for home segment
+    // Tree for help segment
     data: HelpItem[];
 
     // Set the tree elements for side panel
@@ -25,7 +25,7 @@ export class HelpProvider implements vscode.TreeDataProvider<HelpItem> {
         return element;
     }
     
-    getChildren(element?: HelpItem | undefined): vscode.ProviderResult<HelpItem[]> {
+    getChildren(): vscode.ProviderResult<HelpItem[]> {
         return this.data;
     }
 }

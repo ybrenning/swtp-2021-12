@@ -2,10 +2,6 @@
 // start/reload greenIDE, see found methods, get data, activate syntax highlighting
 
 import * as vscode from 'vscode';
-import { Hover, HoverProvider, ProviderResult } from 'vscode';
-import { MessagePort, TransferListItem } from 'worker_threads';
-import { getNonce } from '../getNonce';
-
 
 export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
 
