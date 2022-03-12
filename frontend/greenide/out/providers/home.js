@@ -44,19 +44,14 @@ class HomeItem extends vscode.TreeItem {
         // the command that is executed when clicking on the HomeItem (if it is a child)
         if (line) {
             this.command = {
-                title: "Reveal Method",
+                title: "Highlight Method",
                 command: "greenIDE-home.click",
-                arguments: [line, character]
-            },
-                {
-                    title: "Highlight Method",
-                    command: "greenIDE-home.highlight",
-                    arguments: [line, character]
-                };
+                arguments: [label, line, character]
+            };
         }
         else {
             this.command = {
-                title: "Reveal Method",
+                title: "Highlight All Methods",
                 command: "greenIDE-home.clickAll",
             };
         }

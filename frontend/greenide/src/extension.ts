@@ -86,8 +86,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(disposable);
 
 
-    // TODO: fix right click, logs data from LAST item, not current item as expected
-    // maybe: homeTreeView.onDidChangeSelection or else
+    // TODO: implement syntax highlighting of found / clicked method
     function sidePanelHome() {
 
         // creates tree view for first segment of side panel, home of extension actions
@@ -99,44 +98,30 @@ export function activate(context: vscode.ExtensionContext) {
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
 
-        // TEST suite
-        var lineA: number = 0;
-        var characterA: number = 0;
-        var isParentA: boolean = false;
-
         // when clicking on homeItem
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line: number, character: number) => {
-
-            // TEST suite
-            lineA = line;
-            characterA = character;
-            isParentA = false;
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (name: string, line: number, character: number) => {
 
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line,character);
             vscode.window.activeTextEditor!.selections = [new vscode.Selection(functionPosition, functionPosition)];
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
+
+            // TEST suite
+            console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
+            console.log('');
         }); 
 
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
 
             // TEST suite
-            console.log('TEST FOR CLICKING PARENT');
-            isParentA = true;
-        });
-
-        let highlightEvent = vscode.commands.registerCommand('greenIDE-home.highlight', () => {
-            
-            if (isParentA === false) {
-                console.log('Line: ' + lineA + ', Position: ' + characterA);
-            } else {
-                console.log(functions);
+            for (var j = 0; j < functions.length; j++) {
+                console.log('Method: ' + functions[j].name + ' - Line: ' + functions[j].location.range.start.line + ', Position: ' + functions[j].location.range.start.character);
             }
+            console.log('');
         });
 
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
-        context.subscriptions.push(highlightEvent);
         context.subscriptions.push(homeTreeView);
     }
 

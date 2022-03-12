@@ -60,12 +60,12 @@
         }
       },
       {
-        "command": "greenIDE-home.highlight",
-        "title": "Highlight Method"
+        "command": "greenIDE-home.click",
+        "title": "Highlight Item"
       },
       {
-        "command": "greenIDE-home.click",
-        "title": "Reveal"
+        "command": "greenIDE-home.clickAll",
+        "title": "Highlight All Items"
       },
       {
         "command": "greenIDE.config1",
@@ -90,12 +90,6 @@
           "command": "greenIDE.run",
           "when": "view == greenIDE-home",
           "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "greenIDE-home.highlight",
-          "when": "viewItem == treeItem"
         }
       ]
     },

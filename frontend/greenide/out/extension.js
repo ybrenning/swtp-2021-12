@@ -58,8 +58,7 @@ function activate(context) {
         // WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
-    // TODO: fix right click, logs data from LAST item, not current item as expected
-    // maybe: homeTreeView.onDidChangeSelection or else
+    // TODO: implement syntax highlighting of found / clicked method
     function sidePanelHome() {
         // creates tree view for first segment of side panel, home of extension actions
         var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
@@ -68,37 +67,25 @@ function activate(context) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
-        // TEST suite
-        var lineA = 0;
-        var characterA = 0;
-        var isParentA = false;
         // when clicking on homeItem
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line, character) => {
-            // TEST suite
-            lineA = line;
-            characterA = character;
-            isParentA = false;
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (name, line, character) => {
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
+            // TEST suite
+            console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
+            console.log('');
         });
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
             // TEST suite
-            console.log('TEST FOR CLICKING PARENT');
-            isParentA = true;
-        });
-        let highlightEvent = vscode.commands.registerCommand('greenIDE-home.highlight', () => {
-            if (isParentA === false) {
-                console.log('Line: ' + lineA + ', Position: ' + characterA);
+            for (var j = 0; j < functions.length; j++) {
+                console.log('Method: ' + functions[j].name + ' - Line: ' + functions[j].location.range.start.line + ', Position: ' + functions[j].location.range.start.character);
             }
-            else {
-                console.log(functions);
-            }
+            console.log('');
         });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
-        context.subscriptions.push(highlightEvent);
         context.subscriptions.push(homeTreeView);
     }
     function sidePanelConfigs() {
