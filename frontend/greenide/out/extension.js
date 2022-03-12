@@ -58,7 +58,11 @@ function activate(context) {
         // WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
-    // TODO: implement syntax highlighting of found / clicked method
+    // TODO: tune highlighting
+    // [ ] - make new colors / borders, experiment with decoration
+    // [ ] - reset for every new item
+    // [ ] - parse complete functions[i] from home.ts, not only name,line,char
+    // [ ] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {
         // creates tree view for first segment of side panel, home of extension actions
         var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
@@ -73,12 +77,15 @@ function activate(context) {
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
-            // TEST suite
+            // TEST suite see if arguments pass
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
+            decorate(name, line, character);
+            // what to do with this? may be useful
+            //let testHighlight = new vscode.DocumentHighlight(functions[0].location.range);
         });
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
-            // TEST suite
+            // TEST suite see if arguments pass
             for (var j = 0; j < functions.length; j++) {
                 console.log('Method: ' + functions[j].name + ' - Line: ' + functions[j].location.range.start.line + ', Position: ' + functions[j].location.range.start.character);
             }
@@ -87,6 +94,26 @@ function activate(context) {
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
         context.subscriptions.push(homeTreeView);
+    }
+    // does the syntax highlighting at provided location
+    function decorate(name, line, character) {
+        // TODO: implement from example online
+        // seems to be the right implementation for background color
+        // the type, what color and other stuff
+        var decorationType = vscode.window.createTextEditorDecorationType({
+            backgroundColor: 'green',
+            border: '2px solid white',
+        });
+        // has to be an array
+        let decorationsArray = [];
+        // range for decoration
+        let range = new vscode.Range(new vscode.Position(line, character), new vscode.Position(line, character + name.length));
+        // declara declaration unit
+        let decoration = { range };
+        // add range to decorations
+        decorationsArray.push(decoration);
+        // execute decoration
+        vscode.window.activeTextEditor?.setDecorations(decorationType, decorationsArray);
     }
     function sidePanelConfigs() {
         // creates tree view for second segment of side panel, place for configs
@@ -276,7 +303,7 @@ class JavaDocumentSymbolProvider {
                                                         // Substring only grabbing kanzi method name without braces
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
-                                                        kind: vscode.SymbolKind.Method,
+                                                        kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
                                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
                                                     });
