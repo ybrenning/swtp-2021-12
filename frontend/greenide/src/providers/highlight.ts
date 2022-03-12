@@ -3,9 +3,10 @@
 
 import * as vscode from 'vscode';
 
-// Yellow: #ffec1c
-// Green: #018217
-// Red: #d40000
+// colors for the highlight
+const green: string = '#018217';
+const yellow: string = '#ffec1c';
+const red: string = '#d40000';
 
 export class MethodHighlight {
 
@@ -29,7 +30,7 @@ export class MethodHighlight {
 
             // the type, what color and other stuff
             var decorationType = vscode.window.createTextEditorDecorationType({
-                backgroundColor: '#ffec1c',
+                backgroundColor: yellow,
             });
 
             // has to be an array

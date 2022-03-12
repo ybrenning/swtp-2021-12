@@ -4,24 +4,31 @@
 // TODO: Patches
 /*
 [X] 1.1 - further functional things
-1.2 - sidepanel basics (show methods, toggle highlighting, select configuration)
+1.2 - side panel basics (show methods, toggle highlighting, select configuration)
 [X] 1.2.1 - kanzi locator
-[X] 1.2.2 - sidepanel show all found methods
-[X] 1.2.3 - click on sidepanel method to jump to location
+[X] 1.2.2 - side panel show all found methods
+[X] 1.2.3 - click on side panel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
-[ ] 1.2.4 - toggle highlighting at specific / all methods
-[ ] 1.2.5 - configuration menu in sidepanel
-[ ] 1.2.6 - save configuration to favorites with button in sidepanel
+[ ] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
+[ ] 1.2.5 - configuration menu in side panel
+[ ] 1.2.6 - save configuration to favorites with button in side panel
 1.3 - backend communication
 [ ] 1.3.1 - save config and methods in JSON
 [ ] 1.3.2 - send/receive JSON via backend api
 [ ] 1.3.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
 1.4 - apply response
-[ ] 1.4.1 - ...
-1.5 - colorcode highlighting & detailed statistics
-[ ] 1.5.1 - ...
-1.6 - graphical data & comparison (graphs)
-[ ] 1.6.1 - ...
+[ ] 1.4.1 - apply colors depending on value
+    [ ] - 1.4.1.1 - reset highlights when clicking on iem again / or maybe 'reset'-button
+    [ ] - 1.4.1.2 - reset methods in side panel when switching already opened files
+[ ] 1.4.2 - hover text with data
+[ ] 1.4.3 - graphs and value overview with webview
+1.5 - Minor Tuning
+[ ] 1.5.1 - Help segment in side panel
+*/
+
+/*
+TODO: open ISSUES
+[ ] - refresh methods when switching file
 */
 
 'use strict';
@@ -86,12 +93,11 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(disposable);
 
-
     // TODO: tune highlighting
-    // [ ] - make new colors / borders, experiment with decoration
+    // [X] - make new colors / borders, experiment with decoration
     // [ ] - reset for every new item
-    // [ ] - parse complete functions[i] from home.ts, not only name,line,char
-    // [ ] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
+    // [X] - parse complete functions[i] from home.ts, not only name,line,char
+    // [X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {
 
         // creates tree view for first segment of side panel, home of extension actions
@@ -105,6 +111,8 @@ export function activate(context: vscode.ExtensionContext) {
 
         // when clicking on homeItem
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }) => {
+
+            vscode.window.onDidChangeTextEditorVisibleRanges;
 
             var line = functionI.location.range.start.line - 1;
             var character = functionI.location.range.start.character;

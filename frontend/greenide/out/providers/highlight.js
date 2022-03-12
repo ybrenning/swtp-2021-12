@@ -4,9 +4,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MethodHighlight = void 0;
 const vscode = require("vscode");
-// Yellow: #ffec1c
-// Green: #018217
-// Red: #d40000
+// colors for the highlight
+const green = '#018217';
+const yellow = '#ffec1c';
+const red = '#d40000';
 class MethodHighlight {
     constructor(functionI) {
         this.line = functionI.location.range.start.line - 1;
@@ -19,7 +20,7 @@ class MethodHighlight {
         // TODO: implement from example online
         // the type, what color and other stuff
         var decorationType = vscode.window.createTextEditorDecorationType({
-            backgroundColor: '#ffec1c',
+            backgroundColor: yellow,
         });
         // has to be an array
         let decorationsArray = [];
