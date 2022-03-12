@@ -3,23 +3,30 @@
 // TODO: Patches
 /*
 [X] 1.1 - further functional things
-1.2 - sidepanel basics (show methods, toggle highlighting, select configuration)
+1.2 - side panel basics (show methods, toggle highlighting, select configuration)
 [X] 1.2.1 - kanzi locator
-[X] 1.2.2 - sidepanel show all found methods
-[X] 1.2.3 - click on sidepanel method to jump to location
-[ ] 1.2.4 - button in sidepanel to toggle highlighting at all locations
-[ ] 1.2.5 - configuration menu in sidepanel
-[ ] 1.2.6 - save configuration to favorites with button in sidepanel
+[X] 1.2.2 - side panel show all found methods
+[X] 1.2.3 - click on side panel method to jump to location
+    [X] 1.2.3.1 - reset list of methods when opening new file
+[ ] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
+[ ] 1.2.5 - configuration menu in side panel
+[ ] 1.2.6 - save configuration to favorites with button in side panel
 1.3 - backend communication
 [ ] 1.3.1 - save config and methods in JSON
 [ ] 1.3.2 - send/receive JSON via backend api
 [ ] 1.3.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
 1.4 - apply response
-[ ] 1.4.1 - ...
-1.5 - colorcode highlighting & detailed statistics
-[ ] 1.5.1 - ...
-1.6 - graphical data & comparison (graphs)
-[ ] 1.6.1 - ...
+[ ] 1.4.1 - apply colors depending on value
+    [ ] - 1.4.1.1 - reset highlights when clicking on iem again / or maybe 'reset'-button
+    [ ] - 1.4.1.2 - reset methods in side panel when switching already opened files
+[ ] 1.4.2 - hover text with data
+[ ] 1.4.3 - graphs and value overview with webview
+1.5 - Minor Tuning
+[ ] 1.5.1 - Help segment in side panel
+*/
+/*
+TODO: open ISSUES
+[ ] - refresh methods when switching file
 */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -29,7 +36,9 @@ const home_1 = require("./providers/home");
 const configs_1 = require("./providers/configs");
 const help_1 = require("./providers/help");
 const kanziJSON = require("./method_list.json");
+const highlight_1 = require("./providers/highlight");
 var foundMethods = [];
+// functionsWD = functions /wo duplicates
 var functions = [];
 var config = 0;
 var function1Data;
@@ -43,10 +52,7 @@ function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    // TODO: Auto run extension / command on startup
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with registerCommand
-    // The commandId parameter must match the command field in package.json
+    // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
         // The code you place here will be executed every time your command is executed
         // Starts procedure and updates webview panel
@@ -59,6 +65,11 @@ function activate(context) {
         // WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
+    // TODO: tune highlighting
+    // [X] - make new colors / borders, experiment with decoration
+    // [ ] - reset for every new item
+    // [X] - parse complete functions[i] from home.ts, not only name,line,char
+    // [X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {
         // creates tree view for first segment of side panel, home of extension actions
         var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
@@ -67,16 +78,37 @@ function activate(context) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
-        // TODO: change for any function in functions[i]
-        // for test use only, adjust so dynamic functions[i] data can be parsed
-        //var functionPosition = new vscode.Position(functions[0].location.range.start.line-1,functions[0].location.range.start.character);
         // when clicking on homeItem
-        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (line, character) => {
+        let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI) => {
+            vscode.window.onDidChangeTextEditorVisibleRanges;
+            var line = functionI.location.range.start.line - 1;
+            var character = functionI.location.range.start.character;
+            var name = functionI.name;
             // execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
+            vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
+            // TEST suite see if arguments pass
+            console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
+            console.log('');
+            let testHighlight = new highlight_1.MethodHighlight(functionI);
+            testHighlight.decorate;
+            // what to do with this? may be useful
+            //let testHighlight = new vscode.DocumentHighlight(functions[0].location.range);
+        });
+        let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
+            // TEST suite see if arguments pass
+            for (var j = 0; j < functions.length; j++) {
+                console.log('Method: ' + functions[j].name + ' - Line: ' + functions[j].location.range.start.line + ', Position: ' + functions[j].location.range.start.character);
+            }
+            console.log('');
+            for (var i = 0; i < functions.length; i++) {
+                let testHighlight = new highlight_1.MethodHighlight(functions[i]);
+                testHighlight.decorate;
+            }
         });
         context.subscriptions.push(clickEvent);
+        context.subscriptions.push(clickEventAll);
         context.subscriptions.push(homeTreeView);
     }
     function sidePanelConfigs() {
@@ -116,16 +148,6 @@ function runAnalysis() {
     for (var t = 0; t < 100; t++) {
         console.log('\n');
     }
-    // remove duplicates
-    for (var j = 0; j < functions.length; j++) {
-        for (var i = 0; i < functions.length; i++) {
-            if (!(functions[j].containerName.match(functions[i].containerName))
-                && (functions[j].location.range.start.line === functions[i].location.range.start.line)
-                && (functions[j].location.range.start.character === functions[i].location.range.start.character)) {
-                functions.splice(j, 1);
-            }
-        }
-    }
     // header for understanding methods output
     console.log('Found Kanzi Methods');
     console.log('Name, line, start pos, end pos');
@@ -144,6 +166,9 @@ class JavaDocumentSymbolProvider {
     provideDocumentSymbols(document, token) {
         return new Promise((resolve) => {
             foundMethods = [];
+            // redunant functions saved for iteration
+            var functionsR = [];
+            functionsR = [];
             functions = [];
             var containedKanzis = [];
             var symbols = [];
@@ -274,7 +299,7 @@ class JavaDocumentSymbolProvider {
                                                         // Substring only grabbing kanzi method name without braces
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
-                                                        kind: vscode.SymbolKind.Method,
+                                                        kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
                                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
                                                     });
@@ -342,7 +367,28 @@ class JavaDocumentSymbolProvider {
                 }*/
             }
             // Save symbols (all kanzi methods with metadata)
-            functions = symbols;
+            functionsR = symbols;
+            // checkmark for iteration to eliminate duplicates
+            var checkDup = false;
+            // for every entry in functions ...
+            for (var j = 0; j < functionsR.length; j++) {
+                // check if for every entry in functionsWD ...
+                for (var i = 0; i < functions.length; i++) {
+                    // ... if some element already shares the same location ...
+                    if ((functionsR[j].location.range.start.line === functions[i].location.range.start.line)
+                        && (functionsR[j].location.range.start.character === functions[i].location.range.start.character)) {
+                        // ... if so, this is a duplicate (checkDup = true)
+                        checkDup = true;
+                    }
+                }
+                // if there was no duplicate while iterating in functionsWD ...
+                if (checkDup === false) {
+                    // ... add this element from functions to functionsWD
+                    functions.push(functionsR[j]);
+                }
+                // reset checkDup for next iteration
+                checkDup = false;
+            }
             resolve(symbols);
         });
     }
