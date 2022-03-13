@@ -6,8 +6,10 @@
 import * as vscode from "vscode";
 import { getNonce } from "../getNonce";
 
+// the main webview Panel to work with
 export class ConfigMenu {
-  // Track the current panel. Only allow a single panel to exist at a time.
+
+  // track the current panel. Only allow a single panel to exist at a time.
   public static currentPanel: ConfigMenu | undefined;
 
   public static readonly viewType = "green-ide";
@@ -16,28 +18,29 @@ export class ConfigMenu {
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
+  // technically activate webview panel for configs
   public static createOrShow(extensionUri: vscode.Uri) {
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
 
-    // If we already have a panel, show it
+    // if we already have a panel, show it
     if (ConfigMenu.currentPanel) {
       ConfigMenu.currentPanel._panel.reveal(column);
       ConfigMenu.currentPanel._update();
       return;
     }
 
-    // Otherwise, create a new panel
+    // otherwise, create a new panel
     const panel = vscode.window.createWebviewPanel(
       ConfigMenu.viewType,
-      "GreenIDE",
+      "Config Menu",  // title of tab
       column || vscode.ViewColumn.One,
       {
-        // Enable javascript in the webview
+        // enable javascript in the webview
         enableScripts: true,
 
-        // And restrict the webview to only loading content from our extension's `media` directory.
+        // and restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
           vscode.Uri.joinPath(extensionUri, "media"),
           vscode.Uri.joinPath(extensionUri, "out/compiled"),
@@ -45,27 +48,31 @@ export class ConfigMenu {
       }
     );
 
+    // execute set up webview panel
     ConfigMenu.currentPanel = new ConfigMenu(panel, extensionUri);
   }
 
+  // kill webview panel
   public static kill() {
     ConfigMenu.currentPanel?.dispose();
     ConfigMenu.currentPanel = undefined;
   }
 
+  // revive webview panel
   public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     ConfigMenu.currentPanel = new ConfigMenu(panel, extensionUri);
   }
 
+  // constructor for webview panel
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel;
     this._extensionUri = extensionUri;
 
-    // Set the webview's initial HTML content
+    // set the webview's initial HTML content
     this._update();
 
-    // Listen for when the panel is disposed
-    // This happens when the user closes the panel or when the panel is closed programatically
+    // listen for when the panel is disposed
+    // this happens when the user closes the panel or when the panel is closed programatically
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
     // // Handle messages from the webview
@@ -82,10 +89,11 @@ export class ConfigMenu {
     // );
   }
 
+  // close webview panel
   public dispose() {
     ConfigMenu.currentPanel = undefined;
 
-    // Clean up our resources
+    // clean up our resources
     this._panel.dispose();
 
     while (this._disposables.length) {
@@ -96,10 +104,16 @@ export class ConfigMenu {
     }
   }
 
+  // activate webview content, HTML
   private async _update() {
+
+    // set current webview
     const webview = this._panel.webview;
 
+    // set HTML content for webview panel
     this._panel.webview.html = this._getHtmlForWebview(webview);
+
+    // message handler
     webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case "onInfo": {
@@ -120,6 +134,7 @@ export class ConfigMenu {
     });
   }
 
+  // the HTML content, main functionality of webview panel
   private _getHtmlForWebview(webview: vscode.Webview) {
 
     // Use a nonce to only allow specific scripts to be run
@@ -146,13 +161,9 @@ export class ConfigMenu {
 		</head>
     <body>
     
-    <h1> Welcome to GreenIDE. </h1>
+    <h1>GreenIDE Configuration Menu</h1>
 
     <figure>
-      <p> <strong> Energy </strong> </p>
-      <img src="https://root.cern/doc/master/pict1_graph.C.png" width="300" />
-      <figcaption> Energy Total: 12374398274 mWs </figcaption>
-      <button> <strong> Rerun </strong> </button>
     <p> <strong> Configuration settings: </strong> </p>
     <form>
     <input type="checkbox" name="root" /> root 
@@ -175,16 +186,7 @@ export class ConfigMenu {
     <br> </br>
     <input type="checkbox" name="ANS1" /> ANS1
     <br> </br>
-    <input type="checkbox" name="Range" /> Range   
-    </form>
-    </figure>
-
-    <figure>
-    <p> <strong> Time </strong> </p>
-      <img src="https://root.cern/doc/master/pict1_bent.C.png" width="300" />
-      <figcaption> Time total: 739874192 ms </figcaption>
-      <button> <strong> Compare </strong> </button>
-    <form>
+    <input type="checkbox" name="Range" /> Range
     <br> </br>
     <input type="checkbox" name="FPAQ" /> FPAQ 
     <br> </br>
@@ -209,7 +211,9 @@ export class ConfigMenu {
     <input type="checkbox" name="TEXT" /> TEXT
     <br> </br>
     <input type="checkbox" name="X86" /> X86
+    <br> </br>
     </form>
+    <button> <strong>Apply</strong> </button>
     </figure>
 
 		</body>

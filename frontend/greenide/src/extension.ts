@@ -41,7 +41,7 @@ TODO: open ISSUES
 'use strict';
 import * as vscode from 'vscode';
 import { ConfigMenu } from './webviews/configMenu';
-import { OverView } from './webviews/overview';
+import { Overview } from './webviews/overview';
 import { HomeProvider } from './providers/home';
 import { ConfigsProvider } from './providers/configs';
 import { HelpProvider } from './providers/help';
@@ -175,7 +175,7 @@ export function activate(context: vscode.ExtensionContext) {
         let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', () => {
 
             // open webview 'OverView'
-            OverView.createOrShow(context.extensionUri);
+            Overview.createOrShow(context.extensionUri);
         });
 
         context.subscriptions.push(clickEvent);

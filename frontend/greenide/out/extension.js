@@ -129,7 +129,7 @@ function activate(context) {
         // Button to open overview of methods & data, many many statistics
         let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', () => {
             // open webview 'OverView'
-            overview_1.OverView.createOrShow(context.extensionUri);
+            overview_1.Overview.createOrShow(context.extensionUri);
         });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
