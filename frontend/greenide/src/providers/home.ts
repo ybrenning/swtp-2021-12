@@ -2,10 +2,6 @@
 // start/reload greenIDE, see found methods, get data, activate syntax highlighting
 
 import * as vscode from 'vscode';
-import { Hover, HoverProvider, ProviderResult } from 'vscode';
-import { MessagePort, TransferListItem } from 'worker_threads';
-import { getNonce } from '../getNonce';
-
 
 export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
 
@@ -27,12 +23,18 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
             }
 
             // show methods or ...
-            this.data = [new HomeItem('Found Methods:', sendData)];
+            this.data = [
+                new HomeItem('Found Methods:', sendData),
+                new HomeItem('Detailed Statistics')
+            ];
 
         } else {
 
             // prompt to run/reload
-            this.data = [new HomeItem('Run or Reload Extension')];
+            this.data = [
+                new HomeItem('Run or Reload Extension'),
+                new HomeItem('Detailed Statistics')
+            ];
         }
     }
 
@@ -73,6 +75,11 @@ class HomeItem extends vscode.TreeItem {
                 title: "Highlight Method",
                 command: "greenIDE-home.click",
                 arguments: [functionI]
+            };
+        } else if (label.match('Detailed Statistics')) {
+            this.command = {
+                title: "Open Details",
+                command: "greenIDE-home.overview",
             };
         } else {
             this.command = {

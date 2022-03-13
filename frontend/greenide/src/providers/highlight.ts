@@ -14,11 +14,11 @@ export class MethodHighlight {
     character: number;
     characterEND: number;
     
-    constructor (functionI: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }) {
+    constructor (line: number, character: number, characterEND: number) {
 
-        this.line = functionI.location.range.start.line - 1;
-        this.character = functionI.location.range.start.character;
-        this.characterEND = functionI.location.range.end.character;
+        this.line = line - 1;
+        this.character = character;
+        this.characterEND = characterEND;
 
         this.decorate();
     }

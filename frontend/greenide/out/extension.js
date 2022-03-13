@@ -8,42 +8,56 @@
 [X] 1.2.2 - side panel show all found methods
 [X] 1.2.3 - click on side panel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
-[ ] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
-[ ] 1.2.5 - configuration menu in side panel
-[ ] 1.2.6 - save configuration to favorites with button in side panel
-1.3 - backend communication
-[ ] 1.3.1 - save config and methods in JSON
-[ ] 1.3.2 - send/receive JSON via backend api
-[ ] 1.3.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
-1.4 - apply response
-[ ] 1.4.1 - apply colors depending on value
-    [ ] - 1.4.1.1 - reset highlights when clicking on iem again / or maybe 'reset'-button
-    [ ] - 1.4.1.2 - reset methods in side panel when switching already opened files
-[ ] 1.4.2 - hover text with data
-[ ] 1.4.3 - graphs and value overview with webview
-1.5 - Minor Tuning
-[ ] 1.5.1 - Help segment in side panel
+[X] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
+[ ] 1.2.5 - complete side panel
+1.3 - Configs Side Panel
+[ ] 1.3.1 - Select and save config in JSON
+[ ] 1.3.2 - see current config from JSON in side panel
+[ ] 1.3.3 - save and manage favorites (0 is default, 1+ saved favs)
+1.4 - Backend Communication
+[ ] 1.4.1 - save methods with config in JSON to send
+[ ] 1.4.2 - send/receive JSON via backend api
+[ ] 1.4.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
+1.5 - apply response
+[ ] - 1.5.1 - apply Respose data to each method
+[ ] - 1.5.2 - color code depending on method data
+[ ] - 1.5.3 - bugfixes with highlight
+    [ ] - 1.5.3.1 - reset highlights when clicking on item again / or maybe 'reset'-button
+    [ ] - 1.5.3.2 - reset methods in side panel when switching already opened files
+[ ] - 1.5.4 - Hover text with data
+1.6 - Overview webview
+[ ] - 1.6.1 - display all results in webview from side panel
+[ ] - 1.6.2 - display diagrams with distribution in webview
+[ ] - 1.6.3 - apply different configs to methods in webview
 */
 /*
 TODO: open ISSUES
 [ ] - refresh methods when switching file
+[ ] - edit commands, missing commands from helpProvider and configProvider
 */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
+const configMenu_1 = require("./webviews/configMenu");
+const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
 const configs_1 = require("./providers/configs");
 const help_1 = require("./providers/help");
 const kanziJSON = require("./method_list.json");
 const highlight_1 = require("./providers/highlight");
+/* variable declarations for use */
+// use in iteration to find kanzis
 var foundMethods = [];
 // functionsWD = functions /wo duplicates
 var functions = [];
+// old data
 var config = 0;
+// old data
 var function1Data;
 var function2Data;
 var function3Data;
+/* Main Extension */
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
@@ -65,9 +79,11 @@ function activate(context) {
         // WebviewPanel.createOrShow(context.extensionUri);
     });
     context.subscriptions.push(disposable);
+    // This creates the side panel segment 'GreenIDE' where the user sees the found methods, refresh for new found methods and select items
+    // to highlight them
     // TODO: tune highlighting
     // [X] - make new colors / borders, experiment with decoration
-    // [ ] - reset for every new item
+    // [ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent)
     // [X] - parse complete functions[i] from home.ts, not only name,line,char
     // [X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {
@@ -78,7 +94,7 @@ function activate(context) {
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
-        // when clicking on homeItem
+        // when clicking on a method from tree
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI) => {
             vscode.window.onDidChangeTextEditorVisibleRanges;
             var line = functionI.location.range.start.line - 1;
@@ -91,26 +107,37 @@ function activate(context) {
             // TEST suite see if arguments pass
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
-            let testHighlight = new highlight_1.MethodHighlight(functionI);
+            // Create Highlight object which stores provided data
+            let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character);
+            // execute highlight with provided data
             testHighlight.decorate;
-            // what to do with this? may be useful
-            //let testHighlight = new vscode.DocumentHighlight(functions[0].location.range);
         });
+        // when clicking on 'header', namely 'found methods'
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
             // TEST suite see if arguments pass
             for (var j = 0; j < functions.length; j++) {
                 console.log('Method: ' + functions[j].name + ' - Line: ' + functions[j].location.range.start.line + ', Position: ' + functions[j].location.range.start.character);
             }
             console.log('');
+            // Iterate over functions array to highlight each function with provided data
             for (var i = 0; i < functions.length; i++) {
-                let testHighlight = new highlight_1.MethodHighlight(functions[i]);
+                // Highlight each element from functions[i] at it's proper location
+                let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character);
                 testHighlight.decorate;
             }
         });
+        // Button to open overview of methods & data, many many statistics
+        let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', () => {
+            // open webview 'OverView'
+            overview_1.OverView.createOrShow(context.extensionUri);
+        });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
+        context.subscriptions.push(overviewEvent);
         context.subscriptions.push(homeTreeView);
     }
+    // This creates the side panel segment 'Configs' where the user can see which config elements are active
+    // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
     function sidePanelConfigs() {
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
@@ -118,9 +145,16 @@ function activate(context) {
         });
         // Set name for second segment
         configsTreeView.title = 'CONFIGURATIONS';
-        configsTreeView.message = 'Choose Configs:';
+        // Button to open menu for configs, to select configs, save favorites or delete favorites
+        let clickEvent = vscode.commands.registerCommand('greenIDE-config.menu', () => {
+            // open webview 'ConfigMenu'
+            configMenu_1.ConfigMenu.createOrShow(context.extensionUri);
+        });
+        context.subscriptions.push(clickEvent);
         context.subscriptions.push(configsTreeView);
     }
+    // This creates the side panel segment 'Help' which provides three elements to get
+    // further into our extension, get help in a Q&A or contact us
     function sidePanelHelp() {
         // creates tree view for third segment of side panel, get instructions, commands, help links etc
         var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
@@ -128,7 +162,12 @@ function activate(context) {
         });
         // Set name for third segment
         helpTreeView.title = 'HELP';
-        helpTreeView.message = 'How To use';
+        // Generic button action, provided link is opened
+        let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link) => {
+            // open the link when clicking item number nr
+            vscode.env.openExternal(vscode.Uri.parse(link));
+        });
+        context.subscriptions.push(clickEvent);
         context.subscriptions.push(helpTreeView);
     }
     // Start DocumentSymbolProvider to find methods

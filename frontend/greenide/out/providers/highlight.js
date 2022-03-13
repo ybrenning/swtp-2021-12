@@ -9,10 +9,10 @@ const green = '#018217';
 const yellow = '#ffec1c';
 const red = '#d40000';
 class MethodHighlight {
-    constructor(functionI) {
-        this.line = functionI.location.range.start.line - 1;
-        this.character = functionI.location.range.start.character;
-        this.characterEND = functionI.location.range.end.character;
+    constructor(line, character, characterEND) {
+        this.line = line - 1;
+        this.character = character;
+        this.characterEND = characterEND;
         this.decorate();
     }
     // does the syntax highlighting at provided location
