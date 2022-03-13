@@ -22,17 +22,24 @@ class ConfigsProvider {
         // read the config.json and get current active config elements
         var sendData = [];
         for (var j = 0; j < configs.length; j++) {
-            sendData.push(new ConfigItem(configs[j]));
+            sendData.push(new ConfigItem(configs[j], undefined));
         }
+        // the data, consisting of two elements
+        //  - the tree itself with the current active config elements
+        //  - and the button to toggle webview
         this.data = [
-            new ConfigItem('Current Config:', sendData)
+            new ConfigItem('Current Config:', sendData),
+            new ConfigItem('Open Config Menu')
         ];
     }
     getTreeItem(element) {
         return element;
     }
-    getChildren() {
-        return this.data;
+    getChildren(element) {
+        if (element === undefined) {
+            return this.data;
+        }
+        return element.children;
     }
 }
 exports.ConfigsProvider = ConfigsProvider;
@@ -42,12 +49,11 @@ class ConfigItem extends vscode.TreeItem {
         this.contextValue = 'treeItem';
         // variables for each ConfigItem
         this.children = children;
-        this.label = label;
         // the command that is executed when clicking on the HomeItem (if it is a child)
         if (this.label === 'Open Config Menu') {
             this.command = {
                 title: "Config Menu",
-                command: "greenIDE-config.click"
+                command: "greenIDE-config.menu"
             };
         }
     }

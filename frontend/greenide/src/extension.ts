@@ -10,20 +10,26 @@
 [X] 1.2.3 - click on side panel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
 [X] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
-[ ] 1.2.5 - configuration menu in side panel
-[ ] 1.2.6 - save configuration to favorites with button in side panel
-1.3 - backend communication
-[ ] 1.3.1 - save config and methods in JSON
-[ ] 1.3.2 - send/receive JSON via backend api
-[ ] 1.3.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
-1.4 - apply response
-[ ] 1.4.1 - apply colors depending on value
-    [ ] - 1.4.1.1 - reset highlights when clicking on iem again / or maybe 'reset'-button
-    [ ] - 1.4.1.2 - reset methods in side panel when switching already opened files
-[ ] 1.4.2 - hover text with data
-[ ] 1.4.3 - graphs and value overview with webview
-1.5 - Minor Tuning
-[ ] 1.5.1 - Help segment in side panel
+[ ] 1.2.5 - complete side panel
+1.3 - Configs Side Panel
+[ ] 1.3.1 - Select and save config in JSON
+[ ] 1.3.2 - see current config from JSON in side panel
+[ ] 1.3.3 - save and manage favorites (0 is default, 1+ saved favs)
+1.4 - Backend Communication
+[ ] 1.4.1 - save methods with config in JSON to send
+[ ] 1.4.2 - send/receive JSON via backend api
+[ ] 1.4.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
+1.5 - apply response
+[ ] - 1.5.1 - apply Respose data to each method
+[ ] - 1.5.2 - color code depending on method data
+[ ] - 1.5.3 - bugfixes with highlight
+    [ ] - 1.5.3.1 - reset highlights when clicking on item again / or maybe 'reset'-button
+    [ ] - 1.5.3.2 - reset methods in side panel when switching already opened files
+[ ] - 1.5.4 - Hover text with data
+1.6 - Overview webview
+[ ] - 1.6.1 - display all results in webview from side panel
+[ ] - 1.6.2 - display diagrams with distribution in webview
+[ ] - 1.6.3 - apply different configs to methods in webview
 */
 
 /*
@@ -34,7 +40,8 @@ TODO: open ISSUES
 
 'use strict';
 import * as vscode from 'vscode';
-import { WebviewPanel } from './WebviewPanel';
+import { ConfigMenu } from './webviews/configMenu';
+import { OverView } from './webviews/overview';
 import { HomeProvider } from './providers/home';
 import { ConfigsProvider } from './providers/configs';
 import { HelpProvider } from './providers/help';
@@ -47,23 +54,29 @@ import { cursorTo, moveCursor } from 'readline';
 import { url } from 'inspector';
 import { MethodHighlight } from './providers/highlight';
 
-var foundMethods: string[] = [];
-
-
-// functionsWD = functions /wo duplicates
-var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
-
-var config: number = 0;
-
-// Values of the Analysis
+// Type for analysis
 type Datum = {
     energy: number,
     time: number
 };
 
+/* variable declarations for use */
+
+// use in iteration to find kanzis
+var foundMethods: string[] = [];
+
+// functionsWD = functions /wo duplicates
+var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
+
+// old data
+var config: number = 0;
+
+// old data
 var function1Data: Datum;
 var function2Data: Datum;
 var function3Data: Datum;
+
+/* Main Extension */
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
@@ -98,7 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
     // to highlight them
     // TODO: tune highlighting
     // [X] - make new colors / borders, experiment with decoration
-    // [ ] - reset for every new item
+    // [ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent)
     // [X] - parse complete functions[i] from home.ts, not only name,line,char
     // [X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {
@@ -112,7 +125,7 @@ export function activate(context: vscode.ExtensionContext) {
         homeTreeView.title = 'GREENIDE';
         homeTreeView.description = 'Run GreenIDE:';
 
-        // when clicking on homeItem
+        // when clicking on a method from tree
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }) => {
 
             vscode.window.onDidChangeTextEditorVisibleRanges;
@@ -130,13 +143,17 @@ export function activate(context: vscode.ExtensionContext) {
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
 
-            let testHighlight = new MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character);
+            // Create Highlight object which stores provided data
+            let testHighlight = new MethodHighlight(
+                functionI.location.range.start.line,
+                functionI.location.range.start.character,
+                functionI.location.range.end.character
+            );
+            // execute highlight with provided data
             testHighlight.decorate;
-
-            // what to do with this? may be useful
-            //let testHighlight = new vscode.DocumentHighlight(functions[0].location.range);
         }); 
 
+        // when clicking on 'header', namely 'found methods'
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
 
             // TEST suite see if arguments pass
@@ -145,15 +162,25 @@ export function activate(context: vscode.ExtensionContext) {
             }
             console.log('');
 
+            // Iterate over functions array to highlight each function with provided data
             for (var i = 0; i < functions.length; i++) {
 
+                // Highlight each element from functions[i] at it's proper location
                 let testHighlight = new MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character);
                 testHighlight.decorate;
             }
         });
 
+        // Button to open overview of methods & data, many many statistics
+        let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', () => {
+
+            // open webview 'OverView'
+            OverView.createOrShow(context.extensionUri);
+        });
+
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
+        context.subscriptions.push(overviewEvent);
         context.subscriptions.push(homeTreeView);
     }
 
@@ -169,10 +196,11 @@ export function activate(context: vscode.ExtensionContext) {
         // Set name for second segment
         configsTreeView.title = 'CONFIGURATIONS';
 
-        let clickEvent = vscode.commands.registerCommand('greenIDE-config.click', () => {
+        // Button to open menu for configs, to select configs, save favorites or delete favorites
+        let clickEvent = vscode.commands.registerCommand('greenIDE-config.menu', () => {
 
-            // TEST suite
-            console.log('CONFIG TEST');
+            // open webview 'ConfigMenu'
+            ConfigMenu.createOrShow(context.extensionUri);
         });
 
         context.subscriptions.push(clickEvent);
@@ -191,6 +219,7 @@ export function activate(context: vscode.ExtensionContext) {
         // Set name for third segment
         helpTreeView.title = 'HELP';
 
+        // Generic button action, provided link is opened
         let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link: string) => {
 
             // open the link when clicking item number nr
