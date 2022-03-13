@@ -10,7 +10,7 @@
 [X] 1.2.3 - click on side panel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
 [X] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
-[ ] 1.2.5 - complete side panel
+[X] 1.2.5 - complete side panel
 1.3 - Configs Side Panel
 [ ] 1.3.1 - Select and save config in JSON
 [ ] 1.3.2 - see current config from JSON in side panel
