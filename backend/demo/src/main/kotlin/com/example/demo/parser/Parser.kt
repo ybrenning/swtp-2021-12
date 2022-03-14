@@ -5,7 +5,8 @@ import com.example.demo.dataclasses.DBEntity
 import java.io.File
 
 object Parser {
-    private const val csvFileFolder:String = ""     // location of the folder containing the .csv files
+    // location of the folder containing the .csv files
+    private const val csvFileFolder: String = ""
 
     private fun String.toBoolean(): Boolean {
         return (this.toInt() != 0)
@@ -17,20 +18,20 @@ object Parser {
         lateinit var configurationNames: List<String>
         var i = 0
 
-        File(csvFilePath).forEachLine{
+        File(csvFilePath).forEachLine {
             csvLineElements = it.split(",")
             // check for first line and create the configuration names list from it
-            if(i == 0) {
+            if (i == 0) {
                 configurationNames = csvLineElements
             } else {
                 // create the map of the configuration names and values for the Line (entry)
                 val configMap = HashMap<String, Boolean>()
-                for(loopVar in 1..configurationNames.size - 3)  {
+                for (loopVar in 1..configurationNames.size - 3)  {
                     configMap[configurationNames[loopVar]] = csvLineElements[loopVar].toBoolean()
                 }
 
                 repository.save(
-                    DBEntity (
+                    DBEntity(
                         softwareSystem,
                         csvLineElements[0],
                         configMap,
@@ -39,6 +40,7 @@ object Parser {
                     )
                 )
             }
+
             i = 1
         }
     }
