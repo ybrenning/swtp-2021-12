@@ -304,9 +304,6 @@ class JavaDocumentSymbolProvider {
                             }
                         }*/
                         containedKanzis.push(kanzilist[temp]);
-                        // TEST suite
-                        console.log('Test');
-                        console.log(containedKanzis);
                     }
                 }
                 // TODO: fix kanzi finding

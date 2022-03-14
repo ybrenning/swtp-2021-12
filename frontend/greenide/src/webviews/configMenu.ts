@@ -145,7 +145,7 @@ export class ConfigMenu {
       message => {
         
         // TEST suite
-        console.log('TEST WEBVIEW SEND');
+        console.log(message);
       },
       undefined
     );
@@ -188,7 +188,7 @@ export class ConfigMenu {
     }
     
     .caret::before {
-      content: "\\25B6\\25B6";
+      content: "\\25B7";
       color: white;
       display: inline-block;
       margin-right: 6px;
@@ -214,75 +214,59 @@ export class ConfigMenu {
     <h2>GreenIDE Configuration Menu</h2>
 
     <figure>
-    <p> <strong> Change Config: </strong> </p>
+    <h3>Change Config:</h3>
     <form>
-    <ul id="myUL">
-      <li><span class="caret">Configuration</span>
-        <ul class="nested">
-          <br><input type="checkbox" name="root" /> root</br>
-          <input type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
-          <br><input type="checkbox" name="JOBS" /> JOBS</br>
-          <input type="checkbox" name="LEVEL" /> LEVEL
-          <br><input type="checkbox" name="CHECKSUM" /> CHECKSUM</br>
-          <input type="checkbox" name="SKIP" /> SKIP
-          <br><input type="checkbox" name="NoTransform" /> NoTransform</br>
-          <input type="checkbox" name="Huffman" /> Huffman
-          <br><input type="checkbox" name="ANS0" /> ANS0</br>
-          <input type="checkbox" name="ANS1" /> ANS1
-          <br><input type="checkbox" name="Range" /> Range</br>
-          <input type="checkbox" name="FPAQ" /> FPAQ
-          <br><input type="checkbox" name="TPAQ" /> TPAQ</br>
-          <input type="checkbox" name="CM" /> CM
-          <br><input type="checkbox" name="NoEntropy" /> NoEntropy</br>
-          <input type="checkbox" name="BWTS" /> BWTS
-          <br><input type="checkbox" name="ROLZ" /> ROLZ</br>
-          <input type="checkbox" name="RLT" /> RLT
-          <br><input type="checkbox" name="ZRLT" /> ZRLT</br>
-          <input type="checkbox" name="MTFT" /> MTFT
-          <br><input type="checkbox" name="RANK" /> RANK</br>
-          <input type="checkbox" name="TEXT" /> TEXT
-          <br><input type="checkbox" name="X86" /> X86</br>
-        </ul>
-      </li>
-    </ul>
+    <br><input class="configCheckbox" type="checkbox" name="root" /> root</br>
+    <input class="configCheckbox" type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
+    <br><input class="configCheckbox" type="checkbox" name="JOBS" /> JOBS</br>
+    <input class="configCheckbox" type="checkbox" name="LEVEL" /> LEVEL
+    <br><input class="configCheckbox" type="checkbox" name="CHECKSUM" /> CHECKSUM</br>
+    <input class="configCheckbox" type="checkbox" name="SKIP" /> SKIP
+    <br><input class="configCheckbox" type="checkbox" name="NoTransform" /> NoTransform</br>
+    <input class="configCheckbox" type="checkbox" name="Huffman" /> Huffman
+    <br><input class="configCheckbox" type="checkbox" name="ANS0" /> ANS0</br>
+    <input class="configCheckbox" type="checkbox" name="ANS1" /> ANS1
+    <br><input class="configCheckbox" type="checkbox" name="Range" /> Range</br>
+    <input class="configCheckbox" type="checkbox" name="FPAQ" /> FPAQ
+    <br><input class="configCheckbox" type="checkbox" name="TPAQ" /> TPAQ</br>
+    <input class="configCheckbox" type="checkbox" name="CM" /> CM
+    <br><input class="configCheckbox" type="checkbox" name="NoEntropy" /> NoEntropy</br>
+    <input class="configCheckbox" type="checkbox" name="BWTS" /> BWTS
+    <br><input class="configCheckbox" type="checkbox" name="ROLZ" /> ROLZ</br>
+    <input class="configCheckbox" type="checkbox" name="RLT" /> RLT
+    <br><input class="configCheckbox" type="checkbox" name="ZRLT" /> ZRLT</br>
+    <input class="configCheckbox" type="checkbox" name="MTFT" /> MTFT
+    <br><input class="configCheckbox" type="checkbox" name="RANK" /> RANK</br>
+    <input class="configCheckbox" type="checkbox" name="TEXT" /> TEXT
+    <br><input class="configCheckbox" type="checkbox" name="X86" /> X86</br>
     <br></br>
     </form>
-    <button id="lines-of-code-counter"> <strong>Apply</strong> </button>
+    <span onclick="applyConfig()"><button> <strong>Apply This Configuration</strong> </button></span>
+    <span onclick="saveConfig()"><button> <strong>Save This Configuration</strong> </button></span>
     </figure>
-
     </body>
 
     <script>
-    var toggler = document.getElementsByClassName("caret");
-    var i;
-    
-    for (i = 0; i < toggler.length; i++) {
-      toggler[i].addEventListener("click", function() {
-        this.parentElement.querySelector(".nested").classList.toggle("active");
-        this.classList.toggle("caret-down");
-      });
+
+    function applyConfig() {
+      var checkedValue = []; 
+      var inputElements = document.getElementsByClassName('configCheckbox');
+      for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkedValue.push(inputElements[i].name);
+            }
+      }
+      const vscode = acquireVsCodeApi();
+      vscode.postMessage({text:checkedValue})
     }
 
-    (function() {
+    function saveConfig() {
       const vscode = acquireVsCodeApi();
-      const counter = document.getElementById('lines-of-code-counter');
+      vscode.postMessage({text:'Config Saved'})
+    }
 
-      let count = 0;
-      setInterval(() => {
-          counter.textContent = count++;
-
-          // Alert the extension when our cat introduces a bug
-          if (Math.random() < 0.001 * count) {
-              vscode.postMessage({
-                  command: 'alert',
-                  text: ' on line ' + count
-              })
-          }
-      }, 100);
-    }())
 
     </script>
-
     </html>`;
   }
 }
