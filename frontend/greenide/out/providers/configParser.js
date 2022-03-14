@@ -38,23 +38,38 @@ exports.ConfigParser = ConfigParser;
 function applyConfig(config) {
     // define collection for data
     var obj = {
-        addConfig: [{}]
+        config: []
     };
     // make string for json
     var json;
     const fs = require('fs');
-    // check if 
+    // overwrite file / default config num 0
     fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
             console.log(err);
         }
         else {
-            obj.addConfig.push({ id: 0, name: 'Default', config: config });
-            json = JSON.stringify(obj);
-            fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            if (data.length !== 0) {
+                // TEST suite
+                console.log(data.length);
+                // get the current configs
+                var result = JSON.parse(data);
+                // set data for obj
+                obj.config.push({ id: 0, name: 'Default', config: config });
+                // replace first config with obj config
+                result.config[0] = obj.config[0];
+                // write new default config into file
+                json = JSON.stringify(result);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+            else {
+                // set data for obj
+                obj.config.push({ id: 0, name: 'Default', config: config });
+                json = JSON.stringify(obj);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
         }
     });
-    throw new Error("Function not implemented.");
 }
 // delete this config number num
 function deleteConfig(num) {

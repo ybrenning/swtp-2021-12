@@ -16,7 +16,7 @@ export class ConfigParser {
     // - Delete config number num (Delete,num)
     // - Load config number num (Load,num)
     // - Save as new config (Save,Configs)
-    constructor (mode: string, num?: number, config?: string[]) {
+    constructor(mode: string, num?: number, config?: string[]) {
 
         this.num = num;
         this.config = config;
@@ -52,7 +52,7 @@ function applyConfig(config: string[] | undefined) {
 
     // define collection for data
     var obj = {
-        addConfig: [{}]
+        config: [] as any
     };
 
     // make string for json
@@ -60,17 +60,41 @@ function applyConfig(config: string[] | undefined) {
 
     const fs = require('fs');
 
-    // check if 
-    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string){
-        if (err){
+    // overwrite file / default config num 0
+    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
+        if (err) {
             console.log(err);
         } else {
-        obj.addConfig.push({id: 0, name: 'Default', config: config});
-        json = JSON.stringify(obj);
-        fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
-    }});
 
-    throw new Error("Function not implemented.");
+            if (data.length !== 0) {
+
+                // TEST suite
+                console.log(data.length);
+
+                // get the current configs
+                var result = JSON.parse(data);
+
+                // set data for obj
+                obj.config.push({ id: 0, name: 'Default', config: config });
+
+                // replace first config with obj config
+                result.config[0] = obj.config[0];
+
+                // write new default config into file
+                json = JSON.stringify(result);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+
+            } else {
+
+                // set data for obj
+                obj.config.push({ id: 0, name: 'Default', config: config });
+
+                json = JSON.stringify(obj);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+        }
+    });
 }
 
 // delete this config number num
