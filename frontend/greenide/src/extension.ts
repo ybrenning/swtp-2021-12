@@ -12,7 +12,7 @@
 [X] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
 [X] 1.2.5 - complete side panel
 1.3 - Configs Side Panel
-[ ] 1.3.1 - Select and save config in JSON
+[X] 1.3.1 - Select and save config in JSON
 [ ] 1.3.2 - see current config from JSON in side panel
 [ ] 1.3.3 - save and manage favorites (0 is default, 1+ saved favs)
 1.4 - Backend Communication

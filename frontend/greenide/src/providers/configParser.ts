@@ -69,9 +69,6 @@ function applyConfig(config: string[] | undefined) {
 
             if (data.length !== 0) {
 
-                // TEST suite
-                console.log(data.length);
-
                 // get the current configs
                 var result = JSON.parse(data);
 

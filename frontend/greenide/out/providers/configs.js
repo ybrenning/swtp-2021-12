@@ -17,13 +17,29 @@ class ConfigsProvider {
         [ ] - configs can be browsed in webview, maybe dropdown menu
         [ ] - saved configs can be deleted with a button (command to remove whole block of number x in config.json)
         */
-        // TEST suite HARDCODE
-        var configs = ['ROFL', 'TEX'];
+        // TODO: read JSON to get active config
+        const fs = require('fs');
+        fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', (err, data) => {
+            // get the current configs
+            var result = JSON.parse(data);
+            this.config = result.config[0].config;
+            // TEST suite
+            console.log('TEST CONFIG PARSING');
+            console.log(this.config);
+        });
+        // TEST
+        console.log('AFTER PARSING FILE');
+        console.log(this.config);
+        // TEST suite
+        var configTEST = ['ROFL', 'TEX'];
         // read the config.json and get current active config elements
         var sendData = [];
-        for (var j = 0; j < configs.length; j++) {
-            sendData.push(new ConfigItem(configs[j], undefined));
+        for (var j = 0; j < configTEST.length; j++) {
+            sendData.push(new ConfigItem(configTEST[j], undefined));
         }
+        // TEST suite
+        console.log('SENDDATA');
+        console.log(sendData);
         // the data, consisting of two elements
         //  - the tree itself with the current active config elements
         //  - and the button to toggle webview

@@ -50,8 +50,6 @@ function applyConfig(config) {
         }
         else {
             if (data.length !== 0) {
-                // TEST suite
-                console.log(data.length);
                 // get the current configs
                 var result = JSON.parse(data);
                 // set data for obj
