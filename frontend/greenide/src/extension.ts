@@ -602,3 +602,6 @@ class GoHoverProvider implements vscode.HoverProvider {
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
+
+// useless, only needed for file creation
+function callback(arg0: string, json: string, arg2: string, callback: any) { }

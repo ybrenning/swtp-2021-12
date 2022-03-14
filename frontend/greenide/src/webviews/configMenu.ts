@@ -5,6 +5,7 @@
 
 import * as vscode from "vscode";
 import { getNonce } from "../getNonce";
+import { ConfigParser } from "../providers/configParser";
 
 // the main webview Panel to work with
 export class ConfigMenu {
@@ -145,7 +146,15 @@ export class ConfigMenu {
       message => {
         
         // TEST suite
+        /*console.log('Active Config');
+        for (let i = 0; i < message.text.length; i++) {
+          console.log(message.text[i]);
+        }*/
+
+        // TEST suite
         console.log(message);
+
+        new ConfigParser(message.command,message.num,message.text);
       },
       undefined
     );
@@ -257,12 +266,19 @@ export class ConfigMenu {
             }
       }
       const vscode = acquireVsCodeApi();
-      vscode.postMessage({text:checkedValue})
+      vscode.postMessage({command: 'Apply', num: 0, text:checkedValue})
     }
 
     function saveConfig() {
+      var checkedValue = []; 
+      var inputElements = document.getElementsByClassName('configCheckbox');
+      for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkedValue.push(inputElements[i].name);
+            }
+      }
       const vscode = acquireVsCodeApi();
-      vscode.postMessage({text:'Config Saved'})
+      vscode.postMessage({command: 'Save', text:checkedValue})
     }
 
 

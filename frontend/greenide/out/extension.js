@@ -487,4 +487,6 @@ class GoHoverProvider {
 // This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
+// useless, only needed for file creation
+function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=extension.js.map
