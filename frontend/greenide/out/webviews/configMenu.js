@@ -113,78 +113,109 @@ class ConfigMenu {
         const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
         // Return HTML to be rendered within the Webview
         return `<!DOCTYPE html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<!--
-			Use a content security policy to only allow loading images from https or from our extension directory,
-			and only allow scripts that have a specific nonce.
-      -->
-      <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="${stylesMainUri}" rel="stylesheet">
-      <script nonce="${nonce}">
-      </script>
-		</head>
+    <html lang="en">
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="${stylesMainUri}" rel="stylesheet">
+    <script nonce="${nonce}">
+    </script>
+    <style>
+    ul, #myUL {
+      list-style-type: none;
+    }
+    
+    #myUL {
+      margin: 0;
+      padding: 0;
+    }
+    
+    .caret {
+      cursor: pointer;
+      -webkit-user-select: none; /* Safari 3.1+ */
+      -moz-user-select: none; /* Firefox 2+ */
+      -ms-user-select: none; /* IE 10+ */
+      user-select: none;
+    }
+    
+    .caret::before {
+      content: "\\25B6\\25B6";
+      color: white;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    
+    .caret-down::before {
+      -ms-transform: rotate(90deg); /* IE 9 */
+      -webkit-transform: rotate(90deg); /* Safari */'
+      transform: rotate(90deg);  
+    }
+    
+    .nested {
+      display: none;
+    }
+    
+    .active {
+      display: block;
+    }
+    </style>
+    </head>
     <body>
     
-    <h1>GreenIDE Configuration Menu</h1>
+    <h2>GreenIDE Configuration Menu</h2>
 
     <figure>
-    <p> <strong> Configuration settings: </strong> </p>
+    <p> <strong> Change Config: </strong> </p>
     <form>
-    <input type="checkbox" name="root" /> root 
-    <br> </br>
-    <input type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
-    <br> </br>
-    <input type="checkbox" name="JOBS" /> JOBS 
-    <br> </br>
-    <input type="checkbox" name="LEVEL" /> LEVEL
-    <br> </br>
-    <input type="checkbox" name="CHECKSUM" /> CHECKSUM
-    <br> </br>
-    <input type="checkbox" name="SKIP" /> SKIP
-    <br> </br>
-    <input type="checkbox" name="NoTransform" /> NoTransform
-    <br> </br>
-    <input type="checkbox" name="Huffman" /> Huffman
-    <br> </br>
-    <input type="checkbox" name="ANS0" /> ANS0
-    <br> </br>
-    <input type="checkbox" name="ANS1" /> ANS1
-    <br> </br>
-    <input type="checkbox" name="Range" /> Range
-    <br> </br>
-    <input type="checkbox" name="FPAQ" /> FPAQ 
-    <br> </br>
-    <input type="checkbox" name="TPAQ" /> TPAQ
-    <br> </br>
-    <input type="checkbox" name="CM" /> CM
-    <br> </br>
-    <input type="checkbox" name="NoEntropy" /> NoEntropy 
-    <br> </br>
-    <input type="checkbox" name="BWTS" /> BWTS
-    <br> </br>
-    <input type="checkbox" name="ROLZ" /> ROLZ
-    <br> </br>
-    <input type="checkbox" name="RLT" /> RLT
-    <br> </br>
-    <input type="checkbox" name="ZRLT" /> ZRLT
-    <br> </br>
-    <input type="checkbox" name="MTFT" /> MTFT
-    <br> </br>
-    <input type="checkbox" name="RANK" /> RANK
-    <br> </br>
-    <input type="checkbox" name="TEXT" /> TEXT
-    <br> </br>
-    <input type="checkbox" name="X86" /> X86
-    <br> </br>
+    <ul id="myUL">
+      <li><span class="caret">Configuration</span>
+        <ul class="nested">
+          <br><input type="checkbox" name="root" /> root</br>
+          <input type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
+          <br><input type="checkbox" name="JOBS" /> JOBS</br>
+          <input type="checkbox" name="LEVEL" /> LEVEL
+          <br><input type="checkbox" name="CHECKSUM" /> CHECKSUM</br>
+          <input type="checkbox" name="SKIP" /> SKIP
+          <br><input type="checkbox" name="NoTransform" /> NoTransform</br>
+          <input type="checkbox" name="Huffman" /> Huffman
+          <br><input type="checkbox" name="ANS0" /> ANS0</br>
+          <input type="checkbox" name="ANS1" /> ANS1
+          <br><input type="checkbox" name="Range" /> Range</br>
+          <input type="checkbox" name="FPAQ" /> FPAQ
+          <br><input type="checkbox" name="TPAQ" /> TPAQ</br>
+          <input type="checkbox" name="CM" /> CM
+          <br><input type="checkbox" name="NoEntropy" /> NoEntropy</br>
+          <input type="checkbox" name="BWTS" /> BWTS
+          <br><input type="checkbox" name="ROLZ" /> ROLZ</br>
+          <input type="checkbox" name="RLT" /> RLT
+          <br><input type="checkbox" name="ZRLT" /> ZRLT</br>
+          <input type="checkbox" name="MTFT" /> MTFT
+          <br><input type="checkbox" name="RANK" /> RANK</br>
+          <input type="checkbox" name="TEXT" /> TEXT
+          <br><input type="checkbox" name="X86" /> X86</br>
+        </ul>
+      </li>
+    </ul>
+    
+    <script>
+    var toggler = document.getElementsByClassName("caret");
+    var i;
+    
+    for (i = 0; i < toggler.length; i++) {
+      toggler[i].addEventListener("click", function() {
+        this.parentElement.querySelector(".nested").classList.toggle("active");
+        this.classList.toggle("caret-down");
+      });
+    }
+    </script>
+
+    <br></br>
+
     </form>
     <button> <strong>Apply</strong> </button>
     </figure>
-
-		</body>
-		</html>`;
+    
+    </body>
+    </html>`;
     }
 }
 exports.ConfigMenu = ConfigMenu;
