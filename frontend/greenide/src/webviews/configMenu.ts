@@ -75,7 +75,8 @@ export class ConfigMenu {
     // this happens when the user closes the panel or when the panel is closed programatically
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
-    // // Handle messages from the webview
+    // from old webview
+    /*// // Handle messages from the webview
     // this._panel.webview.onDidReceiveMessage(
     //   (message) => {
     //     switch (message.command) {
@@ -86,7 +87,7 @@ export class ConfigMenu {
     //   },
     //   null,
     //   this._disposables
-    // );
+    // );*/
   }
 
   // close webview panel
@@ -113,7 +114,8 @@ export class ConfigMenu {
     // set HTML content for webview panel
     this._panel.webview.html = this._getHtmlForWebview(webview);
 
-    // message handler
+    // from old webview
+    /*// message handler
     webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case "onInfo": {
@@ -131,7 +133,22 @@ export class ConfigMenu {
           break;
         }
       }
-    });
+    });*/
+
+    // TODO: implement:
+    // [ ] - pressing on button to send checkboxed configs
+    // [ ] - saving config in JSON (default is 0)
+    // [ ] - new button to save favorite with name in JSON
+    // [ ] - new segment: dropdown menu with favorites & delete button
+    // Handle messages from the webview
+    webview.onDidReceiveMessage(
+      message => {
+        
+        // TEST suite
+        console.log('TEST WEBVIEW SEND');
+      },
+      undefined
+    );
   }
 
   // the HTML content, main functionality of webview panel
@@ -228,7 +245,13 @@ export class ConfigMenu {
         </ul>
       </li>
     </ul>
-    
+    <br></br>
+    </form>
+    <button id="lines-of-code-counter"> <strong>Apply</strong> </button>
+    </figure>
+
+    </body>
+
     <script>
     var toggler = document.getElementsByClassName("caret");
     var i;
@@ -239,15 +262,27 @@ export class ConfigMenu {
         this.classList.toggle("caret-down");
       });
     }
+
+    (function() {
+      const vscode = acquireVsCodeApi();
+      const counter = document.getElementById('lines-of-code-counter');
+
+      let count = 0;
+      setInterval(() => {
+          counter.textContent = count++;
+
+          // Alert the extension when our cat introduces a bug
+          if (Math.random() < 0.001 * count) {
+              vscode.postMessage({
+                  command: 'alert',
+                  text: ' on line ' + count
+              })
+          }
+      }, 100);
+    }())
+
     </script>
 
-    <br></br>
-
-    </form>
-    <button> <strong>Apply</strong> </button>
-    </figure>
-    
-    </body>
     </html>`;
   }
 }
