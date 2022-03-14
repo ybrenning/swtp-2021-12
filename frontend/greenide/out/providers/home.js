@@ -12,14 +12,20 @@ class HomeProvider {
             // collect all functions found
             var sendData = [];
             for (var j = 0; j < functions.length; j++) {
-                sendData.push(new HomeItem(functions[j].name, undefined, functions[j].location.range.start.line - 1, functions[j].location.range.start.character));
+                sendData.push(new HomeItem(functions[j].name, undefined, functions[j]));
             }
             // show methods or ...
-            this.data = [new HomeItem('Found Methods:', sendData)];
+            this.data = [
+                new HomeItem('Found Methods:', sendData),
+                new HomeItem('Detailed Statistics')
+            ];
         }
         else {
             // prompt to run/reload
-            this.data = [new HomeItem('Run or Reload Extension')];
+            this.data = [
+                new HomeItem('Run or Reload Extension'),
+                new HomeItem('Detailed Statistics')
+            ];
         }
     }
     getTreeItem(element) {
@@ -34,19 +40,32 @@ class HomeProvider {
 }
 exports.HomeProvider = HomeProvider;
 class HomeItem extends vscode.TreeItem {
-    constructor(label, children, line, character) {
+    constructor(label, children, functionI) {
         super(label, children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded);
         this.contextValue = 'treeItem';
         // variables for each HomeItem
         this.children = children;
-        this.line = line;
-        this.character = character;
-        // the command that is executed when clicking on the HomeItem
-        this.command = {
-            title: "Reveal Method",
-            command: "greenIDE-home.click",
-            arguments: [line, character]
-        };
+        this.line = functionI?.location.range.start.line;
+        // the command that is executed when clicking on the HomeItem (if it is a child)
+        if (this.line) {
+            this.command = {
+                title: "Highlight Method",
+                command: "greenIDE-home.click",
+                arguments: [functionI]
+            };
+        }
+        else if (label.match('Detailed Statistics')) {
+            this.command = {
+                title: "Open Details",
+                command: "greenIDE-home.overview",
+            };
+        }
+        else {
+            this.command = {
+                title: "Highlight All Methods",
+                command: "greenIDE-home.clickAll",
+            };
+        }
     }
 }
 //# sourceMappingURL=home.js.map

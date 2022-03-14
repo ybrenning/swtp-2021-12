@@ -1,9 +1,15 @@
-import * as vscode from "vscode";
-import { getNonce } from "./getNonce";
+// Webview Panel to see details of found methods
+// - see overview of energy / runtime
+// - diagram to see distribution between methods
+// - compare two files (two are sent, if no comparison, second is NULL)
+// - apply different configs to results, see difference in data
 
-export class WebviewPanel {
+import * as vscode from "vscode";
+import { getNonce } from "../getNonce";
+
+export class OverView {
   // Track the current panel. Only allow a single panel to exist at a time.
-  public static currentPanel: WebviewPanel | undefined;
+  public static currentPanel: OverView | undefined;
 
   public static readonly viewType = "green-ide";
 
@@ -17,15 +23,15 @@ export class WebviewPanel {
       : undefined;
 
     // If we already have a panel, show it
-    if (WebviewPanel.currentPanel) {
-      WebviewPanel.currentPanel._panel.reveal(column);
-      WebviewPanel.currentPanel._update();
+    if (OverView.currentPanel) {
+      OverView.currentPanel._panel.reveal(column);
+      OverView.currentPanel._update();
       return;
     }
 
     // Otherwise, create a new panel
     const panel = vscode.window.createWebviewPanel(
-      WebviewPanel.viewType,
+      OverView.viewType,
       "GreenIDE",
       column || vscode.ViewColumn.One,
       {
@@ -40,16 +46,16 @@ export class WebviewPanel {
       }
     );
 
-    WebviewPanel.currentPanel = new WebviewPanel(panel, extensionUri);
+    OverView.currentPanel = new OverView(panel, extensionUri);
   }
 
   public static kill() {
-    WebviewPanel.currentPanel?.dispose();
-    WebviewPanel.currentPanel = undefined;
+    OverView.currentPanel?.dispose();
+    OverView.currentPanel = undefined;
   }
 
   public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
-    WebviewPanel.currentPanel = new WebviewPanel(panel, extensionUri);
+    OverView.currentPanel = new OverView(panel, extensionUri);
   }
 
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
@@ -78,7 +84,7 @@ export class WebviewPanel {
   }
 
   public dispose() {
-    WebviewPanel.currentPanel = undefined;
+    OverView.currentPanel = undefined;
 
     // Clean up our resources
     this._panel.dispose();

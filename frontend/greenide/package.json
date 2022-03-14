@@ -60,28 +60,24 @@
         }
       },
       {
-        "command": "greenIDE-home.rightClick",
+        "command": "greenIDE-home.click",
         "title": "Highlight Item"
       },
       {
-        "command": "greenIDE-home.click",
-        "title": "Reveal"
+        "command": "greenIDE-home.overview",
+        "title": "Open Detailed Statistics"
       },
       {
-        "command": "greenIDE.config1",
-        "title": "Config 1 - true statements: TPAQ, ROLZ"
+        "command": "greenIDE-home.clickAll",
+        "title": "Highlight All Items"
       },
       {
-        "command": "greenIDE.config2",
-        "title": "Config 2 - true statements: ANSI1, RLT"
+        "command": "greenIDE-config.menu",
+        "title": "Config Menu"
       },
       {
-        "command": "greenIDE.config3",
-        "title": "Config 3 - true statements: SKIP, RLT"
-      },
-      {
-        "command": "configsView.reveal",
-        "title": "Configs View: Reveal"
+        "command": "greenIDE-help.click",
+        "title": "Help Item"
       }
     ],
     "menus": {
@@ -90,12 +86,6 @@
           "command": "greenIDE.run",
           "when": "view == greenIDE-home",
           "group": "navigation"
-        }
-      ],
-      "view/item/context": [
-        {
-          "command": "greenIDE-home.rightClick",
-          "when": "viewItem == treeItem"
         }
       ]
     },
