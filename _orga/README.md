@@ -1,6 +1,6 @@
 # Organisation
 
-> Next Tuesday-Meeting: 25.01.2022 (11:00)
+> Next Tuesday-Meeting: 14.03.2022 (11:00)
 
 ## Groups
 * **Front End:** Ferris Kleier, Maxim Zapke
@@ -10,8 +10,8 @@
 ## Current Milestone (V.02)
 - [ ] Find and save specific Kanzi methods from list
 - [ ] Take user input as config from Webview Panel checkboxes
-- [ ] Redesign Webview Panel as side-panel
-- [ ] Readjust highlighting and text hover
+- [x] Redesign Webview Panel as side-panel
+- [x] Readjust highlighting and text hover
 - [ ] Begin back end:
   * Take in Kanzi method names
   * Calculate w/ data from .CSV (Mongo-DB)
