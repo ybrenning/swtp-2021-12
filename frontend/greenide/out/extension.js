@@ -29,11 +29,13 @@
 [ ] - 1.6.1 - display all results in webview from side panel
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
+1.7 - Cleanup and minor issues / tuning
+[ ] - 1.7.1 - Remove test cases / comments
+[ ] - 1.7.1 - Refactoring / outsource functionalities to new classes
 */
 /*
 TODO: open ISSUES
 [ ] - refresh methods when switching file
-[ ] - edit commands, missing commands from helpProvider and configProvider
 */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
