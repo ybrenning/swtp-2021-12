@@ -1,0 +1,26 @@
+{
+    "config": [
+        {
+            "id": 0,
+            "name": "default",
+            "config": [
+                "root",
+                "JOBS",
+                "Range",
+                "CM",
+                "ROLZ",
+                "RLT"
+            ]
+        },
+        {
+            "id": 1,
+            "name": "new config",
+            "config": [
+                "root",
+                "Range",
+                "CM",
+                "RLT"
+            ]
+        }
+    ]
+}

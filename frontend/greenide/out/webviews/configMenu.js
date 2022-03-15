@@ -7,17 +7,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigMenu = void 0;
 const vscode = require("vscode");
 const getNonce_1 = require("../getNonce");
+const configParser_1 = require("../providers/configParser");
+// the main webview Panel to work with
 class ConfigMenu {
+    // constructor for webview panel
     constructor(panel, extensionUri) {
         this._disposables = [];
         this._panel = panel;
         this._extensionUri = extensionUri;
-        // Set the webview's initial HTML content
+        // set the webview's initial HTML content
         this._update();
-        // Listen for when the panel is disposed
-        // This happens when the user closes the panel or when the panel is closed programatically
+        // listen for when the panel is disposed
+        // this happens when the user closes the panel or when the panel is closed programatically
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-        // // Handle messages from the webview
+        // from old webview
+        /*// // Handle messages from the webview
         // this._panel.webview.onDidReceiveMessage(
         //   (message) => {
         //     switch (message.command) {
@@ -28,40 +32,46 @@ class ConfigMenu {
         //   },
         //   null,
         //   this._disposables
-        // );
+        // );*/
     }
+    // technically activate webview panel for configs
     static createOrShow(extensionUri) {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
             : undefined;
-        // If we already have a panel, show it
+        // if we already have a panel, show it
         if (ConfigMenu.currentPanel) {
             ConfigMenu.currentPanel._panel.reveal(column);
             ConfigMenu.currentPanel._update();
             return;
         }
-        // Otherwise, create a new panel
-        const panel = vscode.window.createWebviewPanel(ConfigMenu.viewType, "GreenIDE", column || vscode.ViewColumn.One, {
-            // Enable javascript in the webview
+        // otherwise, create a new panel
+        const panel = vscode.window.createWebviewPanel(ConfigMenu.viewType, "Config Menu", // title of tab
+        column || vscode.ViewColumn.One, {
+            // enable javascript in the webview
             enableScripts: true,
-            // And restrict the webview to only loading content from our extension's `media` directory.
+            // and restrict the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
                 vscode.Uri.joinPath(extensionUri, "media"),
                 vscode.Uri.joinPath(extensionUri, "out/compiled"),
             ],
         });
+        // execute set up webview panel
         ConfigMenu.currentPanel = new ConfigMenu(panel, extensionUri);
     }
+    // kill webview panel
     static kill() {
         ConfigMenu.currentPanel?.dispose();
         ConfigMenu.currentPanel = undefined;
     }
+    // revive webview panel
     static revive(panel, extensionUri) {
         ConfigMenu.currentPanel = new ConfigMenu(panel, extensionUri);
     }
+    // close webview panel
     dispose() {
         ConfigMenu.currentPanel = undefined;
-        // Clean up our resources
+        // clean up our resources
         this._panel.dispose();
         while (this._disposables.length) {
             const x = this._disposables.pop();
@@ -70,28 +80,50 @@ class ConfigMenu {
             }
         }
     }
+    // activate webview content, HTML
     async _update() {
+        // set current webview
         const webview = this._panel.webview;
+        // set HTML content for webview panel
         this._panel.webview.html = this._getHtmlForWebview(webview);
+        // from old webview
+        /*// message handler
         webview.onDidReceiveMessage(async (data) => {
-            switch (data.type) {
-                case "onInfo": {
-                    if (!data.value) {
-                        return;
-                    }
-                    vscode.window.showInformationMessage(data.value);
-                    break;
-                }
-                case "onError": {
-                    if (!data.value) {
-                        return;
-                    }
-                    vscode.window.showErrorMessage(data.value);
-                    break;
-                }
+          switch (data.type) {
+            case "onInfo": {
+              if (!data.value) {
+                return;
+              }
+              vscode.window.showInformationMessage(data.value);
+              break;
             }
-        });
+            case "onError": {
+              if (!data.value) {
+                return;
+              }
+              vscode.window.showErrorMessage(data.value);
+              break;
+            }
+          }
+        });*/
+        // TODO: implement:
+        // [ ] - pressing on button to send checkboxed configs
+        // [ ] - saving config in JSON (default is 0)
+        // [ ] - new button to save favorite with name in JSON
+        // [ ] - new segment: dropdown menu with favorites & delete button
+        // Handle messages from the webview
+        webview.onDidReceiveMessage(message => {
+            // TEST suite
+            /*console.log('Active Config');
+            for (let i = 0; i < message.text.length; i++) {
+              console.log(message.text[i]);
+            }*/
+            // TEST suite
+            console.log(message);
+            new configParser_1.ConfigParser(message.command, message.num, message.text);
+        }, undefined);
     }
+    // the HTML content, main functionality of webview panel
     _getHtmlForWebview(webview) {
         // Use a nonce to only allow specific scripts to be run
         const nonce = (0, getNonce_1.getNonce)();
@@ -100,89 +132,118 @@ class ConfigMenu {
         const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
         // Return HTML to be rendered within the Webview
         return `<!DOCTYPE html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<!--
-			Use a content security policy to only allow loading images from https or from our extension directory,
-			and only allow scripts that have a specific nonce.
-      -->
-      <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="${stylesMainUri}" rel="stylesheet">
-      <script nonce="${nonce}">
-      </script>
-		</head>
+    <html lang="en">
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="${stylesMainUri}" rel="stylesheet">
+    <script nonce="${nonce}">
+    </script>
+    <style>
+    ul, #myUL {
+      list-style-type: none;
+    }
+    
+    #myUL {
+      margin: 0;
+      padding: 0;
+    }
+    
+    .caret {
+      cursor: pointer;
+      -webkit-user-select: none; /* Safari 3.1+ */
+      -moz-user-select: none; /* Firefox 2+ */
+      -ms-user-select: none; /* IE 10+ */
+      user-select: none;
+    }
+    
+    .caret::before {
+      content: "\\25B7";
+      color: white;
+      display: inline-block;
+      margin-right: 6px;
+    }
+    
+    .caret-down::before {
+      -ms-transform: rotate(90deg); /* IE 9 */
+      -webkit-transform: rotate(90deg); /* Safari */'
+      transform: rotate(90deg);  
+    }
+    
+    .nested {
+      display: none;
+    }
+    
+    .active {
+      display: block;
+    }
+    </style>
+    </head>
     <body>
     
-    <h1> Welcome to GreenIDE. </h1>
+    <h2>GreenIDE Configuration Menu</h2>
 
     <figure>
-      <p> <strong> Energy </strong> </p>
-      <img src="https://root.cern/doc/master/pict1_graph.C.png" width="300" />
-      <figcaption> Energy Total: 12374398274 mWs </figcaption>
-      <button> <strong> Rerun </strong> </button>
-    <p> <strong> Configuration settings: </strong> </p>
+    <h3>Change Config:</h3>
     <form>
-    <input type="checkbox" name="root" /> root 
-    <br> </br>
-    <input type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
-    <br> </br>
-    <input type="checkbox" name="JOBS" /> JOBS 
-    <br> </br>
-    <input type="checkbox" name="LEVEL" /> LEVEL
-    <br> </br>
-    <input type="checkbox" name="CHECKSUM" /> CHECKSUM
-    <br> </br>
-    <input type="checkbox" name="SKIP" /> SKIP
-    <br> </br>
-    <input type="checkbox" name="NoTransform" /> NoTransform
-    <br> </br>
-    <input type="checkbox" name="Huffman" /> Huffman
-    <br> </br>
-    <input type="checkbox" name="ANS0" /> ANS0
-    <br> </br>
-    <input type="checkbox" name="ANS1" /> ANS1
-    <br> </br>
-    <input type="checkbox" name="Range" /> Range   
+    <br><input class="configCheckbox" type="checkbox" name="root" /> root</br>
+    <input class="configCheckbox" type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
+    <br><input class="configCheckbox" type="checkbox" name="JOBS" /> JOBS</br>
+    <input class="configCheckbox" type="checkbox" name="LEVEL" /> LEVEL
+    <br><input class="configCheckbox" type="checkbox" name="CHECKSUM" /> CHECKSUM</br>
+    <input class="configCheckbox" type="checkbox" name="SKIP" /> SKIP
+    <br><input class="configCheckbox" type="checkbox" name="NoTransform" /> NoTransform</br>
+    <input class="configCheckbox" type="checkbox" name="Huffman" /> Huffman
+    <br><input class="configCheckbox" type="checkbox" name="ANS0" /> ANS0</br>
+    <input class="configCheckbox" type="checkbox" name="ANS1" /> ANS1
+    <br><input class="configCheckbox" type="checkbox" name="Range" /> Range</br>
+    <input class="configCheckbox" type="checkbox" name="FPAQ" /> FPAQ
+    <br><input class="configCheckbox" type="checkbox" name="TPAQ" /> TPAQ</br>
+    <input class="configCheckbox" type="checkbox" name="CM" /> CM
+    <br><input class="configCheckbox" type="checkbox" name="NoEntropy" /> NoEntropy</br>
+    <input class="configCheckbox" type="checkbox" name="BWTS" /> BWTS
+    <br><input class="configCheckbox" type="checkbox" name="ROLZ" /> ROLZ</br>
+    <input class="configCheckbox" type="checkbox" name="RLT" /> RLT
+    <br><input class="configCheckbox" type="checkbox" name="ZRLT" /> ZRLT</br>
+    <input class="configCheckbox" type="checkbox" name="MTFT" /> MTFT
+    <br><input class="configCheckbox" type="checkbox" name="RANK" /> RANK</br>
+    <input class="configCheckbox" type="checkbox" name="TEXT" /> TEXT
+    <br><input class="configCheckbox" type="checkbox" name="X86" /> X86</br>
+    <br></br>
     </form>
+    <span onclick="applyConfig()"><button> <strong>Apply This Configuration</strong> </button></span>
+    <span onclick="saveConfig()"><button> <strong>Save This Configuration</strong> </button></span>
     </figure>
+    </body>
 
-    <figure>
-    <p> <strong> Time </strong> </p>
-      <img src="https://root.cern/doc/master/pict1_bent.C.png" width="300" />
-      <figcaption> Time total: 739874192 ms </figcaption>
-      <button> <strong> Compare </strong> </button>
-    <form>
-    <br> </br>
-    <input type="checkbox" name="FPAQ" /> FPAQ 
-    <br> </br>
-    <input type="checkbox" name="TPAQ" /> TPAQ
-    <br> </br>
-    <input type="checkbox" name="CM" /> CM
-    <br> </br>
-    <input type="checkbox" name="NoEntropy" /> NoEntropy 
-    <br> </br>
-    <input type="checkbox" name="BWTS" /> BWTS
-    <br> </br>
-    <input type="checkbox" name="ROLZ" /> ROLZ
-    <br> </br>
-    <input type="checkbox" name="RLT" /> RLT
-    <br> </br>
-    <input type="checkbox" name="ZRLT" /> ZRLT
-    <br> </br>
-    <input type="checkbox" name="MTFT" /> MTFT
-    <br> </br>
-    <input type="checkbox" name="RANK" /> RANK
-    <br> </br>
-    <input type="checkbox" name="TEXT" /> TEXT
-    <br> </br>
-    <input type="checkbox" name="X86" /> X86
-    </form>
-    </figure>
+    <script>
 
-		</body>
-		</html>`;
+    function applyConfig() {
+      var checkedValue = []; 
+      var inputElements = document.getElementsByClassName('configCheckbox');
+      for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkedValue.push(inputElements[i].name);
+            }
+      }
+      const vscode = acquireVsCodeApi();
+      vscode.postMessage({command: 'Apply', num: 0, text:checkedValue})
+    }
+
+    function saveConfig() {
+      var checkedValue = []; 
+      var inputElements = document.getElementsByClassName('configCheckbox');
+      for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkedValue.push(inputElements[i].name);
+            }
+      }
+      const vscode = acquireVsCodeApi();
+      vscode.postMessage({command: 'Save', text:checkedValue})
+    }
+
+
+    </script>
+    </html>`;
     }
 }
 exports.ConfigMenu = ConfigMenu;

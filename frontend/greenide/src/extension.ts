@@ -10,11 +10,11 @@
 [X] 1.2.3 - click on side panel method to jump to location
     [X] 1.2.3.1 - reset list of methods when opening new file
 [X] 1.2.4 - toggle highlighting at specific / all methods (generic color yellow)
-[ ] 1.2.5 - complete side panel
+[X] 1.2.5 - complete side panel
 1.3 - Configs Side Panel
-[ ] 1.3.1 - Select and save config in JSON
-[ ] 1.3.2 - see current config from JSON in side panel
-[ ] 1.3.3 - save and manage favorites (0 is default, 1+ saved favs)
+[X] 1.3.1 - Select and save config in JSON
+[X] 1.3.2 - save and manage favorites (0 is default, 1+ saved favs)
+[ ] 1.3.3 - see current config from JSON in side panel
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
@@ -30,18 +30,20 @@
 [ ] - 1.6.1 - display all results in webview from side panel
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
+1.7 - Cleanup and minor issues / tuning
+[ ] - 1.7.1 - Remove test cases / comments
+[ ] - 1.7.1 - Refactoring / outsource functionalities to new classes
 */
 
 /*
 TODO: open ISSUES
 [ ] - refresh methods when switching file
-[ ] - edit commands, missing commands from helpProvider and configProvider
 */
 
 'use strict';
 import * as vscode from 'vscode';
 import { ConfigMenu } from './webviews/configMenu';
-import { OverView } from './webviews/overview';
+import { Overview } from './webviews/overview';
 import { HomeProvider } from './providers/home';
 import { ConfigsProvider } from './providers/configs';
 import { HelpProvider } from './providers/help';
@@ -69,7 +71,7 @@ var foundMethods: string[] = [];
 var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
 
 // old data
-var config: number = 0;
+var config: string[] = [];
 
 // old data
 var function1Data: Datum;
@@ -175,7 +177,7 @@ export function activate(context: vscode.ExtensionContext) {
         let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', () => {
 
             // open webview 'OverView'
-            OverView.createOrShow(context.extensionUri);
+            Overview.createOrShow(context.extensionUri);
         });
 
         context.subscriptions.push(clickEvent);
@@ -190,7 +192,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
-            treeDataProvider: new ConfigsProvider
+            treeDataProvider: new ConfigsProvider(config)
         });
 
         // Set name for second segment
@@ -383,10 +385,6 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                             }
                         }*/
                         containedKanzis.push(kanzilist[temp]);
-
-                        // TEST suite
-                        console.log('Test');
-                        console.log(containedKanzis);
                     }
                 }
 
@@ -604,3 +602,6 @@ class GoHoverProvider implements vscode.HoverProvider {
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
+
+// useless, only needed for file creation
+function callback(arg0: string, json: string, arg2: string, callback: any) { }

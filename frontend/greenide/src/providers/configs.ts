@@ -1,6 +1,7 @@
 // provider for second tab in side panel, configs
 // drop down / tree view for all methods to apply, save methods in favorites
 
+import { config } from 'process';
 import * as vscode from 'vscode';
 
 export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
@@ -11,27 +12,30 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
     data: ConfigItem[];
 
     // Set the tree elements for side panel
-    constructor() {
+    constructor(config: string[]) {
 
         // TODO: 
         // [ ] - code to read config.json
-        // [ ] - config panel freezes on startup -> fix (caused when loop for hardcode config array is in / collapsable tree is in)
         // structure:
         /*
-        [ ] - active config gets number 0 and is displayed
+        [X] - active config gets number 0 and is displayed
         [ ] - every saved config gets number 1 and up
         [ ] - configs can be browsed in webview, maybe dropdown menu
         [ ] - saved configs can be deleted with a button (command to remove whole block of number x in config.json)
         */
 
-        // TEST suite HARDCODE
-        var configs = ['ROFL', 'TEX'];
+        console.log('TEST IN SIDE PANEL');
+        console.log(config);
 
         // read the config.json and get current active config elements
         var sendData = [];
-        for (var j = 0; j<configs.length; j++) {
-            sendData.push(new ConfigItem(configs[j], undefined));
+        for (var j = 0; j<config.length; j++) {
+            sendData.push(new ConfigItem(config[j], undefined));
         }
+
+        // TEST suite
+        console.log('SENDDATA');
+        console.log(sendData);
 
         // the data, consisting of two elements
         //  - the tree itself with the current active config elements
@@ -81,3 +85,4 @@ class ConfigItem extends vscode.TreeItem {
 
     contextValue = 'treeItem';
 }
+

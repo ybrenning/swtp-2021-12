@@ -5,18 +5,20 @@
 // - compare two files (two are sent, if no comparison, second is NULL)
 // - apply different configs to results, see difference in data
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OverView = void 0;
+exports.Overview = void 0;
 const vscode = require("vscode");
 const getNonce_1 = require("../getNonce");
-class OverView {
+// the main webview Panel to work with
+class Overview {
+    // constructor for webview panel
     constructor(panel, extensionUri) {
         this._disposables = [];
         this._panel = panel;
         this._extensionUri = extensionUri;
-        // Set the webview's initial HTML content
+        // set the webview's initial HTML content
         this._update();
-        // Listen for when the panel is disposed
-        // This happens when the user closes the panel or when the panel is closed programatically
+        // listen for when the panel is disposed
+        // this happens when the user closes the panel or when the panel is closed programatically
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
         // // Handle messages from the webview
         // this._panel.webview.onDidReceiveMessage(
@@ -31,38 +33,44 @@ class OverView {
         //   this._disposables
         // );
     }
+    // technically activate webview panel for overview
     static createOrShow(extensionUri) {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
             : undefined;
-        // If we already have a panel, show it
-        if (OverView.currentPanel) {
-            OverView.currentPanel._panel.reveal(column);
-            OverView.currentPanel._update();
+        // if we already have a panel, show it
+        if (Overview.currentPanel) {
+            Overview.currentPanel._panel.reveal(column);
+            Overview.currentPanel._update();
             return;
         }
-        // Otherwise, create a new panel
-        const panel = vscode.window.createWebviewPanel(OverView.viewType, "GreenIDE", column || vscode.ViewColumn.One, {
-            // Enable javascript in the webview
+        // otherwise, create a new panel
+        const panel = vscode.window.createWebviewPanel(Overview.viewType, "Data Overview", // title of tab
+        column || vscode.ViewColumn.One, {
+            // enable javascript in the webview
             enableScripts: true,
-            // And restrict the webview to only loading content from our extension's `media` directory.
+            // and restrict the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
                 vscode.Uri.joinPath(extensionUri, "media"),
                 vscode.Uri.joinPath(extensionUri, "out/compiled"),
             ],
         });
-        OverView.currentPanel = new OverView(panel, extensionUri);
+        // execute set up webview panel
+        Overview.currentPanel = new Overview(panel, extensionUri);
     }
+    // kill webview panel
     static kill() {
-        OverView.currentPanel?.dispose();
-        OverView.currentPanel = undefined;
+        Overview.currentPanel?.dispose();
+        Overview.currentPanel = undefined;
     }
+    // revive webview panel
     static revive(panel, extensionUri) {
-        OverView.currentPanel = new OverView(panel, extensionUri);
+        Overview.currentPanel = new Overview(panel, extensionUri);
     }
+    // close webview panel
     dispose() {
-        OverView.currentPanel = undefined;
-        // Clean up our resources
+        Overview.currentPanel = undefined;
+        // clean up our resources
         this._panel.dispose();
         while (this._disposables.length) {
             const x = this._disposables.pop();
@@ -71,9 +79,13 @@ class OverView {
             }
         }
     }
+    // activate webview content, HTML
     async _update() {
+        // set current webview
         const webview = this._panel.webview;
+        // set HTML content for webview panel
         this._panel.webview.html = this._getHtmlForWebview(webview);
+        // message handler
         webview.onDidReceiveMessage(async (data) => {
             switch (data.type) {
                 case "onInfo": {
@@ -93,6 +105,7 @@ class OverView {
             }
         });
     }
+    // the HTML content, main functionality of webview panel
     _getHtmlForWebview(webview) {
         // Use a nonce to only allow specific scripts to be run
         const nonce = (0, getNonce_1.getNonce)();
@@ -186,6 +199,6 @@ class OverView {
 		</html>`;
     }
 }
-exports.OverView = OverView;
-OverView.viewType = "green-ide";
+exports.Overview = Overview;
+Overview.viewType = "green-ide";
 //# sourceMappingURL=overview.js.map
