@@ -6,7 +6,7 @@ import java.io.File
 
 object Parser {
     // location of the folder containing the .csv files
-    private const val csvFileFolder: String = ""
+    private const val csvFileFolder: String = "src/main/kotlin/com/example/demo/csvLocation/"
 
     private fun String.toBoolean(): Boolean {
         return (this.toInt() != 0)
