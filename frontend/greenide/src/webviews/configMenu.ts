@@ -155,6 +155,9 @@ export class ConfigMenu {
         console.log(message);
 
         new ConfigParser(message.command,message.num,message.text);
+
+        vscode.commands.executeCommand('GreenIDE.run');
+
       },
       undefined
     );

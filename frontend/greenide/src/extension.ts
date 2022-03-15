@@ -71,9 +71,6 @@ var foundMethods: string[] = [];
 var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
 
 // old data
-var config: string[] = [];
-
-// old data
 var function1Data: Datum;
 var function2Data: Datum;
 var function3Data: Datum;
@@ -153,7 +150,7 @@ export function activate(context: vscode.ExtensionContext) {
             );
             // execute highlight with provided data
             testHighlight.decorate;
-        }); 
+        });
 
         // when clicking on 'header', namely 'found methods'
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
@@ -189,6 +186,19 @@ export function activate(context: vscode.ExtensionContext) {
     // This creates the side panel segment 'Configs' where the user can see which config elements are active
     // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
     function sidePanelConfigs() {
+
+        // config data (default config 0)
+        var config: string[] = [];
+
+        // read current config
+        const fs = require('fs');
+
+        var result = JSON.parse(fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8'));
+        config = result.config[0].config;
+
+        // TEST suite
+        console.log('DATA FROM JSON');
+        console.log(config);
 
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
@@ -242,6 +252,8 @@ export function activate(context: vscode.ExtensionContext) {
         { language: "java" }, new GoHoverProvider()
     ));
 }
+
+
 
 // Performs analysis
 // Procedure order:
@@ -602,6 +614,3 @@ class GoHoverProvider implements vscode.HoverProvider {
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
-
-// useless, only needed for file creation
-function callback(arg0: string, json: string, arg2: string, callback: any) { }

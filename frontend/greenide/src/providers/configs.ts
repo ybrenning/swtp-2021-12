@@ -33,10 +33,6 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
             sendData.push(new ConfigItem(config[j], undefined));
         }
 
-        // TEST suite
-        console.log('SENDDATA');
-        console.log(sendData);
-
         // the data, consisting of two elements
         //  - the tree itself with the current active config elements
         //  - and the button to toggle webview

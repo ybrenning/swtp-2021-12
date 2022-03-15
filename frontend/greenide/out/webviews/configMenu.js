@@ -121,6 +121,7 @@ class ConfigMenu {
             // TEST suite
             console.log(message);
             new configParser_1.ConfigParser(message.command, message.num, message.text);
+            vscode.commands.executeCommand('GreenIDE.run');
         }, undefined);
     }
     // the HTML content, main functionality of webview panel

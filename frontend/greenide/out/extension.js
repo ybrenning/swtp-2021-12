@@ -54,8 +54,6 @@ var foundMethods = [];
 // functionsWD = functions /wo duplicates
 var functions = [];
 // old data
-var config = [];
-// old data
 var function1Data;
 var function2Data;
 var function3Data;
@@ -141,6 +139,15 @@ function activate(context) {
     // This creates the side panel segment 'Configs' where the user can see which config elements are active
     // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
     function sidePanelConfigs() {
+        // config data (default config 0)
+        var config = [];
+        // read current config
+        const fs = require('fs');
+        var result = JSON.parse(fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8'));
+        config = result.config[0].config;
+        // TEST suite
+        console.log('DATA FROM JSON');
+        console.log(config);
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
             treeDataProvider: new configs_1.ConfigsProvider(config)
@@ -487,6 +494,4 @@ class GoHoverProvider {
 // This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
-// useless, only needed for file creation
-function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=extension.js.map
