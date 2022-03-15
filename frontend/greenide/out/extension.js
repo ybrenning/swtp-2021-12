@@ -12,8 +12,8 @@
 [X] 1.2.5 - complete side panel
 1.3 - Configs Side Panel
 [X] 1.3.1 - Select and save config in JSON
-[ ] 1.3.2 - see current config from JSON in side panel
-[ ] 1.3.3 - save and manage favorites (0 is default, 1+ saved favs)
+[X] 1.3.2 - save and manage favorites (0 is default, 1+ saved favs)
+[ ] 1.3.3 - see current config from JSON in side panel
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
