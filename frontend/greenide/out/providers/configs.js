@@ -6,36 +6,22 @@ exports.ConfigsProvider = void 0;
 const vscode = require("vscode");
 class ConfigsProvider {
     // Set the tree elements for side panel
-    constructor() {
+    constructor(config) {
         // TODO: 
         // [ ] - code to read config.json
-        // [ ] - config panel freezes on startup -> fix (caused when loop for hardcode config array is in / collapsable tree is in)
         // structure:
         /*
-        [ ] - active config gets number 0 and is displayed
+        [X] - active config gets number 0 and is displayed
         [ ] - every saved config gets number 1 and up
         [ ] - configs can be browsed in webview, maybe dropdown menu
         [ ] - saved configs can be deleted with a button (command to remove whole block of number x in config.json)
         */
-        // TODO: read JSON to get active config
-        const fs = require('fs');
-        fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', (err, data) => {
-            // get the current configs
-            var result = JSON.parse(data);
-            this.config = result.config[0].config;
-            // TEST suite
-            console.log('TEST CONFIG PARSING');
-            console.log(this.config);
-        });
-        // TEST
-        console.log('AFTER PARSING FILE');
-        console.log(this.config);
-        // TEST suite
-        var configTEST = ['ROFL', 'TEX'];
+        console.log('TEST IN SIDE PANEL');
+        console.log(config);
         // read the config.json and get current active config elements
         var sendData = [];
-        for (var j = 0; j < configTEST.length; j++) {
-            sendData.push(new ConfigItem(configTEST[j], undefined));
+        for (var j = 0; j < config.length; j++) {
+            sendData.push(new ConfigItem(config[j], undefined));
         }
         // TEST suite
         console.log('SENDDATA');

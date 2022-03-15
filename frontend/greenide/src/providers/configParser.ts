@@ -109,9 +109,72 @@ function loadConfig(num: number | undefined) {
 // save the provided config
 function saveConfig(config: string[] | undefined) {
 
-    throw new Error("Function not implemented.");
+    // define collection for data
+    var obj = {
+        config: [] as any
+    };
+
+    // make string for json
+    var json: string;
+
+    const fs = require('fs');
+
+    // overwrite file / default config num 0
+    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
+        if (err) {
+            console.log(err);
+        } else {
+
+            if (data.length !== 0) {
+
+                // TEST suite
+                var result = JSON.parse(data);
+                var ids: number[] = [];
+                var id: number = 0;
+
+                // get all the ids to see what's the next smallest id to save as
+                for (let i = 0; i < Object.keys(result.config).length; i++) {
+                    ids.push(result.config[i].id);
+                }
+
+                // TODO: does only save default value (0) for id, then the next time it works
+                // problem: ids list is compared with numbers, but all are different, so no new number
+                // assign id as smallest id not taken
+                for (let i = 0; i < Object.keys(result.config).length+1; i++) {
+
+                    if (!(ids.includes(i))) {
+                        id = i;
+                    }
+                }
+
+                // get the current configs
+                obj = JSON.parse(data);
+
+                // set name for config
+                var name = 'Config ' + id;
+
+                // set data for obj
+                obj.config[0] = ({ id: 0, name: 'Default', config: config });
+                obj.config.push({ id: id, name: name, config: config });
+
+                // write new default config into file
+                json = JSON.stringify(obj);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+
+            } else {
+
+                // set data for obj
+                obj.config.push({ id: 0, name: 'Default', config: config });
+                obj.config.push({ id: 1, name: 'Config 1', config: config });
+
+                json = JSON.stringify(obj);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+        }
+    });
 }
-function callback(arg0: string, json: string, arg2: string, callback: any) {
-    throw new Error("Function not implemented.");
-}
+
+// just for file reasons, not to be implemented
+function callback(arg0: string, json: string, arg2: string, callback: any) { }
 

@@ -71,7 +71,7 @@ var foundMethods: string[] = [];
 var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
 
 // old data
-var config: number = 0;
+var config: string[] = [];
 
 // old data
 var function1Data: Datum;
@@ -192,7 +192,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
-            treeDataProvider: new ConfigsProvider
+            treeDataProvider: new ConfigsProvider(config)
         });
 
         // Set name for second segment

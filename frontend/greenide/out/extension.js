@@ -54,7 +54,7 @@ var foundMethods = [];
 // functionsWD = functions /wo duplicates
 var functions = [];
 // old data
-var config = 0;
+var config = [];
 // old data
 var function1Data;
 var function2Data;
@@ -143,7 +143,7 @@ function activate(context) {
     function sidePanelConfigs() {
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
-            treeDataProvider: new configs_1.ConfigsProvider
+            treeDataProvider: new configs_1.ConfigsProvider(config)
         });
         // Set name for second segment
         configsTreeView.title = 'CONFIGURATIONS';
