@@ -18,29 +18,33 @@ class FunctionValueCalculatorService(
     ): ArrayList<ConfiguredFunction> {
         val configuredFunctions: ArrayList<ConfiguredFunction> = ArrayList()
 
-        //repeat for all functions that are requested
-        for(function in functionsToFind) {
+        // repeat for all functions that are requested
+        for (function in functionsToFind) {
             val functionConfigsRaw: List<DBEntity> = repository.findByFunctionName(function)
             var functionResultEnergy = 0.0
-            var functionResultTime   = 0.0
+            var functionResultTime = 0.0
 
-            //repeat for each configuration returned from the database
-            for(functionConfigRaw in functionConfigsRaw) {
-
-                //repeat for every configuration that is requested
-                for(configToFind in configsToFind) {
-
-                    //is this config #requested AND #the one in this database entry
-                    if(functionConfigRaw.configs[configToFind] == true) {
-
+            // repeat for each configuration returned from the database
+            for (functionConfigRaw in functionConfigsRaw) {
+                // repeat for every configuration that is requested
+                for (configToFind in configsToFind) {
+                    // is this config #requested AND #the one in this database entry
+                    if (functionConfigRaw.configs[configToFind] == true) {
                         functionResultEnergy += functionConfigRaw.energy
-                        functionResultTime   += functionConfigRaw.time
+                        functionResultTime += functionConfigRaw.time
                         break
                     }
                 }
             }
-            //add the function with its calculated values to the return list
-            configuredFunctions.add(ConfiguredFunction(function, functionResultEnergy, functionResultTime))
+
+            // add the function with its calculated values to the return list
+            configuredFunctions.add(
+                ConfiguredFunction(
+                    function,
+                    functionResultEnergy,
+                    functionResultTime
+                )
+            )
         }
 
         return configuredFunctions
@@ -52,7 +56,7 @@ class FunctionValueCalculatorService(
         val functions: List<DBEntity> = repository.findBySoftwareSystem(softwareSystem)
 
         for (obj in functions) {
-            if(!functionsNoDupes.contains(obj.functionName)){
+            if (!functionsNoDupes.contains(obj.functionName)) {
                 functionsNoDupes.add(obj.functionName)
             }
         }

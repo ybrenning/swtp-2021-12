@@ -12,5 +12,5 @@ data class DBEntity(
     val energy: Double,
     val time: Double,
     @Id
-    val id: String = ObjectId.get().toString(),
+    val id: String = ObjectId.get().toString()
 )
