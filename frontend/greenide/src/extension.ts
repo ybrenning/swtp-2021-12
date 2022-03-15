@@ -14,7 +14,8 @@
 1.3 - Configs Side Panel
 [X] 1.3.1 - Select and save config in JSON
 [X] 1.3.2 - save and manage favorites (0 is default, 1+ saved favs)
-[ ] 1.3.3 - see current config from JSON in side panel
+[X] 1.3.3 - see current config from JSON in side panel
+[ ] 1.3.4 - See List of Saved Configs
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
@@ -110,7 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
     // to highlight them
     // TODO: tune highlighting
     // [X] - make new colors / borders, experiment with decoration
-    // [ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent)
+    // [ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent), Maybe reset context.subscriptions
     // [X] - parse complete functions[i] from home.ts, not only name,line,char
     // [X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {

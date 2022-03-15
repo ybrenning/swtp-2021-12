@@ -97,13 +97,70 @@ function applyConfig(config: string[] | undefined) {
 // delete this config number num
 function deleteConfig(num: number | undefined) {
 
-    throw new Error("Function not implemented.");
+    const fs = require('fs');
+
+    // read file to get configs
+    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
+        if (err) {
+            console.log(err);
+        } else {
+
+            // get JSON data
+            var result = JSON.parse(data);
+
+            // index of config number num
+            var index = -1;
+            index = result.config.findIndex((obj: { id: number | undefined; }) => obj.id === num);
+
+            // check if id was found
+            if (index === -1) {
+                throw new Error('Config Not Found');
+            } else {
+
+                // splice for 1 spot at found index
+                result.config.splice(index,1);
+
+                // translate to JSON and write into file
+                var json = JSON.stringify(result);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+        }
+    });
 }
 
 // load this config, set it as new config set number 0
 function loadConfig(num: number | undefined) {
 
-    throw new Error("Function not implemented.");
+    const fs = require('fs');
+
+    // read file to get configs
+    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
+        if (err) {
+            console.log(err);
+        } else {
+
+            // get JSON data
+            var result = JSON.parse(data);
+
+            // index of config number num
+            var index = -1;
+            index = result.config.findIndex((obj: { id: number | undefined; }) => obj.id === num);
+
+            // check if id was found
+            if (index === -1) {
+                throw new Error('Config Not Found');
+            } else {
+
+                result.config[0] = { id: 0, name: 'Default', config: result.config[index].config };
+
+                // translate to JSON and write into file
+                var json = JSON.stringify(result);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+        }
+    });
 }
 
 // save the provided config
@@ -177,4 +234,3 @@ function saveConfig(config: string[] | undefined) {
 
 // just for file reasons, not to be implemented
 function callback(arg0: string, json: string, arg2: string, callback: any) { }
-
