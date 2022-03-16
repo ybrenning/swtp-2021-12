@@ -99,6 +99,7 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     });
 
     // open webview 'ConfigMenu'
+    ConfigMenu.currentPanel?.dispose();
     ConfigMenu.createOrShow(extensionUri);
 }
 
@@ -137,6 +138,7 @@ function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
     });
 
     // open webview 'ConfigMenu'
+    ConfigMenu.currentPanel?.dispose();
     ConfigMenu.createOrShow(extensionUri);
 }
 
@@ -174,6 +176,7 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
     });
 
     // open webview 'ConfigMenu'
+    ConfigMenu.currentPanel?.dispose();
     ConfigMenu.createOrShow(extensionUri);
 }
 
@@ -248,6 +251,7 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     });
 
     // open webview 'ConfigMenu'
+    ConfigMenu.currentPanel?.dispose();
     ConfigMenu.createOrShow(extensionUri);
 }
 

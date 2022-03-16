@@ -71,6 +71,7 @@ function applyConfig(config, extensionUri) {
         }
     });
     // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.currentPanel?.dispose();
     configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // delete this config number num
@@ -101,6 +102,7 @@ function deleteConfig(num, extensionUri) {
         }
     });
     // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.currentPanel?.dispose();
     configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // load this config, set it as new config set number 0
@@ -130,6 +132,7 @@ function loadConfig(num, extensionUri) {
         }
     });
     // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.currentPanel?.dispose();
     configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // save the provided config
@@ -185,6 +188,7 @@ function saveConfig(config, extensionUri) {
         }
     });
     // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.currentPanel?.dispose();
     configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // just for file reasons, not to be implemented
