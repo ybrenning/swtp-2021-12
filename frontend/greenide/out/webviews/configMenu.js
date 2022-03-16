@@ -106,7 +106,7 @@ class ConfigMenu {
         // read config JSON to display current configs
         const fs = require('fs');
         var data = fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8');
-        const configList = data;
+        var configList = data;
         // Get path of css file to be used within the Webview's HTML
         const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
         const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
@@ -167,7 +167,7 @@ class ConfigMenu {
     <figure>
     <h3>Change Config:</h3>
     <form>
-    <br><input class="configCheckbox" type="checkbox" name="root" /> root</br>
+    <input class="configCheckbox" type="checkbox" name="root" /> root<br>
     <input class="configCheckbox" type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
     <br><input class="configCheckbox" type="checkbox" name="JOBS" /> JOBS</br>
     <input class="configCheckbox" type="checkbox" name="LEVEL" /> LEVEL
@@ -200,8 +200,6 @@ class ConfigMenu {
 
     <h3>Available Configs:</h3>
 
-    <span onclick="displayConfigs()"><button id = "9491"> <strong>Display Configs</strong> </button></span>
-    <br></br>
     <div id="target-id"></div>
 
     <figure>
@@ -221,21 +219,20 @@ class ConfigMenu {
 
     <script>
 
-    function displayConfigs() {
 
-      var mainContainer = document.getElementById("target-id"); 
-      data = ${configList}
+    var mainContainer = document.getElementById("target-id");
+    data = ${configList}
 
-      for (var i = 0; i < data.config.length; i++) {
-        var div = document.createElement("div");
-        var configItems = [];
-        for (var j = 0; j < data.config[i].config.length; j++) {
-          configItems.push(' ' + data.config[i].config[j]);
-        }
-        div.innerHTML = 'ID: ' + data.config[i].id + ' Config: [' + configItems + ' ]';
-        mainContainer.appendChild(div);
+    for (var i = 0; i < data.config.length; i++) {
+      var div = document.createElement("div");
+      var configItems = [];
+      for (var j = 0; j < data.config[i].config.length; j++) {
+        configItems.push(' ' + data.config[i].config[j]);
       }
+      div.innerHTML = data.config[i].name + ' Config: [' + configItems + ' ]';
+      mainContainer.appendChild(div);
     }
+    
 
     function applyConfig() {
       var checkedValue = []; 

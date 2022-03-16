@@ -16,6 +16,7 @@
 [X] 1.3.3 - see current config from JSON in side panel
 [X] 1.3.4 - See List of Saved Configs
 [ ] 1.3.5 - Minor Fixes (Display Configs in Webview only one time, click on items several times without need to reopen webview)
+[ ] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
@@ -54,6 +55,7 @@ const configs_1 = require("./providers/configs");
 const help_1 = require("./providers/help");
 const kanziJSON = require("./method_list.json");
 const highlight_1 = require("./providers/highlight");
+const settings_1 = require("./providers/settings");
 /* variable declarations for use */
 // use in iteration to find kanzis
 var foundMethods = [];
@@ -80,6 +82,7 @@ function activate(context) {
         // side panel segments loading
         sidePanelHome();
         sidePanelConfigs();
+        sidePanelSettings();
         sidePanelHelp();
         // old webview panel
         // WebviewPanel.createOrShow(context.extensionUri);
@@ -168,14 +171,33 @@ function activate(context) {
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(configsTreeView);
     }
+    // This creates the side panel segment 'Settings' to change config items or locator items
+    function sidePanelSettings() {
+        // creates tree view for third segment of side panel
+        var helpTreeView = vscode.window.createTreeView("greenIDE-settings", {
+            treeDataProvider: new settings_1.SettingsProvider
+        });
+        // Set name for third segment
+        helpTreeView.title = 'SETTINGS';
+        helpTreeView.message = 'Click to Edit ...';
+        // Generic button action, provided document is oepned
+        let clickEvent = vscode.commands.registerCommand('greenIDE-settings.click', (openPath) => {
+            // open the link when clicking item number nr
+            vscode.workspace.openTextDocument(openPath).then(doc => {
+                vscode.window.showTextDocument(doc);
+            });
+        });
+        context.subscriptions.push(clickEvent);
+        context.subscriptions.push(helpTreeView);
+    }
     // This creates the side panel segment 'Help' which provides three elements to get
     // further into our extension, get help in a Q&A or contact us
     function sidePanelHelp() {
-        // creates tree view for third segment of side panel, get instructions, commands, help links etc
+        // creates tree view for fourth segment of side panel, get instructions, commands, help links etc
         var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
             treeDataProvider: new help_1.HelpProvider
         });
-        // Set name for third segment
+        // Set name for fourth segment
         helpTreeView.title = 'HELP';
         // Generic button action, provided link is opened
         let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link) => {

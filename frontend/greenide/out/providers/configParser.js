@@ -55,7 +55,7 @@ function applyConfig(config, extensionUri) {
                 // get the current configs
                 var result = JSON.parse(data);
                 // set data for obj
-                obj.config.push({ id: 0, name: 'Default', config: config });
+                obj.config.push({ id: 0, name: 'Active', config: config });
                 // replace first config with obj config
                 result.config[0] = obj.config[0];
                 // write new default config into file
@@ -64,7 +64,7 @@ function applyConfig(config, extensionUri) {
             }
             else {
                 // set data for obj
-                obj.config.push({ id: 0, name: 'Default', config: config });
+                obj.config.push({ id: 0, name: 'Active', config: config });
                 json = JSON.stringify(obj);
                 fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
             }
@@ -124,7 +124,7 @@ function loadConfig(num, extensionUri) {
                 throw new Error('Config Not Found');
             }
             else {
-                result.config[0] = { id: 0, name: 'Default', config: result.config[index].config };
+                result.config[0] = { id: 0, name: 'Active', config: result.config[index].config };
                 // translate to JSON and write into file
                 var json = JSON.stringify(result);
                 fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
@@ -172,7 +172,7 @@ function saveConfig(config, extensionUri) {
                 // set name for config
                 var name = 'Config ' + id;
                 // set data for obj
-                obj.config[0] = ({ id: 0, name: 'Default', config: config });
+                obj.config[0] = ({ id: 0, name: 'Active', config: config });
                 obj.config.push({ id: id, name: name, config: config });
                 // write new default config into file
                 json = JSON.stringify(obj);
@@ -180,7 +180,7 @@ function saveConfig(config, extensionUri) {
             }
             else {
                 // set data for obj
-                obj.config.push({ id: 0, name: 'Default', config: config });
+                obj.config.push({ id: 0, name: 'Active', config: config });
                 obj.config.push({ id: 1, name: 'Config 1', config: config });
                 json = JSON.stringify(obj);
                 fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
