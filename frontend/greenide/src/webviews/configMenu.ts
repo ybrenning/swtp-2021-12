@@ -28,7 +28,7 @@ export class ConfigMenu {
     // if we already have a panel, show it
     if (ConfigMenu.currentPanel) {
       ConfigMenu.currentPanel._panel.reveal(column);
-      ConfigMenu.currentPanel._update();
+      ConfigMenu.currentPanel._update(extensionUri);
       return;
     }
 
@@ -71,7 +71,7 @@ export class ConfigMenu {
     this._extensionUri = extensionUri;
 
     // set the webview's initial HTML content
-    this._update();
+    this._update(extensionUri);
 
     // listen for when the panel is disposed
     // this happens when the user closes the panel or when the panel is closed programatically
@@ -108,7 +108,7 @@ export class ConfigMenu {
   }
 
   // activate webview content, HTML
-  private async _update() {
+  private async _update(extensionUri: vscode.Uri) {
 
     // set current webview
     const webview = this._panel.webview;
@@ -130,7 +130,7 @@ export class ConfigMenu {
         console.log('MESSAGE RECEIVED FROM WEBVIEW');
         console.log(message);
 
-        // new ConfigParser(message.command,message.num,message.text);
+        new ConfigParser(extensionUri,message.command,message.num,message.text);
       },
       undefined
     );

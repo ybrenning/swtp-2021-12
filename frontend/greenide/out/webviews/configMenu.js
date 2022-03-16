@@ -7,6 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigMenu = void 0;
 const vscode = require("vscode");
 const getNonce_1 = require("../getNonce");
+const configParser_1 = require("../providers/configParser");
 // the main webview Panel to work with
 class ConfigMenu {
     // constructor for webview panel
@@ -15,7 +16,7 @@ class ConfigMenu {
         this._panel = panel;
         this._extensionUri = extensionUri;
         // set the webview's initial HTML content
-        this._update();
+        this._update(extensionUri);
         // listen for when the panel is disposed
         // this happens when the user closes the panel or when the panel is closed programatically
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -41,7 +42,7 @@ class ConfigMenu {
         // if we already have a panel, show it
         if (ConfigMenu.currentPanel) {
             ConfigMenu.currentPanel._panel.reveal(column);
-            ConfigMenu.currentPanel._update();
+            ConfigMenu.currentPanel._update(extensionUri);
             return;
         }
         // otherwise, create a new panel
@@ -80,7 +81,7 @@ class ConfigMenu {
         }
     }
     // activate webview content, HTML
-    async _update() {
+    async _update(extensionUri) {
         // set current webview
         const webview = this._panel.webview;
         // set HTML content for webview panel
@@ -95,7 +96,7 @@ class ConfigMenu {
             // TEST suite
             console.log('MESSAGE RECEIVED FROM WEBVIEW');
             console.log(message);
-            // new ConfigParser(message.command,message.num,message.text);
+            new configParser_1.ConfigParser(extensionUri, message.command, message.num, message.text);
         }, undefined);
     }
     // the HTML content, main functionality of webview panel

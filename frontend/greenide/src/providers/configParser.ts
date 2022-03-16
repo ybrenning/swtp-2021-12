@@ -1,6 +1,7 @@
 // Parses received config settings from webview into proper JSON
 
 import * as vscode from "vscode";
+import { ConfigMenu } from "../webviews/configMenu";
 
 // the main webview Panel to work with
 export class ConfigParser {
@@ -11,44 +12,48 @@ export class ConfigParser {
     // the provided config from webview checkboxes
     config?: string[];
 
+    // Extension URI to refresh webview
+    extensionUri: vscode.Uri;
+
     // receive call with ...
     // - Apply as current config (Apply,configs)
     // - Delete config number num (Delete,num)
     // - Load config number num (Load,num)
     // - Save as new config (Save,Configs)
-    constructor(mode: string, num?: number, config?: string[]) {
+    constructor(extensionUri: vscode.Uri, mode: string, num?: number, config?: string[]) {
 
         this.num = num;
         this.config = config;
+        this.extensionUri = extensionUri;
 
         // depending on what mode (Apply, Delete, Load, Save)
         switch (mode) {
 
             // apply this config
             case 'Apply':
-                applyConfig(config);
+                applyConfig(config,extensionUri);
                 break;
 
             // delete config number num
             case 'Delete':
-                deleteConfig(num);
+                deleteConfig(num,extensionUri);
                 break;
 
             // load config number num
             case 'Load':
-                loadConfig(num);
+                loadConfig(num,extensionUri);
                 break;
 
             // save this config as new set
             default:
-                saveConfig(config);
+                saveConfig(config,extensionUri);
                 break;
         }
     }
 }
 
 // apply provided config from checkboxes, set this as new configs set number 0
-function applyConfig(config: string[] | undefined) {
+function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
     // define collection for data
     var obj = {
@@ -92,10 +97,13 @@ function applyConfig(config: string[] | undefined) {
             }
         }
     });
+
+    // open webview 'ConfigMenu'
+    ConfigMenu.createOrShow(extensionUri);
 }
 
 // delete this config number num
-function deleteConfig(num: number | undefined) {
+function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
     const fs = require('fs');
 
@@ -127,10 +135,13 @@ function deleteConfig(num: number | undefined) {
             }
         }
     });
+
+    // open webview 'ConfigMenu'
+    ConfigMenu.createOrShow(extensionUri);
 }
 
 // load this config, set it as new config set number 0
-function loadConfig(num: number | undefined) {
+function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
     const fs = require('fs');
 
@@ -159,12 +170,15 @@ function loadConfig(num: number | undefined) {
                 var json = JSON.stringify(result);
                 fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
             }
-        }
+        } 
     });
+
+    // open webview 'ConfigMenu'
+    ConfigMenu.createOrShow(extensionUri);
 }
 
 // save the provided config
-function saveConfig(config: string[] | undefined) {
+function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
     // define collection for data
     var obj = {
@@ -229,7 +243,12 @@ function saveConfig(config: string[] | undefined) {
                 fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
             }
         }
+
+        
     });
+
+    // open webview 'ConfigMenu'
+    ConfigMenu.createOrShow(extensionUri);
 }
 
 // just for file reasons, not to be implemented

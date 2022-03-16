@@ -38,6 +38,10 @@
 /*
 TODO: open ISSUES
 [ ] - refresh methods when switching file
+[ ] - display configs in webview on startup / without button, or only one print when button pressed
+[X] - click multiple items in webview without reloading
+[ ] - webview buttons cause exponential buffer (see debug printing)
+[ ] - refactoring
 */
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
