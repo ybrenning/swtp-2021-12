@@ -272,7 +272,7 @@ export class ConfigMenu {
       for (var j = 0; j < data.config[i].config.length; j++) {
         configItems.push(' ' + data.config[i].config[j]);
       }
-      div.innerHTML = data.config[i].name + ' Config: [' + configItems + ' ]';
+      div.innerHTML = data.config[i].name + ':&nbsp;&nbsp;[' + configItems + ' ]';
       mainContainer.appendChild(div);
     }
     

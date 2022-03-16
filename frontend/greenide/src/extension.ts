@@ -15,12 +15,13 @@
 [X] 1.3.3 - see current config from JSON in side panel
 [X] 1.3.4 - See List of Saved Configs
 [X] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
-[ ] 1.3.6 - Minor Fixes (Display Configs in Webview only one time, click on items several times without need to reopen webview)
+[ ] 1.3.6 - Minor Fixes (Refresh found methods, reset highlighting, ...)
     - 1.3.6a - New 'Highlight All' button in home segment
 1.4 - Backend Communication
-[ ] 1.4.1 - save methods with config in JSON to send
+[ ] 1.4.1 - pressing button in home segment --> save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
 [ ] 1.4.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
+            (will be used later in overview webview)
 1.5 - apply response
 [ ] - 1.5.1 - apply Respose data to each method
 [ ] - 1.5.2 - color code depending on method data
