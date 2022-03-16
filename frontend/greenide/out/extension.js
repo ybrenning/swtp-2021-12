@@ -33,8 +33,9 @@
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
 1.7 - Cleanup and minor issues / tuning
-[ ] - 1.7.1 - Remove test cases / comments
-[ ] - 1.7.1 - Refactoring / outsource functionalities to new classes
+[ ] - 1.7.1 - Parse into configList.json / locatorList.json from .csv file
+[ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
+[ ] - 1.7.3 - Remove test cases / comments
 */
 /*
 TODO: open ISSUES
@@ -53,9 +54,9 @@ const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
 const configs_1 = require("./providers/configs");
 const help_1 = require("./providers/help");
-const kanziJSON = require("./method_list.json");
 const highlight_1 = require("./providers/highlight");
 const settings_1 = require("./providers/settings");
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 /* variable declarations for use */
 // use in iteration to find kanzis
 var foundMethods = [];
@@ -256,10 +257,12 @@ class JavaDocumentSymbolProvider {
             //   – KanzilistIMPwD: kanzilistIMP without duplicates
             // – kanzilistMET: all the methods
             // – kanzilist: the implementations and their belonging methods
-            // Full Kanzilist from CSV, to edit kanzi methods: edit method_list.json
+            // Full methodlist from CSV, to edit prefered methods: edit locatorList.json in workspace
+            const fs = require('fs');
+            var data = JSON.parse(fs.readFileSync(folder + '/configurations/locatorItems.json', 'utf8'));
             var kanzilistFULL = [];
-            for (var n1 = 0; n1 < kanziJSON.kanzimethods.length; n1++) {
-                kanzilistFULL[n1] = JSON.stringify(kanziJSON.kanzimethods[n1]);
+            for (var n1 = 0; n1 < data.methods.length; n1++) {
+                kanzilistFULL[n1] = JSON.stringify(data.methods[n1]);
             }
             // first sublist: slice at the last dot to check for implemenation
             // second sublist: take second part after slice for methods

@@ -7,6 +7,8 @@ import * as vscode from "vscode";
 import { getNonce } from "../getNonce";
 import { ConfigParser } from "../providers/configParser";
 
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+
 // the main webview Panel to work with
 export class ConfigMenu {
 
@@ -144,7 +146,7 @@ export class ConfigMenu {
 
     // read config JSON to display current configs
     const fs = require('fs');
-    var data = fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8');
+    var data = fs.readFileSync(folder + '/configurations/configuration.json', 'utf8');
     var configList = data;
 
     // Get path of css file to be used within the Webview's HTML

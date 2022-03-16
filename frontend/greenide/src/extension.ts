@@ -34,8 +34,9 @@
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
 1.7 - Cleanup and minor issues / tuning
-[ ] - 1.7.1 - Remove test cases / comments
-[ ] - 1.7.1 - Refactoring / outsource functionalities to new classes
+[ ] - 1.7.1 - Parse into configList.json / locatorList.json from .csv file
+[ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
+[ ] - 1.7.3 - Remove test cases / comments
 */
 
 /*
@@ -64,6 +65,8 @@ import { url } from 'inspector';
 import { MethodHighlight } from './providers/highlight';
 import { SettingsProvider } from './providers/settings';
 
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+
 // Type for analysis
 type Datum = {
     energy: number,
@@ -91,6 +94,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
+
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
@@ -339,10 +343,12 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
             // – kanzilistMET: all the methods
             // – kanzilist: the implementations and their belonging methods
 
-            // Full Kanzilist from CSV, to edit kanzi methods: edit method_list.json
+            // Full methodlist from CSV, to edit prefered methods: edit locatorList.json in workspace
+            const fs = require('fs');
+            var data = JSON.parse(fs.readFileSync(folder + '/configurations/locatorItems.json', 'utf8'));
             var kanzilistFULL: string[] = [];
-            for (var n1 = 0; n1 < kanziJSON.kanzimethods.length; n1++) {
-                kanzilistFULL[n1] = JSON.stringify(kanziJSON.kanzimethods[n1]);
+            for (var n1 = 0; n1 < data.methods.length; n1++) {
+                kanzilistFULL[n1] = JSON.stringify(data.methods[n1]);
             }
 
             // first sublist: slice at the last dot to check for implemenation

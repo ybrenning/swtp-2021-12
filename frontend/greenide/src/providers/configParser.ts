@@ -3,6 +3,8 @@
 import * as vscode from "vscode";
 import { ConfigMenu } from "../webviews/configMenu";
 
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+
 // the main webview Panel to work with
 export class ConfigParser {
 
@@ -66,7 +68,7 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // overwrite file / default config num 0
-    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
 
         if (err) {
             console.log(err);
@@ -85,7 +87,7 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
                 // write new default config into file
                 json = JSON.stringify(result);
-                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
 
             } else {
 
@@ -93,7 +95,7 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
                 obj.config.push({ id: 0, name: 'Active', config: config });
 
                 json = JSON.stringify(obj);
-                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
             }
         }
     });
@@ -109,7 +111,7 @@ function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // read file to get configs
-    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
 
         if (err) {
             console.log(err);
@@ -132,7 +134,7 @@ function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
                 // translate to JSON and write into file
                 var json = JSON.stringify(result);
-                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
             }
         }
     });
@@ -148,7 +150,7 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // read file to get configs
-    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
 
         if (err) {
             console.log(err);
@@ -170,7 +172,7 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
                 // translate to JSON and write into file
                 var json = JSON.stringify(result);
-                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
             }
         } 
     });
@@ -194,7 +196,7 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // overwrite file / default config num 0
-    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
 
         if (err) {
             console.log(err);
@@ -234,7 +236,7 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
                 // write new default config into file
                 json = JSON.stringify(obj);
-                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
 
             } else {
 
@@ -243,7 +245,7 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
                 obj.config.push({ id: 1, name: 'Config 1', config: config });
 
                 json = JSON.stringify(obj);
-                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
             }
         }
 

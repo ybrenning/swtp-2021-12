@@ -1,5 +1,5 @@
 {
-    "kanzimethods": [
+    "methods": [
         "kanzi.Global$1.compare()",
         "kanzi.Global.<clinit>()",
         "kanzi.Global.computeHistogramOrder0()",

@@ -4,6 +4,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettingsProvider = void 0;
 const vscode = require("vscode");
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 class SettingsProvider {
     // Set the tree elements for side panel
     constructor() {
@@ -33,14 +34,14 @@ class SettingsItem extends vscode.TreeItem {
                 this.command = {
                     title: "Settings Item",
                     command: "greenIDE-settings.click",
-                    arguments: ['./configurations/configItems.json']
+                    arguments: [folder + '/configurations/configItems.json']
                 };
                 break;
             case 1:
                 this.command = {
                     title: "Settings Item",
                     command: "greenIDE-settings.click",
-                    arguments: ['./configurations/locatorItems.json']
+                    arguments: [folder + '/configurations/locatorItems.json']
                 };
                 break;
             default:
