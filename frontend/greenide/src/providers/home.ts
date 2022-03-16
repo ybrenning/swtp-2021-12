@@ -25,6 +25,7 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
             // show methods or ...
             this.data = [
                 new HomeItem('Found Methods:', sendData),
+                new HomeItem('Highlight All Methods'),
                 new HomeItem('Detailed Statistics')
             ];
 
@@ -32,8 +33,7 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
 
             // prompt to run/reload
             this.data = [
-                new HomeItem('Run or Reload Extension'),
-                new HomeItem('Detailed Statistics')
+                new HomeItem('Run or Reload Extension')
             ];
         }
     }
@@ -81,7 +81,7 @@ class HomeItem extends vscode.TreeItem {
                 title: "Open Details",
                 command: "greenIDE-home.overview",
             };
-        } else {
+        } else if (label.match('Highlight All Methods')) {
             this.command = {
                 title: "Highlight All Methods",
                 command: "greenIDE-home.clickAll",

@@ -1,8 +1,6 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-
-// TODO: Patches
+// TODO: Patchlist / History
 /*
+[X] 1.0 - MVP
 [X] 1.1 - further functional things
 1.2 - side panel basics (show methods, toggle highlighting, select configuration)
 [X] 1.2.1 - kanzi locator
@@ -16,8 +14,9 @@
 [X] 1.3.2 - save and manage favorites (0 is default, 1+ saved favs)
 [X] 1.3.3 - see current config from JSON in side panel
 [X] 1.3.4 - See List of Saved Configs
-[ ] 1.3.5 - Minor Fixes (Display Configs in Webview only one time, click on items several times without need to reopen webview)
-[ ] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
+[X] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
+[ ] 1.3.6 - Minor Fixes (Display Configs in Webview only one time, click on items several times without need to reopen webview)
+    - 1.3.6a - New 'Highlight All' button in home segment
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
