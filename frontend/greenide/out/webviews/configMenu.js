@@ -7,7 +7,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigMenu = void 0;
 const vscode = require("vscode");
 const getNonce_1 = require("../getNonce");
-const configParser_1 = require("../providers/configParser");
 // the main webview Panel to work with
 class ConfigMenu {
     // constructor for webview panel
@@ -96,7 +95,7 @@ class ConfigMenu {
             // TEST suite
             console.log('MESSAGE RECEIVED FROM WEBVIEW');
             console.log(message);
-            new configParser_1.ConfigParser(message.command, message.num, message.text);
+            // new ConfigParser(message.command,message.num,message.text);
         }, undefined);
     }
     // the HTML content, main functionality of webview panel
@@ -106,10 +105,7 @@ class ConfigMenu {
         // read config JSON to display current configs
         const fs = require('fs');
         var data = fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8');
-        const configList = data.config;
-        // TEST suite
-        console.log('TEST FOR CONFIGS LIST');
-        console.log(configList);
+        const configList = data;
         // Get path of css file to be used within the Webview's HTML
         const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
         const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
@@ -121,6 +117,7 @@ class ConfigMenu {
     <link href="${stylesMainUri}" rel="stylesheet">
     <script nonce="${nonce}">
     </script>
+
     <style>
     ul, #myUL {
       list-style-type: none;
@@ -160,6 +157,7 @@ class ConfigMenu {
       display: block;
     }
     </style>
+
     </head>
     <body>
     
@@ -201,7 +199,8 @@ class ConfigMenu {
 
     <h3>Available Configs:</h3>
 
-    <span onclick="displayConfigs()"><button> <strong>Display Configs</strong> </button></span>
+    <span onclick="displayConfigs()"><button id = "9491"> <strong>Display Configs</strong> </button></span>
+    <br></br>
     <div id="target-id"></div>
 
     <figure>
@@ -221,13 +220,18 @@ class ConfigMenu {
 
     <script>
 
-    
     function displayConfigs() {
-      var mainContainer = document.getElementById("target-id");
+
+      var mainContainer = document.getElementById("target-id"); 
       data = ${configList}
-      for (var i = 0; i < data.length; i++) {
+
+      for (var i = 0; i < data.config.length; i++) {
         var div = document.createElement("div");
-        div.innerHTML = 'ID: ' + data[i].id + ' Name: ' + data[i].name;
+        var configItems = [];
+        for (var j = 0; j < data.config[i].config.length; j++) {
+          configItems.push(' ' + data.config[i].config[j]);
+        }
+        div.innerHTML = 'ID: ' + data.config[i].id + ' Config: [' + configItems + ' ]';
         mainContainer.appendChild(div);
       }
     }

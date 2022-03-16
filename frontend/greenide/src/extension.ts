@@ -15,7 +15,8 @@
 [X] 1.3.1 - Select and save config in JSON
 [X] 1.3.2 - save and manage favorites (0 is default, 1+ saved favs)
 [X] 1.3.3 - see current config from JSON in side panel
-[ ] 1.3.4 - See List of Saved Configs
+[X] 1.3.4 - See List of Saved Configs
+[ ] 1.3.5 - Minor Fixes (Display Configs in Webview only one time, click on items several times without need to reopen webview)
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
