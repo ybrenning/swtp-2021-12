@@ -15,8 +15,6 @@
 [X] 1.3.3 - see current config from JSON in side panel
 [X] 1.3.4 - See List of Saved Configs
 [X] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
-[ ] 1.3.6 - Minor Fixes (Refresh found methods, reset highlighting, ...)
-    - 1.3.6a - New 'Highlight All' button in home segment
 1.4 - Backend Communication
 [ ] 1.4.1 - pressing button in home segment --> save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
@@ -34,9 +32,11 @@
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
 1.7 - Cleanup and minor issues / tuning
+[ ] - 1.7.0 - Minor Fixes (Refresh found methods, reset highlighting, ...)
 [ ] - 1.7.1 - Parse into configList.json / locatorList.json from .csv file
 [ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
-[ ] - 1.7.3 - Remove test cases / comments
+[ ] - 1.7.3 - rename all kanzi occurences to genereic method names
+[ ] - 1.7.4 - Remove test cases / comments
 */
 /*
 TODO: open ISSUES
@@ -63,6 +63,7 @@ const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)
 var foundMethods = [];
 // functionsWD = functions /wo duplicates
 var functions = [];
+var sendFunctions;
 // old data
 var function1Data;
 var function2Data;
@@ -167,7 +168,7 @@ function activate(context) {
         var config = [];
         // read current config
         const fs = require('fs');
-        var result = JSON.parse(fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8'));
+        var result = JSON.parse(fs.readFileSync(folder + '/configurations/configuration.json', 'utf8'));
         config = result.config[0].config;
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
@@ -232,22 +233,40 @@ exports.activate = activate;
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis() {
-    // make space
-    for (var t = 0; t < 100; t++) {
-        console.log('\n');
+    // read current config
+    const fs = require('fs');
+    var result = JSON.parse(fs.readFileSync(folder + '/configurations/configuration.json', 'utf8'));
+    var config = [];
+    if (result.config[0] === undefined) {
+        config = [];
     }
-    // header for understanding methods output
-    console.log('Found Methods');
-    console.log('Name, line, start pos, end pos');
-    console.log(functions);
-    // Display the found "kanzi." methods from java source code
-    for (var i = 0; i < functions.length; i++) {
-        console.log(functions[i].name, // name of found kanzi method
-        functions[i].location.range.start.line, // line of found kanzi method
-        functions[i].location.range.start.character, // starting column of found kanzi method
-        functions[i].location.range.end.character // ending column of found kanzi method
-        );
+    else {
+        config = result.config[0].config;
     }
+    // TESt suite
+    console.log('TEST CONFIG EMPFANG');
+    console.log(config);
+    // define collection for data
+    var obj = {
+        functions: [],
+        config: []
+    };
+    console.log('START READER');
+    for (let i = 0; i < config.length; i++) {
+        obj.config.push(config[i]);
+    }
+    for (let i = 0; i < functions.length; i++) {
+        obj.functions.push(functions[i].name);
+    }
+    // TEST suite
+    console.log('TEST OBJ');
+    console.log(obj);
+    // TEST suite
+    console.log('METHODS:');
+    for (let i = 0; i < functions.length; i++) {
+        console.log(functions[i].method);
+    }
+    // TODO: continue with parsing for backend, write file etc.
 }
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
@@ -326,32 +345,6 @@ class JavaDocumentSymbolProvider {
                 for (var temp = 0; temp < kanzilist.length; temp++) {
                     // if kanzi is in line ...
                     if (line.text.includes('import ' + kanzilist[temp][0])) {
-                        /*
-                        // for the whole line fro beginning to end ...
-                        for (var j = 0; j < line.text.length; j++) {
-                            // mark location of kanzi
-                            if (!line.text.substring(j).includes(' ' + kanzilistIMPwD[temp])) {
-
-                                // // Search for end of full kanzi name
-                                // for (var k = j; k < line.text.length; k++) {
-                                //     if (line.text.substring(j-1, k).includes(";")) {
-                                //         // Add found kanzi name and location to object
-                                symbols.push({
-
-                                    // Substring only grabbing kanzi method name without braces
-                                    // name: line.text.substr(j-1, (k-1) - (j-1)),
-                                    name: kanzilistIMPwD[temp],
-                                    kind: vscode.SymbolKind.Method,
-                                    containerName: containerNumber.toString(),
-                                    location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilistIMPwD[temp].length + 1)))
-                                });
-
-                                foundMethods[containerNumber] = kanzilistIMPwD[temp];
-                                containerNumber++;
-
-                                break;
-                            }
-                        }*/
                         containedKanzis.push(kanzilist[temp]);
                     }
                 }
@@ -386,6 +379,7 @@ class JavaDocumentSymbolProvider {
                                                         // Substring only grabbing kanzi method name without braces
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + containedKanzis[temp][1] + '()',
+                                                        method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
                                                         kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
                                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
@@ -416,6 +410,7 @@ class JavaDocumentSymbolProvider {
                                         // Substring only grabbing kanzi method name without braces
                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                         name: impKanzi + '()',
+                                        method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impKanzi.length + 4)))
@@ -428,30 +423,6 @@ class JavaDocumentSymbolProvider {
                         }
                     }
                 }
-                /*for (var temp = 0; temp < containedKanzis.length; temp++) {
- 
-                    if (line.text.includes(containedKanzis[temp][1] + '(')) {
- 
-                        // // Search for end of full kanzi name
-                        // for (var k = j; k < line.text.length; k++) {
-                        //     if (line.text.substring(j-1, k).includes(";")) {
-                        //         // Add found kanzi name and location to object
-                        symbols.push({
- 
-                            // Substring only grabbing kanzi method name without braces
-                            // name: line.text.substr(j-1, (k-1) - (j-1)),
-                            name: kanzilist[temp][1],
-                            kind: vscode.SymbolKind.Method,
-                            containerName: containerNumber.toString(),
-                            location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 1), new vscode.Position(i + 1, j + kanzilist[temp][1].length + 1)))
-                        });
- 
-                        foundMethods[containerNumber] = kanzilist[temp][1];
-                        containerNumber++;
- 
-                        break;
-                    }
-                }*/
             }
             // Save symbols (all kanzi methods with metadata)
             functionsR = symbols;
@@ -536,4 +507,6 @@ class GoHoverProvider {
 // This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
+// For file reading, not purpose though
+function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=extension.js.map
