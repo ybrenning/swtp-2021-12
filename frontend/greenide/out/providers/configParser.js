@@ -2,6 +2,7 @@
 // Parses received config settings from webview into proper JSON
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigParser = void 0;
+const configMenu_1 = require("../webviews/configMenu");
 // the main webview Panel to work with
 class ConfigParser {
     // receive call with ...
@@ -9,33 +10,34 @@ class ConfigParser {
     // - Delete config number num (Delete,num)
     // - Load config number num (Load,num)
     // - Save as new config (Save,Configs)
-    constructor(mode, num, config) {
+    constructor(extensionUri, mode, num, config) {
         this.num = num;
         this.config = config;
+        this.extensionUri = extensionUri;
         // depending on what mode (Apply, Delete, Load, Save)
         switch (mode) {
             // apply this config
             case 'Apply':
-                applyConfig(config);
+                applyConfig(config, extensionUri);
                 break;
             // delete config number num
             case 'Delete':
-                deleteConfig(num);
+                deleteConfig(num, extensionUri);
                 break;
             // load config number num
             case 'Load':
-                loadConfig(num);
+                loadConfig(num, extensionUri);
                 break;
             // save this config as new set
             default:
-                saveConfig(config);
+                saveConfig(config, extensionUri);
                 break;
         }
     }
 }
 exports.ConfigParser = ConfigParser;
 // apply provided config from checkboxes, set this as new configs set number 0
-function applyConfig(config) {
+function applyConfig(config, extensionUri) {
     // define collection for data
     var obj = {
         config: []
@@ -68,17 +70,70 @@ function applyConfig(config) {
             }
         }
     });
+    // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // delete this config number num
-function deleteConfig(num) {
-    throw new Error("Function not implemented.");
+function deleteConfig(num, extensionUri) {
+    const fs = require('fs');
+    // read file to get configs
+    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err, data) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            // get JSON data
+            var result = JSON.parse(data);
+            // index of config number num
+            var index = -1;
+            index = result.config.findIndex((obj) => obj.id === num);
+            // check if id was found
+            if (index === -1) {
+                throw new Error('Config Not Found');
+            }
+            else {
+                // splice for 1 spot at found index
+                result.config.splice(index, 1);
+                // translate to JSON and write into file
+                var json = JSON.stringify(result);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+        }
+    });
+    // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // load this config, set it as new config set number 0
-function loadConfig(num) {
-    throw new Error("Function not implemented.");
+function loadConfig(num, extensionUri) {
+    const fs = require('fs');
+    // read file to get configs
+    fs.readFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8', function readFileCallback(err, data) {
+        if (err) {
+            console.log(err);
+        }
+        else {
+            // get JSON data
+            var result = JSON.parse(data);
+            // index of config number num
+            var index = -1;
+            index = result.config.findIndex((obj) => obj.id === num);
+            // check if id was found
+            if (index === -1) {
+                throw new Error('Config Not Found');
+            }
+            else {
+                result.config[0] = { id: 0, name: 'Default', config: result.config[index].config };
+                // translate to JSON and write into file
+                var json = JSON.stringify(result);
+                fs.writeFile('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', json, 'utf8', callback);
+            }
+        }
+    });
+    // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // save the provided config
-function saveConfig(config) {
+function saveConfig(config, extensionUri) {
     // define collection for data
     var obj = {
         config: []
@@ -129,6 +184,8 @@ function saveConfig(config) {
             }
         }
     });
+    // open webview 'ConfigMenu'
+    configMenu_1.ConfigMenu.createOrShow(extensionUri);
 }
 // just for file reasons, not to be implemented
 function callback(arg0, json, arg2, callback) { }

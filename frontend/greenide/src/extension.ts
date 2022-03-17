@@ -14,7 +14,9 @@
 1.3 - Configs Side Panel
 [X] 1.3.1 - Select and save config in JSON
 [X] 1.3.2 - save and manage favorites (0 is default, 1+ saved favs)
-[ ] 1.3.3 - see current config from JSON in side panel
+[X] 1.3.3 - see current config from JSON in side panel
+[X] 1.3.4 - See List of Saved Configs
+[ ] 1.3.5 - Minor Fixes (Display Configs in Webview only one time, click on items several times without need to reopen webview)
 1.4 - Backend Communication
 [ ] 1.4.1 - save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
@@ -38,6 +40,10 @@
 /*
 TODO: open ISSUES
 [ ] - refresh methods when switching file
+[ ] - display configs in webview on startup / without button, or only one print when button pressed
+[X] - click multiple items in webview without reloading
+[ ] - webview buttons cause exponential buffer (see debug printing)
+[ ] - refactoring
 */
 
 'use strict';
@@ -69,9 +75,6 @@ var foundMethods: string[] = [];
 
 // functionsWD = functions /wo duplicates
 var functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
-
-// old data
-var config: string[] = [];
 
 // old data
 var function1Data: Datum;
@@ -113,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
     // to highlight them
     // TODO: tune highlighting
     // [X] - make new colors / borders, experiment with decoration
-    // [ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent)
+    // [ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent), Maybe reset context.subscriptions
     // [X] - parse complete functions[i] from home.ts, not only name,line,char
     // [X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
     function sidePanelHome() {
@@ -153,7 +156,7 @@ export function activate(context: vscode.ExtensionContext) {
             );
             // execute highlight with provided data
             testHighlight.decorate;
-        }); 
+        });
 
         // when clicking on 'header', namely 'found methods'
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
@@ -189,6 +192,19 @@ export function activate(context: vscode.ExtensionContext) {
     // This creates the side panel segment 'Configs' where the user can see which config elements are active
     // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
     function sidePanelConfigs() {
+
+        // config data (default config 0)
+        var config: string[] = [];
+
+        // read current config
+        const fs = require('fs');
+
+        var result = JSON.parse(fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8'));
+        config = result.config[0].config;
+
+        // TEST suite
+        console.log('DATA FROM JSON');
+        console.log(config);
 
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
@@ -242,6 +258,8 @@ export function activate(context: vscode.ExtensionContext) {
         { language: "java" }, new GoHoverProvider()
     ));
 }
+
+
 
 // Performs analysis
 // Procedure order:
@@ -602,6 +620,3 @@ class GoHoverProvider implements vscode.HoverProvider {
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
-
-// useless, only needed for file creation
-function callback(arg0: string, json: string, arg2: string, callback: any) { }

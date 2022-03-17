@@ -16,7 +16,7 @@ class ConfigMenu {
         this._panel = panel;
         this._extensionUri = extensionUri;
         // set the webview's initial HTML content
-        this._update();
+        this._update(extensionUri);
         // listen for when the panel is disposed
         // this happens when the user closes the panel or when the panel is closed programatically
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
@@ -42,7 +42,7 @@ class ConfigMenu {
         // if we already have a panel, show it
         if (ConfigMenu.currentPanel) {
             ConfigMenu.currentPanel._panel.reveal(column);
-            ConfigMenu.currentPanel._update();
+            ConfigMenu.currentPanel._update(extensionUri);
             return;
         }
         // otherwise, create a new panel
@@ -81,52 +81,32 @@ class ConfigMenu {
         }
     }
     // activate webview content, HTML
-    async _update() {
+    async _update(extensionUri) {
         // set current webview
         const webview = this._panel.webview;
         // set HTML content for webview panel
         this._panel.webview.html = this._getHtmlForWebview(webview);
-        // from old webview
-        /*// message handler
-        webview.onDidReceiveMessage(async (data) => {
-          switch (data.type) {
-            case "onInfo": {
-              if (!data.value) {
-                return;
-              }
-              vscode.window.showInformationMessage(data.value);
-              break;
-            }
-            case "onError": {
-              if (!data.value) {
-                return;
-              }
-              vscode.window.showErrorMessage(data.value);
-              break;
-            }
-          }
-        });*/
         // TODO: implement:
-        // [ ] - pressing on button to send checkboxed configs
-        // [ ] - saving config in JSON (default is 0)
-        // [ ] - new button to save favorite with name in JSON
+        // [X] - pressing on button to send checkboxed configs
+        // [X] - saving config in JSON (default is 0)
+        // [X] - new button to save favorite with name in JSON
         // [ ] - new segment: dropdown menu with favorites & delete button
         // Handle messages from the webview
         webview.onDidReceiveMessage(message => {
             // TEST suite
-            /*console.log('Active Config');
-            for (let i = 0; i < message.text.length; i++) {
-              console.log(message.text[i]);
-            }*/
-            // TEST suite
+            console.log('MESSAGE RECEIVED FROM WEBVIEW');
             console.log(message);
-            new configParser_1.ConfigParser(message.command, message.num, message.text);
+            new configParser_1.ConfigParser(extensionUri, message.command, message.num, message.text);
         }, undefined);
     }
     // the HTML content, main functionality of webview panel
     _getHtmlForWebview(webview) {
         // Use a nonce to only allow specific scripts to be run
         const nonce = (0, getNonce_1.getNonce)();
+        // read config JSON to display current configs
+        const fs = require('fs');
+        var data = fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8');
+        const configList = data;
         // Get path of css file to be used within the Webview's HTML
         const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
         const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
@@ -138,6 +118,7 @@ class ConfigMenu {
     <link href="${stylesMainUri}" rel="stylesheet">
     <script nonce="${nonce}">
     </script>
+
     <style>
     ul, #myUL {
       list-style-type: none;
@@ -177,6 +158,7 @@ class ConfigMenu {
       display: block;
     }
     </style>
+
     </head>
     <body>
     
@@ -213,9 +195,47 @@ class ConfigMenu {
     <span onclick="applyConfig()"><button> <strong>Apply This Configuration</strong> </button></span>
     <span onclick="saveConfig()"><button> <strong>Save This Configuration</strong> </button></span>
     </figure>
+
+    <figure>
+
+    <h3>Available Configs:</h3>
+
+    <span onclick="displayConfigs()"><button id = "9491"> <strong>Display Configs</strong> </button></span>
+    <br></br>
+    <div id="target-id"></div>
+
+    <figure>
+    Config to Load<br>
+    <input id="69" type="text">
+    <span onclick="loadConfig()"><button> <strong>Load Config</strong> </button></span>
+    </figure>
+
+    <figure>
+    Config to Delete<br>
+    <input id="420" type="text">
+    <span onclick="deleteConfig()"><button> <strong>Delete Config</strong> </button></span>
+    </figure>
+
+    </figure>
     </body>
 
     <script>
+
+    function displayConfigs() {
+
+      var mainContainer = document.getElementById("target-id"); 
+      data = ${configList}
+
+      for (var i = 0; i < data.config.length; i++) {
+        var div = document.createElement("div");
+        var configItems = [];
+        for (var j = 0; j < data.config[i].config.length; j++) {
+          configItems.push(' ' + data.config[i].config[j]);
+        }
+        div.innerHTML = 'ID: ' + data.config[i].id + ' Config: [' + configItems + ' ]';
+        mainContainer.appendChild(div);
+      }
+    }
 
     function applyConfig() {
       var checkedValue = []; 
@@ -241,6 +261,17 @@ class ConfigMenu {
       vscode.postMessage({command: 'Save', text:checkedValue})
     }
 
+    function loadConfig() {
+      var num = parseFloat(document.getElementById("69").value);
+      const vscode = acquireVsCodeApi();
+      vscode.postMessage({command: 'Load', num: num})
+    }
+
+    function deleteConfig() {
+      var num = parseFloat(document.getElementById("420").value);
+      const vscode = acquireVsCodeApi();
+      vscode.postMessage({command: 'Delete', num: num})
+    }
 
     </script>
     </html>`;

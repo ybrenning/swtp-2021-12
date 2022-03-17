@@ -90,6 +90,12 @@ textarea::placeholder {
 	color: var(--vscode-input-placeholderForeground);
 }
 
+input[type="text"]
+{
+    font-size:12px;
+	width: 142px;
+}
+
 figure {
 	float: left;
 	text-align: left;

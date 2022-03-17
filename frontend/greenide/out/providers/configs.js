@@ -23,9 +23,6 @@ class ConfigsProvider {
         for (var j = 0; j < config.length; j++) {
             sendData.push(new ConfigItem(config[j], undefined));
         }
-        // TEST suite
-        console.log('SENDDATA');
-        console.log(sendData);
         // the data, consisting of two elements
         //  - the tree itself with the current active config elements
         //  - and the button to toggle webview
