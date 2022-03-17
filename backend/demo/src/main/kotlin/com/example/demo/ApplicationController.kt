@@ -28,4 +28,10 @@ class ApplicationController(
     fun parseFileToDB(@PathVariable softwareSystem:String) {
         functionService.parseFileToDB(softwareSystem)
     }
+
+    @GetMapping("/test/")
+    fun connectTest(): String {
+        println("test ping has been received")
+        return "test received"
+    }
 }
