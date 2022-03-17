@@ -16,8 +16,6 @@ class ConfigsProvider {
         [ ] - configs can be browsed in webview, maybe dropdown menu
         [ ] - saved configs can be deleted with a button (command to remove whole block of number x in config.json)
         */
-        console.log('TEST IN SIDE PANEL');
-        console.log(config);
         // read the config.json and get current active config elements
         var sendData = [];
         for (var j = 0; j < config.length; j++) {

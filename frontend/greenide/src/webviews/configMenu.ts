@@ -127,11 +127,6 @@ export class ConfigMenu {
     
     webview.onDidReceiveMessage(
       message => {
-
-        // TEST suite
-        console.log('MESSAGE RECEIVED FROM WEBVIEW');
-        console.log(message);
-
         new ConfigParser(extensionUri,message.command,message.num,message.text);
       },
       undefined

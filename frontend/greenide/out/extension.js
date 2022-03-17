@@ -76,6 +76,8 @@ function activate(context) {
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
+    // TEST suite
+    console.log('TEST START');
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
         // The code you place here will be executed every time your command is executed
@@ -83,6 +85,8 @@ function activate(context) {
         runAnalysis();
         // side panel segments loading
         sidePanelHome();
+        // TEST suite
+        console.log('TEST ASYNC B');
         sidePanelConfigs();
         sidePanelSettings();
         sidePanelHelp();
@@ -104,10 +108,11 @@ function activate(context) {
         });
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
-        homeTreeView.description = 'Run GreenIDE:';
+        homeTreeView.description = 'Refresh Methods:';
+        // TEST suite
+        console.log('TEST ASYNC A');
         // when clicking on a method from tree
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI) => {
-            vscode.window.onDidChangeTextEditorVisibleRanges;
             var line = functionI.location.range.start.line - 1;
             var character = functionI.location.range.start.character;
             var name = functionI.name;
@@ -123,6 +128,8 @@ function activate(context) {
             // execute highlight with provided data
             testHighlight.decorate;
         });
+        // TEST suite
+        console.log('TEST ASYNC C');
         // when clicking on 'header', namely 'found methods'
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
             // TEST suite see if arguments pass
@@ -137,15 +144,21 @@ function activate(context) {
                 testHighlight.decorate;
             }
         });
+        // TEST suite
+        console.log('TEST ASYNC D');
         // Button to open overview of methods & data, many many statistics
-        let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', () => {
+        let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', async () => {
             // open webview 'OverView'
             overview_1.Overview.createOrShow(context.extensionUri);
         });
+        // TEST suite
+        console.log('TEST ASYNC E');
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
         context.subscriptions.push(overviewEvent);
         context.subscriptions.push(homeTreeView);
+        // TEST suite
+        console.log('TEST ASYNC F');
     }
     // This creates the side panel segment 'Configs' where the user can see which config elements are active
     // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
@@ -156,9 +169,6 @@ function activate(context) {
         const fs = require('fs');
         var result = JSON.parse(fs.readFileSync('/Users/ferris/PECK/kanzi-1.7.0/configurations/configuration.json', 'utf8'));
         config = result.config[0].config;
-        // TEST suite
-        console.log('DATA FROM JSON');
-        console.log(config);
         // creates tree view for second segment of side panel, place for configs
         var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
             treeDataProvider: new configs_1.ConfigsProvider(config)
@@ -227,7 +237,7 @@ function runAnalysis() {
         console.log('\n');
     }
     // header for understanding methods output
-    console.log('Found Kanzi Methods');
+    console.log('Found Methods');
     console.log('Name, line, start pos, end pos');
     console.log(functions);
     // Display the found "kanzi." methods from java source code

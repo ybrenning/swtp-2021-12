@@ -94,9 +94,6 @@ class ConfigMenu {
         // [ ] - new segment: dropdown menu with favorites & delete button
         // Handle messages from the webview
         webview.onDidReceiveMessage(message => {
-            // TEST suite
-            console.log('MESSAGE RECEIVED FROM WEBVIEW');
-            console.log(message);
             new configParser_1.ConfigParser(extensionUri, message.command, message.num, message.text);
         }, undefined);
     }
