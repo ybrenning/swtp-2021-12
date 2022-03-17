@@ -1,0 +1,27 @@
+{
+    "items" : [
+        "root",
+        "BLOCKSIZE",
+        "JOBS",
+        "LEVEL",
+        "CHECKSUM",
+        "SKIP",
+        "NoTransform",
+        "Huffman",
+        "ANS0",
+        "ANS1",
+        "Range",
+        "FPAQ",
+        "TPAQ",
+        "CM",
+        "NoEntropy",
+        "BWTS",
+        "ROLZ",
+        "RLT",
+        "ZRLT",
+        "MTFT",
+        "RANK",
+        "TEXT",
+        "X86"
+    ]
+}
