@@ -9,70 +9,57 @@ const vscode = require("vscode");
 const getNonce_1 = require("../getNonce");
 const configParser_1 = require("../providers/configParser");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
-// the main webview Panel to work with
+// The main webview Panel to work with
 class ConfigMenu {
-    // constructor for webview panel
+    // Constructor for webview panel
     constructor(panel, extensionUri) {
         this._disposables = [];
         this._panel = panel;
         this._extensionUri = extensionUri;
-        // set the webview's initial HTML content
+        // Set the webview's initial HTML content
         this._update(extensionUri);
-        // listen for when the panel is disposed
-        // this happens when the user closes the panel or when the panel is closed programatically
+        // Listen for when the panel is disposed
+        // This happens when the user closes the panel or when the panel is closed programatically
         this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-        // from old webview
-        /*// // Handle messages from the webview
-        // this._panel.webview.onDidReceiveMessage(
-        //   (message) => {
-        //     switch (message.command) {
-        //       case "alert":
-        //         vscode.window.showErrorMessage(message.text);
-        //         return;
-        //     }
-        //   },
-        //   null,
-        //   this._disposables
-        // );*/
     }
-    // technically activate webview panel for configs
+    // Technically activate webview panel for configs
     static createOrShow(extensionUri) {
         const column = vscode.window.activeTextEditor
             ? vscode.window.activeTextEditor.viewColumn
             : undefined;
-        // if we already have a panel, show it
+        // If we already have a panel, show it
         if (ConfigMenu.currentPanel) {
             ConfigMenu.currentPanel._panel.reveal(column);
             ConfigMenu.currentPanel._update(extensionUri);
             return;
         }
-        // otherwise, create a new panel
+        // Otherwise, create a new panel
         const panel = vscode.window.createWebviewPanel(ConfigMenu.viewType, "Config Menu", // title of tab
         column || vscode.ViewColumn.One, {
-            // enable javascript in the webview
+            // Enable javascript in the webview
             enableScripts: true,
-            // and restrict the webview to only loading content from our extension's `media` directory.
+            // And restrict the webview to only loading content from our extension's `media` directory.
             localResourceRoots: [
                 vscode.Uri.joinPath(extensionUri, "media"),
                 vscode.Uri.joinPath(extensionUri, "out/compiled"),
             ],
         });
-        // execute set up webview panel
+        // Execute set up webview panel
         ConfigMenu.currentPanel = new ConfigMenu(panel, extensionUri);
     }
-    // kill webview panel
+    // Kill webview panel
     static kill() {
         ConfigMenu.currentPanel?.dispose();
         ConfigMenu.currentPanel = undefined;
     }
-    // revive webview panel
+    // Revive webview panel
     static revive(panel, extensionUri) {
         ConfigMenu.currentPanel = new ConfigMenu(panel, extensionUri);
     }
-    // close webview panel
+    // Close webview panel
     dispose() {
         ConfigMenu.currentPanel = undefined;
-        // clean up our resources
+        // Clean up our resources
         this._panel.dispose();
         while (this._disposables.length) {
             const x = this._disposables.pop();
@@ -81,11 +68,11 @@ class ConfigMenu {
             }
         }
     }
-    // activate webview content, HTML
+    // Activate webview content, HTML
     async _update(extensionUri) {
-        // set current webview
+        // Set current webview
         const webview = this._panel.webview;
-        // set HTML content for webview panel
+        // Set HTML content for webview panel
         this._panel.webview.html = this._getHtmlForWebview(webview);
         // TODO: implement:
         // [X] - pressing on button to send checkboxed configs
@@ -97,11 +84,11 @@ class ConfigMenu {
             new configParser_1.ConfigParser(extensionUri, message.command, message.num, message.text);
         }, undefined);
     }
-    // the HTML content, main functionality of webview panel
+    // The HTML content, main functionality of webview panel
     _getHtmlForWebview(webview) {
         // Use a nonce to only allow specific scripts to be run
         const nonce = (0, getNonce_1.getNonce)();
-        // read config JSON to display current configs
+        // Read config JSON to display current configs
         const fs = require('fs');
         var data = fs.readFileSync(folder + '/configurations/configuration.json', 'utf8');
         var configList = data;

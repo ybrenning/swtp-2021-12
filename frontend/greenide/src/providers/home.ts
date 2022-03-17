@@ -1,28 +1,30 @@
-// provider for first tab in side panel, home
-// start/reload greenIDE, see found methods, get data, activate syntax highlighting
+// Provider for first tab in side panel, home
+// Start/reload greenIDE, see found methods, get data, activate syntax highlighting
 
 import * as vscode from 'vscode';
 
 export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
-
     onDidChangeTreeData?: vscode.Event<HomeItem | null | undefined> | undefined;
 
     // Tree for home segment
     data: HomeItem[];
 
     // Set the tree elements for side panel
-    constructor(functions: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }[]) {
-
-        // if there are functions
+    constructor(functions: { 
+        name: string; 
+        kind: vscode.SymbolKind; 
+        containerName: string; 
+        location: vscode.Location; 
+    }[]) {
+        // If there are functions
         if (functions.length > 0) {
-
-            // collect all functions found
+            // Collect all functions found
             var sendData = [];
             for (var j = 0; j<functions.length; j++) {
                 sendData.push(new HomeItem(functions[j].name, undefined, functions[j]));
             }
 
-            // show methods or ...
+            // Show methods or ...
             this.data = [
                 new HomeItem('Found Methods:', sendData),
                 new HomeItem('Highlight All Methods'),
@@ -30,8 +32,7 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
             ];
 
         } else {
-
-            // prompt to run/reload
+            // Prompt to run/reload
             this.data = [
                 new HomeItem('Run or Reload Extension')
             ];
@@ -39,37 +40,39 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
     }
 
     getTreeItem(element: HomeItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
-
         return element;
     }
 
     getChildren(element?: HomeItem | undefined): vscode.ProviderResult<HomeItem[]> {
-
         if (element === undefined) {
             return this.data;
         }
+
         return element.children;
     }
 }
 
 class HomeItem extends vscode.TreeItem {
-
-    // initialize variables for constructor
+    // Initialize variables for constructor
     children: HomeItem[] | undefined;
     line: number | undefined;
 
-    constructor(label: string, children?: HomeItem[], functionI?: { name: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location; }) {
-
+    constructor(label: string, children?: HomeItem[], functionI?: { 
+        name: string; 
+        kind: vscode.SymbolKind; 
+        containerName: string; 
+        location: vscode.Location; 
+    }) {
         super(
             label,
             children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded
         );
 
-        // variables for each HomeItem
+        // Variables for each HomeItem
         this.children = children;
         this.line = functionI?.location.range.start.line;
 
-        // the command that is executed when clicking on the HomeItem (if it is a child)
+        // The command that is executed when clicking on the HomeItem (if it is a child)
         if (this.line) {
             this.command = {
                 title: "Highlight Method",

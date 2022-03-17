@@ -1,4 +1,4 @@
-// provider for second tab in side panel, configs
+// Provider for second tab in side panel, configs
 // drop down / tree view for all methods to apply, save methods in favorites
 
 import { config } from 'process';
@@ -13,7 +13,6 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
 
     // Set the tree elements for side panel
     constructor(config: string[]) {
-
         // TODO: 
         // [ ] - code to read config.json
         // structure:
@@ -26,11 +25,11 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
 
         // read the config.json and get current active config elements
         var sendData = [];
-        for (var j = 0; j<config.length; j++) {
+        for (var j = 0; j < config.length; j++) {
             sendData.push(new ConfigItem(config[j], undefined));
         }
 
-        // the data, consisting of two elements
+        // The data, consisting of two elements
         //  - the tree itself with the current active config elements
         //  - and the button to toggle webview
         this.data = [
@@ -44,30 +43,28 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
     }
     
     getChildren(element?: ConfigItem | undefined): vscode.ProviderResult<ConfigItem[]> {
-        
         if (element === undefined) {
             return this.data;
         }
+
         return element.children;
     }
 }
 
 class ConfigItem extends vscode.TreeItem {
-    
-    // initialize variables for constructor
+    // Initialize variables for constructor
     children: ConfigItem[] | undefined;
 
     constructor(label: string, children?: ConfigItem[]) {
-
         super(
             label,
             children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded
         );
 
-        // variables for each ConfigItem
+        // Variables for each ConfigItem
         this.children = children;
 
-        // the command that is executed when clicking on the HomeItem (if it is a child)
+        // The command that is executed when clicking on the HomeItem (if it is a child)
         if (this.label === 'Open Config Menu') {
             this.command = {
                 title: "Config Menu",
@@ -78,4 +75,3 @@ class ConfigItem extends vscode.TreeItem {
 
     contextValue = 'treeItem';
 }
-

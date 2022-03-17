@@ -1,5 +1,5 @@
 "use strict";
-// provider for second tab in side panel, configs
+// Provider for second tab in side panel, configs
 // drop down / tree view for all methods to apply, save methods in favorites
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigsProvider = void 0;
@@ -21,7 +21,7 @@ class ConfigsProvider {
         for (var j = 0; j < config.length; j++) {
             sendData.push(new ConfigItem(config[j], undefined));
         }
-        // the data, consisting of two elements
+        // The data, consisting of two elements
         //  - the tree itself with the current active config elements
         //  - and the button to toggle webview
         this.data = [
@@ -44,9 +44,9 @@ class ConfigItem extends vscode.TreeItem {
     constructor(label, children) {
         super(label, children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded);
         this.contextValue = 'treeItem';
-        // variables for each ConfigItem
+        // Variables for each ConfigItem
         this.children = children;
-        // the command that is executed when clicking on the HomeItem (if it is a child)
+        // The command that is executed when clicking on the HomeItem (if it is a child)
         if (this.label === 'Open Config Menu') {
             this.command = {
                 title: "Config Menu",

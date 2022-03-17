@@ -1,6 +1,6 @@
 "use strict";
-// provider for settings segment
-// just two clickable elements to either parse another configItems.json or locatorItems.json
+// Provider for settings segment
+// Just two clickable elements to either parse another configItems.json or locatorItems.json
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettingsProvider = void 0;
 const vscode = require("vscode");
@@ -28,7 +28,7 @@ class SettingsItem extends vscode.TreeItem {
         // Set the label for each element
         super(label);
         this.contextValue = 'treeItem';
-        // depending on which item, execute different command
+        // Depending on which item, execute different command
         switch (nr) {
             case 0:
                 this.command = {

@@ -1,5 +1,5 @@
-// provider for settings segment
-// just two clickable elements to either parse another configItems.json or locatorItems.json
+// Provider for settings segment
+// Just two clickable elements to either parse another configItems.json or locatorItems.json
 
 import * as vscode from 'vscode';
 
@@ -14,7 +14,6 @@ export class SettingsProvider implements vscode.TreeDataProvider<SettingsItem> {
 
     // Set the tree elements for side panel
     constructor() {
-
         // Create three items
         this.data = [
             new SettingsItem('Config Elements',0),
@@ -33,13 +32,11 @@ export class SettingsProvider implements vscode.TreeDataProvider<SettingsItem> {
 
 // Class to create each item
 class SettingsItem extends vscode.TreeItem {
-
     constructor(label: string, nr: number) {
-
         // Set the label for each element
         super(label);
 
-        // depending on which item, execute different command
+        // Depending on which item, execute different command
         switch (nr) {
             case 0:
                 this.command = {
