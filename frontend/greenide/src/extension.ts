@@ -10,6 +10,7 @@ import { MethodHighlight } from './providers/highlight';
 import { SettingsProvider } from './providers/settings';
 import { runAnalysis } from './functions/runAnalysis';
 import { GoHoverProvider } from './providers/GoHoverProvider';
+import { startup } from './functions/startup';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
@@ -25,12 +26,15 @@ var functions: {
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
 
     // Use the console to output diagnostic information (console.log) and errors (console.error)
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
+
+    startup();
 
     // TEST suite
     console.log('TEST START');
@@ -136,7 +140,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Read current config
         const fs = require('fs');
-        var result = JSON.parse(fs.readFileSync(folder + '/configurations/configuration.json', 'utf8'));
+        var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
         config = result.config[0].config;
 
         // Creates tree view for second segment of side panel, place for configs
@@ -240,7 +244,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 
             // Full methodlist from CSV, to edit prefered methods: edit locatorList.json in workspace
             const fs = require('fs');
-            var data = JSON.parse(fs.readFileSync(folder + '/configurations/locatorItems.json', 'utf8'));
+            var data = JSON.parse(fs.readFileSync(folder + '/greenide/locatorItems.json', 'utf8'));
             var kanzilistFULL: string[] = [];
             for (var n1 = 0; n1 < data.methods.length; n1++) {
                 kanzilistFULL[n1] = JSON.stringify(data.methods[n1]);
@@ -321,7 +325,7 @@ class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
                                                     symbols.push({
                                                         // Substring only grabbing kanzi method name without braces
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
-                                                        name: impKanzi + containedKanzis[temp][1] + '()',
+                                                        name: impKanzi + '.' + containedKanzis[temp][1] + '()',
                                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
                                                         kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),

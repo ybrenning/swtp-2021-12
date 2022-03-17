@@ -17,7 +17,8 @@ export class SettingsProvider implements vscode.TreeDataProvider<SettingsItem> {
         // Create three items
         this.data = [
             new SettingsItem('Config Elements',0),
-            new SettingsItem('Locator Elements',1)
+            new SettingsItem('Locator Elements',1),
+            new SettingsItem('Configurations',2)
         ];
     }
     
@@ -42,14 +43,21 @@ class SettingsItem extends vscode.TreeItem {
                 this.command = {
                     title: "Settings Item",
                     command: "greenIDE-settings.click",
-                    arguments: [folder + '/configurations/configItems.json']
+                    arguments: [folder + '/greenide/configItems.json']
                 };
                 break;
             case 1:
                 this.command = {
                     title: "Settings Item",
                     command: "greenIDE-settings.click",
-                    arguments: [folder + '/configurations/locatorItems.json']
+                    arguments: [folder + '/greenide/locatorItems.json']
+                };
+                break;
+            case 2:
+                this.command = {
+                    title: "Settings Item",
+                    command: "greenIDE-settings.click",
+                    arguments: [folder + '/greenide/configuration.json']
                 };
                 break;
             default:

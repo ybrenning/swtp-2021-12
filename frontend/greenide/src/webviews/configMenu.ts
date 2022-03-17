@@ -127,7 +127,7 @@ export class ConfigMenu {
 
     // Read config JSON to display current configs
     const fs = require('fs');
-    var data = fs.readFileSync(folder + '/configurations/configuration.json', 'utf8');
+    var data = fs.readFileSync(folder + '/greenide/configuration.json', 'utf8');
     var configList = data;
 
     // Get path of css file to be used within the Webview's HTML

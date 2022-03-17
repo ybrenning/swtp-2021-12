@@ -62,7 +62,7 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // Overwrite file / default config num 0
-    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
         if (err) {
             console.log(err);
         } else {
@@ -78,12 +78,12 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
                 // Write new default config into file
                 json = JSON.stringify(result);
-                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             } else {
                 // Set data for obj
                 obj.config.push({ id: 0, name: 'Active', config: config });
                 json = JSON.stringify(obj);
-                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
     });
@@ -97,7 +97,7 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
     // Read file to get configs
-    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
         if (err) {
             console.log(err);
         } else {
@@ -116,7 +116,7 @@ function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
                 // Translate to JSON and write into file
                 var json = JSON.stringify(result);
-                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
     });
@@ -131,7 +131,7 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // Read file to get configs
-    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
         if (err) {
             console.log(err);
         } else {
@@ -150,7 +150,7 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
                 // Translate to JSON and write into file
                 var json = JSON.stringify(result);
-                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         } 
     });
@@ -173,7 +173,7 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     const fs = require('fs');
 
     // Overwrite file / default config num 0
-    fs.readFile(folder + '/configurations/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+    fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
         if (err) {
             console.log(err);
         } else {
@@ -209,14 +209,14 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
                 // Write new default config into file
                 json = JSON.stringify(obj);
-                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             } else {
                 // Set data for obj
                 obj.config.push({ id: 0, name: 'Active', config: config });
                 obj.config.push({ id: 1, name: 'Config 1', config: config });
 
                 json = JSON.stringify(obj);
-                fs.writeFile(folder + '/configurations/configuration.json', json, 'utf8', callback);
+                fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }   
     });
