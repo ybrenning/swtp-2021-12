@@ -22,13 +22,13 @@ function activate(context) {
     vscode.commands.executeCommand('greenIDE.run');
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    (0, startup_1.startup)();
     // TEST suite
     console.log('TEST START');
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
         // The code you place here will be executed every time your command is executed
         // Starts procedure and updates webview panel
+        (0, startup_1.startup)();
         (0, runAnalysis_1.runAnalysis)(functions);
         // side panel segments loading
         sidePanelHome();

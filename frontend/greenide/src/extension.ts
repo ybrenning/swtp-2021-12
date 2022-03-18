@@ -33,8 +33,6 @@ export function activate(context: vscode.ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
 
-    startup();
-
     // TEST suite
     console.log('TEST START');
 
@@ -43,6 +41,7 @@ export function activate(context: vscode.ExtensionContext) {
         // The code you place here will be executed every time your command is executed
 
         // Starts procedure and updates webview panel
+        startup();
         runAnalysis(functions);
 
         // side panel segments loading
