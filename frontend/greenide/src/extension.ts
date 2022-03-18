@@ -44,14 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // side panel segments loading
 
-        // TEST suite
-        console.log('TEST HOME:');
-
         const homePromise = sidePanelHome();
-
-        // TEST suite
-        console.log('TEST CONFIGS:');
-
         const configsPromise = sidePanelConfigs(context);
         const settingsPromise = sidePanelSettings(context);
         const helpPromise = sidePanelHelp(context);
@@ -156,10 +149,6 @@ export function activate(context: vscode.ExtensionContext) {
 
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
-
-    // TODO: maybe helps to fix reload when switching tabs
-    onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
-    onDidChange = this.onDidChangeEmitter.event;
 
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         // Use in iteration to find kanzis

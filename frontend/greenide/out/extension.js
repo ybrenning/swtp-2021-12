@@ -30,11 +30,7 @@ function activate(context) {
         (0, startup_1.startup)();
         (0, runAnalysis_1.runAnalysis)(functions);
         // side panel segments loading
-        // TEST suite
-        console.log('TEST HOME:');
         const homePromise = sidePanelHome();
-        // TEST suite
-        console.log('TEST CONFIGS:');
         const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);
         const settingsPromise = (0, sidePanelSettings_1.sidePanelSettings)(context);
         const helpPromise = (0, sidePanelHelp_1.sidePanelHelp)(context);
@@ -105,11 +101,6 @@ function activate(context) {
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
-    constructor() {
-        // TODO: maybe helps to fix reload when switching tabs
-        this.onDidChangeEmitter = new vscode.EventEmitter();
-        this.onDidChange = this.onDidChangeEmitter.event;
-    }
     provideDocumentSymbols(document, token) {
         // Use in iteration to find kanzis
         var foundMethods = [];
