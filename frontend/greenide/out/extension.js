@@ -29,12 +29,12 @@ function activate(context) {
     vscode.commands.executeCommand('greenIDE.run');
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
-    // TEST suite
-    console.log('TEST START');
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-        // Starts procedure and updates webview panel
+        // TODO: try different vscode.Text... events if they work
+        const didChange = new vscode.EventEmitter();
+        didChange.fire;
         (0, startup_1.startup)();
         (0, runAnalysis_1.runAnalysis)(functions);
         // side panel segments loading
@@ -105,6 +105,9 @@ function activate(context) {
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     // Start Hover Provider to create hovers
     context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(() => {
+        new JavaDocumentSymbolProvider;
+    }));
 }
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'

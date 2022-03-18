@@ -30,7 +30,6 @@ var functions: {
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-
     // create needed directories
     const fs = require('fs');
     fs.mkdirSync(folder + '/greenide/', { recursive: true });
@@ -42,20 +41,21 @@ export function activate(context: vscode.ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
 
-    // TEST suite
-    console.log('TEST START');
-
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
- 
-        // Starts procedure and updates webview panel
+
+        // TODO: try different vscode.Text... events if they work
+        const didChange = new vscode.EventEmitter<vscode.TextDocumentChangeEvent>();
+        didChange.fire;
+        
         startup();
         runAnalysis(functions);
 
         // side panel segments loading
 
         const homePromise = sidePanelHome();
+
         const configsPromise = sidePanelConfigs(context);
         const settingsPromise = sidePanelSettings(context);
         const helpPromise = sidePanelHelp(context);
@@ -147,6 +147,8 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(homeTreeView);
     }
 
+    
+
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(
         { language: "java" }, new JavaDocumentSymbolProvider()
@@ -156,6 +158,10 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.languages.registerHoverProvider(
         { language: "java" }, new GoHoverProvider()
     ));
+
+    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor( () => {
+        new JavaDocumentSymbolProvider;
+    }));
 }
 
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
