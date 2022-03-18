@@ -16,6 +16,7 @@
 [X] 1.3.4 - See List of Saved Configs
 [X] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
 1.4 - Backend Communication
+[X] 1.4.0 - Bugfixes
 [ ] 1.4.1 - pressing button in home segment --> save methods with config in JSON to send
 [ ] 1.4.2 - send/receive JSON via backend api
 [ ] 1.4.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)

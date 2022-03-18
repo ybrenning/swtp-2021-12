@@ -1,16 +1,14 @@
 'use strict';
 import * as vscode from 'vscode';
-import { ConfigMenu } from './webviews/configMenu';
 import { Overview } from './webviews/overview';
 import { HomeProvider } from './providers/home';
-import { ConfigsProvider } from './providers/configs';
-import { HelpProvider } from './providers/help';
-import lineReader = require('line-reader');
 import { MethodHighlight } from './providers/highlight';
-import { SettingsProvider } from './providers/settings';
 import { runAnalysis } from './functions/runAnalysis';
 import { GoHoverProvider } from './providers/GoHoverProvider';
 import { startup } from './functions/startup';
+import { sidePanelConfigs } from './functions/sidePanelConfig';
+import { sidePanelSettings } from './functions/sidePanelSettings';
+import { sidePanelHelp } from './functions/sidePanelHelp';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
@@ -33,30 +31,44 @@ export function activate(context: vscode.ExtensionContext) {
     // This line of code will only be executed once when your extension is activated
     console.log('Congratulations, your extension "greenide" is now active!');
 
-    startup();
-
     // TEST suite
     console.log('TEST START');
 
     // start extension
-    let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
+    let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
 
         // Starts procedure and updates webview panel
+        startup();
         runAnalysis(functions);
 
         // side panel segments loading
-        sidePanelHome();
-        sidePanelConfigs();
-        sidePanelSettings();
-        sidePanelHelp();
+
+        // TEST suite
+        console.log('TEST HOME:');
+
+        const homePromise = sidePanelHome();
+
+        // TEST suite
+        console.log('TEST CONFIGS:');
+
+        const configsPromise = sidePanelConfigs(context);
+        const settingsPromise = sidePanelSettings(context);
+        const helpPromise = sidePanelHelp(context);
+
+        await homePromise;
+        await configsPromise;
+        await settingsPromise;
+        await helpPromise;
     });
+
+    Promise.all([sidePanelHome(),sidePanelConfigs(context),sidePanelSettings(context),sidePanelHelp(context)]);
 
     context.subscriptions.push(disposable);
 
     // This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
     // refresh for new found methods and select items to highlight them
-    function sidePanelHome() {
+    async function sidePanelHome() {
         // Creates tree view for first segment of side panel, home of extension actions
         var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
             treeDataProvider: new HomeProvider(functions)
@@ -131,82 +143,6 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(homeTreeView);
     }
 
-    // This creates the side panel segment 'Configs' where the user can see which config elements are active
-    // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
-    function sidePanelConfigs() {
-        // Config data (default config 0)
-        var config: string[] = [];
-
-        // Read current config
-        const fs = require('fs');
-        var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-        config = result.config[0].config;
-
-        // Creates tree view for second segment of side panel, place for configs
-        var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
-            treeDataProvider: new ConfigsProvider(config)
-        });
-
-        // Set name for second segment
-        configsTreeView.title = 'CONFIGURATIONS';
-
-        // Button to open menu for configs, to select configs, save favorites or delete favorites
-        let clickEvent = vscode.commands.registerCommand('greenIDE-config.menu', () => {
-
-            // Open webview 'ConfigMenu'
-            ConfigMenu.createOrShow(context.extensionUri);
-        });
-
-        context.subscriptions.push(clickEvent);
-        context.subscriptions.push(configsTreeView);
-    }
-
-    // This creates the side panel segment 'Settings' to change config items or locator items
-    function sidePanelSettings() {
-        // creates tree view for third segment of side panel
-        var helpTreeView = vscode.window.createTreeView("greenIDE-settings", {
-            treeDataProvider: new SettingsProvider
-        });
-
-        // Set name for third segment
-        helpTreeView.title = 'SETTINGS';
-        helpTreeView.message = 'Click to Edit ...';
-
-        // Generic button action, provided document is oepned
-        let clickEvent = vscode.commands.registerCommand('greenIDE-settings.click', (openPath: string) => {
-
-            // Open the link when clicking item number nr
-            vscode.workspace.openTextDocument(openPath).then(doc => {
-                vscode.window.showTextDocument(doc);
-              });
-        });
-
-        context.subscriptions.push(clickEvent);
-        context.subscriptions.push(helpTreeView);
-    }
-
-    // This creates the side panel segment 'Help' which provides three elements to get
-    // further into our extension, get help in a Q&A or contact us
-    function sidePanelHelp() {
-        // Creates tree view for fourth segment of side panel, get instructions, commands, help links etc
-        var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
-            treeDataProvider: new HelpProvider
-        });
-
-        // Set name for fourth segment
-        helpTreeView.title = 'HELP';
-
-        // Generic button action, provided link is opened
-        let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link: string) => {
-
-            // Open the link when clicking item number nr
-            vscode.env.openExternal(vscode.Uri.parse(link));
-        });
-
-        context.subscriptions.push(clickEvent);
-        context.subscriptions.push(helpTreeView);
-    }
-
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(
         { language: "java" }, new JavaDocumentSymbolProvider()
@@ -220,6 +156,11 @@ export function activate(context: vscode.ExtensionContext) {
 
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
+
+    // TODO: maybe helps to fix reload when switching tabs
+    onDidChangeEmitter = new vscode.EventEmitter<vscode.Uri>();
+    onDidChange = this.onDidChangeEmitter.event;
+
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         // Use in iteration to find kanzis
         var foundMethods: string[] = [];
