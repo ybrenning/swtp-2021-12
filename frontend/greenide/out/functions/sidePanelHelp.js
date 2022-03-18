@@ -6,7 +6,7 @@ exports.sidePanelHelp = void 0;
 const vscode = require("vscode");
 const help_1 = require("../providers/help");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
-function sidePanelHelp(context) {
+async function sidePanelHelp(context) {
     // Creates tree view for fourth segment of side panel, get instructions, commands, help links etc
     var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
         treeDataProvider: new help_1.HelpProvider

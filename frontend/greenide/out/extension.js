@@ -24,21 +24,30 @@ function activate(context) {
     // TEST suite
     console.log('TEST START');
     // start extension
-    let disposable = vscode.commands.registerCommand('greenIDE.run', () => {
+    let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
         // Starts procedure and updates webview panel
         (0, startup_1.startup)();
         (0, runAnalysis_1.runAnalysis)(functions);
         // side panel segments loading
-        sidePanelHome();
-        (0, sidePanelConfig_1.sidePanelConfigs)(context);
-        (0, sidePanelSettings_1.sidePanelSettings)(context);
-        (0, sidePanelHelp_1.sidePanelHelp)(context);
+        // TEST suite
+        console.log('TEST HOME:');
+        const homePromise = sidePanelHome();
+        // TEST suite
+        console.log('TEST CONFIGS:');
+        const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);
+        const settingsPromise = (0, sidePanelSettings_1.sidePanelSettings)(context);
+        const helpPromise = (0, sidePanelHelp_1.sidePanelHelp)(context);
+        await homePromise;
+        await configsPromise;
+        await settingsPromise;
+        await helpPromise;
     });
+    Promise.all([sidePanelHome(), (0, sidePanelConfig_1.sidePanelConfigs)(context), (0, sidePanelSettings_1.sidePanelSettings)(context), (0, sidePanelHelp_1.sidePanelHelp)(context)]);
     context.subscriptions.push(disposable);
     // This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
     // refresh for new found methods and select items to highlight them
-    function sidePanelHome() {
+    async function sidePanelHome() {
         // Creates tree view for first segment of side panel, home of extension actions
         var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
             treeDataProvider: new home_1.HomeProvider(functions)
@@ -96,6 +105,11 @@ function activate(context) {
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
+    constructor() {
+        // TODO: maybe helps to fix reload when switching tabs
+        this.onDidChangeEmitter = new vscode.EventEmitter();
+        this.onDidChange = this.onDidChangeEmitter.event;
+    }
     provideDocumentSymbols(document, token) {
         // Use in iteration to find kanzis
         var foundMethods = [];

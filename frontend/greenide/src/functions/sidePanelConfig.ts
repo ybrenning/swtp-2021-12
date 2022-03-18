@@ -7,7 +7,7 @@ import { ConfigMenu } from '../webviews/configMenu';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 
-export function sidePanelConfigs(context: vscode.ExtensionContext) {
+export async function sidePanelConfigs(context: vscode.ExtensionContext) {
     // Config data (default config 0)
     var config: string[] = [];
 

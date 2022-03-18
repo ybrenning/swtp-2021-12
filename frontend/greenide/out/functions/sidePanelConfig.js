@@ -7,7 +7,7 @@ const vscode = require("vscode");
 const configs_1 = require("../providers/configs");
 const configMenu_1 = require("../webviews/configMenu");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
-function sidePanelConfigs(context) {
+async function sidePanelConfigs(context) {
     // Config data (default config 0)
     var config = [];
     // TEST suite
