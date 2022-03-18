@@ -1,6 +1,7 @@
 // function for backend communication
 
 import * as vscode from 'vscode';
+import axios from 'axios';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 
@@ -22,7 +23,12 @@ export function runAnalysis(functions: {
     const fs = require('fs');
     var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
     var config = [];
+    var softwareSystem = '';
 
+    // get softwareSystem
+    softwareSystem = result.system;
+
+    // get active config
     if (result.config[0] === undefined) {
         config = [];
     } else {
@@ -43,7 +49,20 @@ export function runAnalysis(functions: {
         obj.functions.push(functions[i].method);
     }
 
-    var json = JSON.stringify(obj);
+    var json = JSON.stringify(obj,null,'\t');
 
+    // for message
+    // http postrequest for data, getrequest for functions
     
+    // post 
+    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem + '/';
+    axios({
+        method: 'post',
+        url: urlPost,
+        data: json
+    })
+    .then(data=>console.log(data))
+    .catch(err=>console.log(err));
+
+
 }

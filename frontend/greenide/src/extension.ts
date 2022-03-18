@@ -21,9 +21,20 @@ var functions: {
     location: vscode.Location;
 }[] = [];
 
+// TODO:
+// [ ] - fix documentsymbolprovider
+// [ ] - set focus to line in code, not just input
+// [ ] - shadow-implement backend data
+
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
+
+
+    // create needed directories
+    const fs = require('fs');
+    fs.mkdirSync(folder + '/greenide/', { recursive: true });
+    fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
 
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
@@ -37,7 +48,7 @@ export function activate(context: vscode.ExtensionContext) {
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-
+ 
         // Starts procedure and updates webview panel
         startup();
         runAnalysis(functions);

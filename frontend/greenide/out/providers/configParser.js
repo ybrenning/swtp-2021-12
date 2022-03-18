@@ -61,13 +61,13 @@ function applyConfig(config, extensionUri) {
                 // Replace first config with obj config
                 result.config[0] = obj.config[0];
                 // Write new default config into file
-                json = JSON.stringify(result);
+                json = JSON.stringify(result, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
             else {
                 // Set data for obj
                 obj.config.push({ id: 0, name: 'Active', config: config });
-                json = JSON.stringify(obj);
+                json = JSON.stringify(obj, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
@@ -98,7 +98,7 @@ function deleteConfig(num, extensionUri) {
                 // Splice for 1 spot at found index
                 result.config.splice(index, 1);
                 // Translate to JSON and write into file
-                var json = JSON.stringify(result);
+                var json = JSON.stringify(result, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
@@ -128,7 +128,7 @@ function loadConfig(num, extensionUri) {
             else {
                 result.config[0] = { id: 0, name: 'Active', config: result.config[index].config };
                 // Translate to JSON and write into file
-                var json = JSON.stringify(result);
+                var json = JSON.stringify(result, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
@@ -177,14 +177,14 @@ function saveConfig(config, extensionUri) {
                 obj.config[0] = ({ id: 0, name: 'Active', config: config });
                 obj.config.push({ id: id, name: name, config: config });
                 // Write new default config into file
-                json = JSON.stringify(obj);
+                json = JSON.stringify(obj, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
             else {
                 // Set data for obj
                 obj.config.push({ id: 0, name: 'Active', config: config });
                 obj.config.push({ id: 1, name: 'Config 1', config: config });
-                json = JSON.stringify(obj);
+                json = JSON.stringify(obj, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }

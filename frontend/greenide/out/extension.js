@@ -14,9 +14,17 @@ const sidePanelHelp_1 = require("./functions/sidePanelHelp");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
 var functions = [];
+// TODO:
+// [ ] - fix documentsymbolprovider
+// [ ] - set focus to line in code, not just input
+// [ ] - shadow-implement backend data
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
+    // create needed directories
+    const fs = require('fs');
+    fs.mkdirSync(folder + '/greenide/', { recursive: true });
+    fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
     // This line of code will only be executed once when your extension is activated

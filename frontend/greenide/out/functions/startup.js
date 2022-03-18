@@ -6,6 +6,7 @@ const vscode = require("vscode");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 function startup() {
+    // TODO: change to getrequest from backend when backend works
     // create items to parse into json
     var configItems = [];
     var locatorItems = [];
@@ -46,6 +47,9 @@ function getLocatorItems(document) {
     return items.filter((item, index) => items.indexOf(item) === index);
 }
 function formatInput(items, mode) {
+    var objS = { system: 'kanzi' };
+    var jsonS = JSON.stringify(objS, null, '\t');
+    fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
     if (mode.match('config')) {
         var objC = {
             items: []
@@ -53,8 +57,8 @@ function formatInput(items, mode) {
         for (let i = 0; i < items.length; i++) {
             objC.items.push(items[i]);
         }
-        var json = JSON.stringify(objC);
-        fs.writeFile(folder + '/greenide/configItems.json', json, 'utf8', callback);
+        var jsonC = JSON.stringify(objC, null, '\t');
+        fs.writeFile(folder + '/greenide/configItems.json', jsonC, 'utf8', callback);
     }
     else {
         var objM = {
@@ -63,8 +67,8 @@ function formatInput(items, mode) {
         for (let i = 0; i < items.length; i++) {
             objM.methods.push(items[i]);
         }
-        var json = JSON.stringify(objM);
-        fs.writeFile(folder + '/greenide/locatorItems.json', json, 'utf8', callback);
+        var jsonM = JSON.stringify(objM, null, '\t');
+        fs.writeFile(folder + '/greenide/locatorItems.json', jsonM, 'utf8', callback);
     }
 }
 // useless, just for reading file to work
