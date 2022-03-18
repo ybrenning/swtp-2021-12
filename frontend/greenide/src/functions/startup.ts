@@ -69,7 +69,7 @@ function formatInput(items: string[], mode: string) {
             objC.items.push(items[i]);
         }
 
-        var json = JSON.stringify(objC);
+        var json = JSON.stringify(objC,null,'\t');
         fs.writeFile(folder + '/greenide/configItems.json', json, 'utf8', callback);
     } else {
 
@@ -80,7 +80,7 @@ function formatInput(items: string[], mode: string) {
             objM.methods.push(items[i]);
         }
 
-        var json = JSON.stringify(objM);
+        var json = JSON.stringify(objM,null,'\t');
         fs.writeFile(folder + '/greenide/locatorItems.json', json, 'utf8', callback);
     }
 }
