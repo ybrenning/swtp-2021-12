@@ -16,6 +16,8 @@ console.log(folder);
 var functions = [];
 // TODO:
 // [ ] - fix documentsymbolprovider
+// [ ] - set focus to line in code, not just input
+// [ ] - shadow-implement backend data
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
