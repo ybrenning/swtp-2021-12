@@ -10,6 +10,8 @@ const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)
 function sidePanelConfigs(context) {
     // Config data (default config 0)
     var config = [];
+    // TEST suite
+    console.log('SIDEPANEL TEST');
     // Read current config
     const fs = require('fs');
     var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));

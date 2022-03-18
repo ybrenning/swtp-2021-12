@@ -1,11 +1,13 @@
 "use strict";
+// This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
+// refresh for new found methods and select items to highlight them
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sidePanelHome = void 0;
 const vscode = require("vscode");
 const highlight_1 = require("../providers/highlight");
 const home_1 = require("../providers/home");
 const overview_1 = require("../webviews/overview");
-function sidePanelHome(functions, context) {
+function sidePanelHome(context, functions) {
     // Creates tree view for first segment of side panel, home of extension actions
     var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
         treeDataProvider: new home_1.HomeProvider(functions)
@@ -31,17 +33,17 @@ function sidePanelHome(functions, context) {
         testHighlight.decorate;
     });
     // When clicking on 'header', namely 'found methods'
-    let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
+    let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', (functionsA) => {
         // TEST suite see if arguments pass
-        for (var j = 0; j < functions.length; j++) {
-            console.log('Method: ' + functions[j].name
-                + ' - Line: ' + functions[j].location.range.start.line
-                + ', Position: ' + functions[j].location.range.start.character);
+        for (var j = 0; j < functionsA.length; j++) {
+            console.log('Method: ' + functionsA[j].name
+                + ' - Line: ' + functionsA[j].location.range.start.line
+                + ', Position: ' + functionsA[j].location.range.start.character);
         }
         // Iterate over functions array to highlight each function with provided data
-        for (var i = 0; i < functions.length; i++) {
+        for (var i = 0; i < functionsA.length; i++) {
             // Highlight each element from functions[i] at it's proper location
-            let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character);
+            let testHighlight = new highlight_1.MethodHighlight(functionsA[i].location.range.start.line, functionsA[i].location.range.start.character, functionsA[i].location.range.end.character);
             testHighlight.decorate;
         }
     });

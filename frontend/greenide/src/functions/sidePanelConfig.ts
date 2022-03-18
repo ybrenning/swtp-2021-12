@@ -11,6 +11,9 @@ export function sidePanelConfigs(context: vscode.ExtensionContext) {
     // Config data (default config 0)
     var config: string[] = [];
 
+    // TEST suite
+    console.log('SIDEPANEL TEST');
+
     // Read current config
     const fs = require('fs');
     var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));

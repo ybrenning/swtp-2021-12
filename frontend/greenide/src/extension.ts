@@ -14,6 +14,7 @@ import { startup } from './functions/startup';
 import { sidePanelConfigs } from './functions/sidePanelConfig';
 import { sidePanelSettings } from './functions/sidePanelSettings';
 import { sidePanelHelp } from './functions/sidePanelHelp';
+import { start } from 'repl';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
