@@ -2,16 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deactivate = exports.activate = void 0;
 const vscode = require("vscode");
-const configMenu_1 = require("./webviews/configMenu");
 const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
-const configs_1 = require("./providers/configs");
-const help_1 = require("./providers/help");
 const highlight_1 = require("./providers/highlight");
-const settings_1 = require("./providers/settings");
 const runAnalysis_1 = require("./functions/runAnalysis");
 const GoHoverProvider_1 = require("./providers/GoHoverProvider");
 const startup_1 = require("./functions/startup");
+const sidePanelConfig_1 = require("./functions/sidePanelConfig");
+const sidePanelSettings_1 = require("./functions/sidePanelSettings");
+const sidePanelHelp_1 = require("./functions/sidePanelHelp");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
 var functions = [];
@@ -32,9 +31,9 @@ function activate(context) {
         (0, runAnalysis_1.runAnalysis)(functions);
         // side panel segments loading
         sidePanelHome();
-        sidePanelConfigs();
-        sidePanelSettings();
-        sidePanelHelp();
+        (0, sidePanelConfig_1.sidePanelConfigs)(context);
+        (0, sidePanelSettings_1.sidePanelSettings)(context);
+        (0, sidePanelHelp_1.sidePanelHelp)(context);
     });
     context.subscriptions.push(disposable);
     // This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
@@ -88,65 +87,6 @@ function activate(context) {
         context.subscriptions.push(clickEventAll);
         context.subscriptions.push(overviewEvent);
         context.subscriptions.push(homeTreeView);
-    }
-    // This creates the side panel segment 'Configs' where the user can see which config elements are active
-    // there's also an element to click and open a webview to change the config with checkboxes or manage saved favorites / save a new favorite
-    function sidePanelConfigs() {
-        // Config data (default config 0)
-        var config = [];
-        // Read current config
-        const fs = require('fs');
-        var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-        config = result.config[0].config;
-        // Creates tree view for second segment of side panel, place for configs
-        var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
-            treeDataProvider: new configs_1.ConfigsProvider(config)
-        });
-        // Set name for second segment
-        configsTreeView.title = 'CONFIGURATIONS';
-        // Button to open menu for configs, to select configs, save favorites or delete favorites
-        let clickEvent = vscode.commands.registerCommand('greenIDE-config.menu', () => {
-            // Open webview 'ConfigMenu'
-            configMenu_1.ConfigMenu.createOrShow(context.extensionUri);
-        });
-        context.subscriptions.push(clickEvent);
-        context.subscriptions.push(configsTreeView);
-    }
-    // This creates the side panel segment 'Settings' to change config items or locator items
-    function sidePanelSettings() {
-        // creates tree view for third segment of side panel
-        var helpTreeView = vscode.window.createTreeView("greenIDE-settings", {
-            treeDataProvider: new settings_1.SettingsProvider
-        });
-        // Set name for third segment
-        helpTreeView.title = 'SETTINGS';
-        helpTreeView.message = 'Click to Edit ...';
-        // Generic button action, provided document is oepned
-        let clickEvent = vscode.commands.registerCommand('greenIDE-settings.click', (openPath) => {
-            // Open the link when clicking item number nr
-            vscode.workspace.openTextDocument(openPath).then(doc => {
-                vscode.window.showTextDocument(doc);
-            });
-        });
-        context.subscriptions.push(clickEvent);
-        context.subscriptions.push(helpTreeView);
-    }
-    // This creates the side panel segment 'Help' which provides three elements to get
-    // further into our extension, get help in a Q&A or contact us
-    function sidePanelHelp() {
-        // Creates tree view for fourth segment of side panel, get instructions, commands, help links etc
-        var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
-            treeDataProvider: new help_1.HelpProvider
-        });
-        // Set name for fourth segment
-        helpTreeView.title = 'HELP';
-        // Generic button action, provided link is opened
-        let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link) => {
-            // Open the link when clicking item number nr
-            vscode.env.openExternal(vscode.Uri.parse(link));
-        });
-        context.subscriptions.push(clickEvent);
-        context.subscriptions.push(helpTreeView);
     }
     // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));

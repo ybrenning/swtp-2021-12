@@ -33,6 +33,7 @@ function runAnalysis(functions) {
         obj.functions.push(functions[i].method);
     }
     var json = JSON.stringify(obj);
+    //
 }
 exports.runAnalysis = runAnalysis;
 //# sourceMappingURL=runAnalysis.js.map
