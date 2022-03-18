@@ -16,8 +16,29 @@ export async function sidePanelConfigs(context: vscode.ExtensionContext) {
 
     // Read current config
     const fs = require('fs');
-    var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-    config = result.config[0].config;
+
+    // if file exists, get active config
+    if (fs.existsSync(folder + '/greenide/configuration.json')) {
+
+        var data = fs.readFileSync(folder + '/greenide/configuration.json');
+        
+        var result = JSON.parse(data);
+        config = result.config[0].config;
+
+    // else create file
+    } else {
+
+        // initiate file
+        var obj = {
+            config: [] as any
+        };
+
+        // Set data for obj
+        obj.config.push({ id: 0, name: 'Active', config: [] });
+
+        var json = JSON.stringify(obj,null,'\t');
+        fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
+    }
 
     // Creates tree view for second segment of side panel, place for configs
     var configsTreeView = vscode.window.createTreeView("greenIDE-configs", {
@@ -37,3 +58,5 @@ export async function sidePanelConfigs(context: vscode.ExtensionContext) {
     context.subscriptions.push(clickEvent);
     context.subscriptions.push(configsTreeView);
 }
+
+function callback(arg0: string, obj: { config: any; }, arg2: string, callback: any) { }

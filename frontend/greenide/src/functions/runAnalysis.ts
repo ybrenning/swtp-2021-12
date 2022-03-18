@@ -19,13 +19,16 @@ export function runAnalysis(functions: {
     location: vscode.Location;
 }[]) {
 
-    var softwareSystem = 'kanzi';
-
     // read current config
     const fs = require('fs');
     var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
     var config = [];
+    var softwareSystem = '';
 
+    // get softwareSystem
+    softwareSystem = result.system;
+
+    // get active config
     if (result.config[0] === undefined) {
         config = [];
     } else {
@@ -60,4 +63,6 @@ export function runAnalysis(functions: {
     })
     .then(data=>console.log(data))
     .catch(err=>console.log(err));
+
+
 }

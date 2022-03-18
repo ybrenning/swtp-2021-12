@@ -12,11 +12,14 @@ const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis(functions) {
-    var softwareSystem = 'kanzi';
     // read current config
     const fs = require('fs');
     var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
     var config = [];
+    var softwareSystem = '';
+    // get softwareSystem
+    softwareSystem = result.system;
+    // get active config
     if (result.config[0] === undefined) {
         config = [];
     }
