@@ -32,6 +32,7 @@
           [ ] column without config
           [ ] column with config
           [ ] difference in data
+[ ] - 1.6.3 - connect properly to backend
 1.7 - Cleanup and minor issues / tuning
 [ ] - 1.7.1 - Bugfixes:
           [ ] execute 'press refresh button' command aka greenIDE.run correctly
