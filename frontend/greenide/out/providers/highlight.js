@@ -5,22 +5,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.MethodHighlight = void 0;
 const vscode = require("vscode");
 // Colors for the highlight
-const green = '#018217';
-const yellow = '#ffec1c';
-const red = '#d40000';
+const green = '#007512';
+const yellow = '#fbd304';
+const red = '#a80000';
 class MethodHighlight {
-    constructor(line, character, characterEND) {
+    constructor(line, character, characterEND, runtime, energy) {
         this.line = line - 1;
         this.character = character;
         this.characterEND = characterEND;
+        this.runtime = runtime;
+        this.energy = energy;
         this.decorate();
     }
     // Does the syntax highlighting at provided location
     decorate() {
-        // TODO: implement from example online
+        // set color
+        var color;
+        if (this.runtime <= -16) {
+            color = green;
+        }
+        else if (this.runtime > -16 && this.runtime < 8) {
+            color = yellow;
+        }
+        else if (this.runtime >= 8) {
+            color = red;
+        }
         // The type, what color and other stuff
         var decorationType = vscode.window.createTextEditorDecorationType({
-            backgroundColor: yellow,
+            backgroundColor: color,
         });
         // Has to be an array
         let decorationsArray = [];
