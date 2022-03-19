@@ -1,20 +1,22 @@
 "use strict";
-// This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
-// refresh for new found methods and select items to highlight them
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sidePanelHome = void 0;
 const vscode = require("vscode");
+const extension_1 = require("../extension");
 const highlight_1 = require("../providers/highlight");
 const home_1 = require("../providers/home");
 const overview_1 = require("../webviews/overview");
-function sidePanelHome(context, functions) {
+// This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
+// refresh for new found methods and select items to highlight them
+async function sidePanelHome(context) {
+    var functions = (0, extension_1.getFunctions)();
     // Creates tree view for first segment of side panel, home of extension actions
     var homeTreeView = vscode.window.createTreeView("greenIDE-home", {
         treeDataProvider: new home_1.HomeProvider(functions)
     });
     // Set name for first segment
     homeTreeView.title = 'GREENIDE';
-    homeTreeView.description = 'Refresh Methods:';
+    homeTreeView.description = 'Refresh GreenIDE:';
     // When clicking on a method from tree
     let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI) => {
         var line = functionI.location.range.start.line - 1;
@@ -28,22 +30,22 @@ function sidePanelHome(context, functions) {
         console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
         console.log('');
         // Create Highlight object which stores provided data
-        let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character);
+        let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character, functionI.runtime[1], functionI.energy[1]);
         // Execute highlight with provided data
         testHighlight.decorate;
     });
     // When clicking on 'header', namely 'found methods'
-    let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', (functionsA) => {
+    let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
         // TEST suite see if arguments pass
-        for (var j = 0; j < functionsA.length; j++) {
-            console.log('Method: ' + functionsA[j].name
-                + ' - Line: ' + functionsA[j].location.range.start.line
-                + ', Position: ' + functionsA[j].location.range.start.character);
+        for (var j = 0; j < functions.length; j++) {
+            console.log('Method: ' + functions[j].name
+                + ' - Line: ' + functions[j].location.range.start.line
+                + ', Position: ' + functions[j].location.range.start.character);
         }
         // Iterate over functions array to highlight each function with provided data
-        for (var i = 0; i < functionsA.length; i++) {
+        for (var i = 0; i < functions.length; i++) {
             // Highlight each element from functions[i] at it's proper location
-            let testHighlight = new highlight_1.MethodHighlight(functionsA[i].location.range.start.line, functionsA[i].location.range.start.character, functionsA[i].location.range.end.character);
+            let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character, functions[i].runtime[1], functions[i].energy[1]);
             testHighlight.decorate;
         }
     });

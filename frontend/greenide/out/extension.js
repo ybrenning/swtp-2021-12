@@ -1,12 +1,12 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.JavaDocumentSymbolProvider = exports.activate = void 0;
+exports.getFunctions = exports.deactivate = exports.JavaDocumentSymbolProvider = exports.activate = void 0;
 const vscode = require("vscode");
 const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
 const highlight_1 = require("./providers/highlight");
 const runAnalysis_1 = require("./functions/runAnalysis");
-const GoHoverProvider_1 = require("./providers/GoHoverProvider");
+const goHoverProvider_1 = require("./providers/goHoverProvider");
 const startup_1 = require("./functions/startup");
 const sidePanelConfig_1 = require("./functions/sidePanelConfig");
 const sidePanelSettings_1 = require("./functions/sidePanelSettings");
@@ -109,7 +109,7 @@ function activate(context) {
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     (0, eventListener_1.eventListener)(context);
     // Start Hover Provider to create hovers
-    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new goHoverProvider_1.GoHoverProvider()));
 }
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
@@ -285,6 +285,10 @@ exports.JavaDocumentSymbolProvider = JavaDocumentSymbolProvider;
 // This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
+function getFunctions() {
+    return functions;
+}
+exports.getFunctions = getFunctions;
 // For file reading, not purpose though
 function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=extension.js.map

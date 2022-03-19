@@ -1,64 +1,71 @@
+// Hover Provider to display data above found method in code
+
 import * as vscode from 'vscode';
-import { Datum } from '../types/datum';
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+import { getFunctions } from '../extension';
 
 export class GoHoverProvider implements vscode.HoverProvider {
+    
+
     public provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.Hover> {
-        var function1Data: Datum;
-        var function2Data: Datum;
-        var function3Data: Datum;
+
+        
+        var functions: { 
+            name: string; 
+            method: string; 
+            runtime: number[];
+            energy: number[];
+            kind: vscode.SymbolKind; 
+            containerName: string; 
+            location: vscode.Location;
+        }[] = getFunctions();
 
         // document: currently open document, position: current position of cursor
         // Both change dynamically as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve) => {
-            var displaytext: string = "";
 
-            // Keep here for actual implementation
-            /*
-            switch(config) { 
-                case 1: { 
-                    for(var funct in functions) {
-                        if(funct.location.line == position.line) {
-                            displaytext = function1Data
-                        }
-                    }
-                    break; 
-                } 
-                case 2: { 
-                   //statements; 
-                   break; 
-                } 
-                case 3: {
-        
-                    break;
+            var line = position.line + 1;
+
+            // TEST suite
+            console.log('LINE FROM HOVERPROVIDER: ' + line);
+            console.log('LINE FROM FUNCTIONS: ' + functions[0].location.range.start.line);
+
+            for (let i = 0; i < functions.length; i++) {
+
+                var functLine = functions[i].location.range.start.line;
+                var functChar = functions[i].location.range.start.character;
+                var functCharEND = functions[i].location.range.end.character;
+
+                if (line === functLine) {
+
+                    // Range where hover is active
+                    var range = new vscode.Range(
+                        new vscode.Position(functLine+1, functChar),
+                        new vscode.Position(functLine+1, functCharEND)
+                    );
+
+                    var text = (functions[i].name + '  \n'
+                                + 'Runtime: ' + functions[i].runtime[1] + ' ms  \n'
+                                + 'Energy: ' + functions[i].energy[1] + ' mWs');
+
+                    // execute hover
+                    resolve(new vscode.Hover(text, range));
                 }
-                default: { 
-                    
-                   break; 
-                } 
-            } 
-            */
+            }
+
+            /*var displaytext: string = "";
 
             // Determines what information to show and saves it to displaytext
             var line = position.line + 1;
 
             if (line === 29) {
-                displaytext = ('Energy: ' + function1Data.energy.toString() + 'mWs   Time: ' + function1Data.time.toString() + 'ms');
-            };
-
-            if (line === 30) {
-                displaytext = ('Energy: ' + function1Data.energy.toString() + 'mWs   Time: ' + function1Data.time.toString() + 'ms');
-            };
-
-            if (line === 36) {
-                displaytext = ('Energy: ' + function2Data.energy.toString() + 'mWs   Time: ' + function2Data.time.toString() + 'ms');
+                displaytext = ('Energy: TEST 1');
             };
 
             if (line === 37) {
-                displaytext = ('Energy: ' + function2Data.energy.toString() + 'mWs   Time: ' + function2Data.time.toString() + 'ms');
+                displaytext = ('Energy: TEST 2');
             };
 
-            resolve(new vscode.Hover(displaytext));
+            resolve(new vscode.Hover(displaytext));*/
         });
     }
 }
