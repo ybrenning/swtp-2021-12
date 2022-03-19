@@ -90,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
-        homeTreeView.description = 'Refresh Methods:';
+        homeTreeView.description = 'Refresh GreenIDE:';
 
         // When clicking on a method from tree
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI: { 
