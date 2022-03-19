@@ -9,6 +9,7 @@ import { startup } from './functions/startup';
 import { sidePanelConfigs } from './functions/sidePanelConfig';
 import { sidePanelSettings } from './functions/sidePanelSettings';
 import { sidePanelHelp } from './functions/sidePanelHelp';
+import { eventListener } from './functions/eventListener';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
@@ -22,7 +23,7 @@ var functions: {
 }[] = [];
 
 // TODO:
-// [ ] - fix documentsymbolprovider
+// [ ] - refresh method list when changing files or applying config (why doesn't 'greenIDE.run' work???)
 // [ ] - set focus to line in code, not just input
 // [ ] - shadow-implement backend data
 
@@ -44,12 +45,11 @@ export function activate(context: vscode.ExtensionContext) {
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-
-        // TODO: try different vscode.Text... events if they work
-        const didChange = new vscode.EventEmitter<vscode.TextDocumentChangeEvent>();
-        didChange.fire;
         
+        // check for new csv and parse methods / config elements
         startup();
+
+        // get data from backend
         runAnalysis(functions);
 
         // side panel segments loading
@@ -147,25 +147,20 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(homeTreeView);
     }
 
-    
-
-    // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider(
         { language: "java" }, new JavaDocumentSymbolProvider()
     ));
 
+    eventListener(context);
+    
     // Start Hover Provider to create hovers
     context.subscriptions.push(vscode.languages.registerHoverProvider(
         { language: "java" }, new GoHoverProvider()
     ));
-
-    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor( () => {
-        new JavaDocumentSymbolProvider;
-    }));
 }
 
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
-class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
+export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
 
     public provideDocumentSymbols(document: vscode.TextDocument, token: vscode.CancellationToken): Thenable<vscode.SymbolInformation[]> {
         // Use in iteration to find kanzis

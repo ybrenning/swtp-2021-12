@@ -17,9 +17,10 @@
 [X] 1.3.5 - Settings Section, Edit configItems.json (any checkboxable Items) and locatorItems.json (which methods to find)
 1.4 - Backend Communication
 [X] 1.4.0 - Bugfixes
-[ ] 1.4.1 - pressing button in home segment --> save methods with config in JSON to send
-[ ] 1.4.2 - send/receive JSON via backend api
-[ ] 1.4.3 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
+[X] 1.4.1 - parse methods & config for backend
+[X] 1.4.2 - send/receive JSON via backend api
+[X] 1.4.3 - Bugfixes (refresh DocumentProvider when changing files)
+[ ] 1.4.4 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
             (will be used later in overview webview)
 1.5 - apply response
 [ ] - 1.5.1 - apply Respose data to each method
@@ -33,23 +34,6 @@
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
 1.7 - Cleanup and minor issues / tuning
-[ ] - 1.7.0 - Minor Fixes (Refresh found methods, reset highlighting, ...)
-[ ] - 1.7.1 - Parse into configList.json / locatorList.json from .csv file
 [ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
 [ ] - 1.7.3 - rename all kanzi occurences to genereic method names
 [ ] - 1.7.4 - Remove test cases / comments
-
-## TODO: open ISSUES
-
-[ ] - refresh methods when switching file
-[ ] - display configs in webview on startup / without button, or only one print when button pressed
-[X] - click multiple items in webview without reloading
-[X] - webview buttons cause exponential buffer (see debug printing)
-[ ] - refactoring
-
-## TODO: tune highlighting
-
-[X] - make new colors / borders, experiment with decoration
-[ ] - reset for every new item (maybe highlight.reset() option at beginning of each item/clickevent), Maybe reset context.subscriptions
-[X] - parse complete functions[i] from home.ts, not only name,line,char
-[X] - use property symbolkind.method or symbolkind.object to identify proper range (to end of name) 
