@@ -34,6 +34,8 @@
 [ ] - 1.6.2 - display diagrams with distribution in webview
 [ ] - 1.6.3 - apply different configs to methods in webview
 1.7 - Cleanup and minor issues / tuning
+[ ] - 1.7.1 - Bugfix: execute 'press refresh button' command aka greenIDE.run correctly when changing files & clicking
+              on webview buttons so methods and config get refreshed without pressing the button in home-segment
 [ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
 [ ] - 1.7.3 - rename all kanzi occurences to genereic method names
 [ ] - 1.7.4 - Remove test cases / comments
