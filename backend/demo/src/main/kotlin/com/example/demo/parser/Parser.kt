@@ -24,15 +24,18 @@ object Parser {
             if (i == 0) {
                 configurationNames = csvLineElements
             } else {
+                //removes " from the function name string
+                var functionName = csvLineElements[0].substring(1,csvLineElements[0].length - 1)
+
                 // create the map of the configuration names and values for the Line (entry)
                 val configMap = HashMap<String, Boolean>()
                 for (loopVar in 1..configurationNames.size - 3)  {
                     if(csvLineElements[loopVar].length == 1) {
                         configMap[configurationNames[loopVar]] = csvLineElements[loopVar].toBoolean()
+                    } else {
+                        functionName += csvLineElements[loopVar]
                     }
                 }
-                //removes " from the function name string
-                var functionName = csvLineElements[0].substring(1,csvLineElements[0].length - 1)
 
                 repository.save(
                     DBEntity(
