@@ -4,28 +4,42 @@
 import * as vscode from 'vscode';
 
 // Colors for the highlight
-const green: string = '#018217';
-const yellow: string = '#ffec1c';
-const red: string = '#d40000';
+const green: string = '#007512';
+const yellow: string = '#fbd304';
+const red: string = '#a80000';
 
 export class MethodHighlight {
     line: number;
     character: number;
     characterEND: number;
+    runtime: number;
+    energy: number;
     
-    constructor (line: number, character: number, characterEND: number) {
+    constructor (line: number, character: number, characterEND: number, runtime: number, energy: number) {
         this.line = line - 1;
         this.character = character;
         this.characterEND = characterEND;
+        this.runtime = runtime;
+        this.energy = energy;
         this.decorate();
     }
 
     // Does the syntax highlighting at provided location
     decorate() {
-        // TODO: implement from example online
+
+        // set color
+        var color;
+        if (this.runtime <= -16) {
+            color = green;
+        } else if (this.runtime > -16 && this.runtime < 8) {
+            color = yellow;
+        } else if (this.runtime >= 8) {
+            color = red;
+        }
+
         // The type, what color and other stuff
         var decorationType = vscode.window.createTextEditorDecorationType({
-            backgroundColor: yellow,
+            backgroundColor: color,
         });
 
         // Has to be an array

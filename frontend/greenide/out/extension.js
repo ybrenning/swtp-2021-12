@@ -77,7 +77,7 @@ function activate(context) {
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
             console.log('');
             // Create Highlight object which stores provided data
-            let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character);
+            let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character, functionI.runtime[1], functionI.energy[1]);
             // Execute highlight with provided data
             testHighlight.decorate;
         });
@@ -92,7 +92,7 @@ function activate(context) {
             // Iterate over functions array to highlight each function with provided data
             for (var i = 0; i < functions.length; i++) {
                 // Highlight each element from functions[i] at it's proper location
-                let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character);
+                let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character, functions[i].runtime[1], functions[i].energy[1]);
                 testHighlight.decorate;
             }
         });

@@ -91,6 +91,8 @@ export function activate(context: vscode.ExtensionContext) {
         // When clicking on a method from tree
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI: { 
             name: string; 
+            runtime: number[];
+            energy: number[];
             kind: vscode.SymbolKind; 
             containerName: string; 
             location: vscode.Location; 
@@ -112,7 +114,9 @@ export function activate(context: vscode.ExtensionContext) {
             let testHighlight = new MethodHighlight(
                 functionI.location.range.start.line,
                 functionI.location.range.start.character,
-                functionI.location.range.end.character
+                functionI.location.range.end.character,
+                functionI.runtime[1],
+                functionI.energy[1]
             );
 
             // Execute highlight with provided data
@@ -134,7 +138,9 @@ export function activate(context: vscode.ExtensionContext) {
                 let testHighlight = new MethodHighlight(
                     functions[i].location.range.start.line, 
                     functions[i].location.range.start.character, 
-                    functions[i].location.range.end.character
+                    functions[i].location.range.end.character,
+                    functions[i].runtime[1],
+                    functions[i].energy[1]
                 );
 
                 testHighlight.decorate;
