@@ -4,7 +4,7 @@ import { Overview } from './webviews/overview';
 import { HomeProvider } from './providers/home';
 import { MethodHighlight } from './providers/highlight';
 import { runAnalysis } from './functions/runAnalysis';
-import { GoHoverProvider } from './providers/GoHoverProvider';
+import { GoHoverProvider } from './providers/goHoverProvider';
 import { startup } from './functions/startup';
 import { sidePanelConfigs } from './functions/sidePanelConfig';
 import { sidePanelSettings } from './functions/sidePanelSettings';
@@ -375,6 +375,10 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
 
 // This method is called when your extension is deactivated
 export function deactivate() { }
+
+export function getFunctions() {
+    return functions;
+}
 
 // For file reading, not purpose though
 function callback(arg0: string, json: any, arg2: string, callback: any) { }
