@@ -60,11 +60,16 @@ function getLocatorItems(document: string[]) {
     return items.filter((item,index) => items.indexOf(item) === index);
 }
 
-function formatInput(items: string[], mode: string) {
+async function formatInput(items: string[], mode: string) {
 
-    var objS = { system: 'kanzi'};
+    // declare software system, default for customer is kanzi, can be changed
+    var objS = {
+        system: '' as any
+    };
+    objS.system.push('kanzidd');
     var jsonS = JSON.stringify(objS,null,'\t');
-    fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
+    const writer = fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
+    await writer;
 
     if (mode.match('config')) {
 

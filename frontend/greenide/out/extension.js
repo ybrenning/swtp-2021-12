@@ -12,10 +12,13 @@ const sidePanelConfig_1 = require("./functions/sidePanelConfig");
 const sidePanelSettings_1 = require("./functions/sidePanelSettings");
 const sidePanelHelp_1 = require("./functions/sidePanelHelp");
 const eventListener_1 = require("./functions/eventListener");
+const fs_1 = require("fs");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
 var functions = [];
 // TODO:
+// [ ] - button to change software system
+// [ ] - send two datas to backend
 // [ ] - refresh method list when changing files or applying config (why doesn't 'greenIDE.run' work???)
 // [ ] - set focus to line in code, not just input
 // [ ] - shadow-implement backend data
@@ -35,13 +38,17 @@ function activate(context) {
         // The code you place here will be executed every time your command is executed
         // check for new csv and parse methods / config elements
         (0, startup_1.startup)();
-        // get data from backend
+        // get data from backend (IMPLEMENT WHEN READY)
         (0, runAnalysis_1.runAnalysis)(functions);
+        // TEST suite
+        var response = JSON.parse((0, fs_1.readFileSync)('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/response.json', 'utf8'));
+        console.log(response);
         // side panel segments loading
         const homePromise = sidePanelHome();
         const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);
         const settingsPromise = (0, sidePanelSettings_1.sidePanelSettings)(context);
         const helpPromise = (0, sidePanelHelp_1.sidePanelHelp)(context);
+        // ||
         await homePromise;
         await configsPromise;
         await settingsPromise;
@@ -201,6 +208,8 @@ class JavaDocumentSymbolProvider {
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + '.' + containedKanzis[temp][1] + '()',
                                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
+                                                        runtime: 0,
+                                                        energy: 0,
                                                         kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
                                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
@@ -232,6 +241,8 @@ class JavaDocumentSymbolProvider {
                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                         name: impKanzi + '()',
                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
+                                        runtime: 0,
+                                        energy: 0,
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impKanzi.length + 4)))
