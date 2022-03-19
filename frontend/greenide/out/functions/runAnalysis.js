@@ -16,9 +16,16 @@ function runAnalysis(functions) {
     var functionsNEW = [];
     // read defined software system
     var softwareSystem = fs.readFileSync(folder + '/greenide/system.json', 'utf8');
-    var json = parseToSend(functions);
-    var response1 = getData(json, softwareSystem);
-    return functionsNEW;
+    var jsonDefault = parseToSend(functions, 0);
+    var jsonApplied = parseToSend(functions, 1);
+    // TEST suite
+    console.log('JSON1: DEFAULT');
+    console.log(jsonDefault);
+    console.log('JSON2: APPLIED');
+    console.log(jsonApplied);
+    var responseDefault = getData(jsonDefault, softwareSystem);
+    var responseApplied = getData(jsonApplied, softwareSystem);
+    //return functionsNEW;
 }
 exports.runAnalysis = runAnalysis;
 function getData(json, softwareSystem) {
@@ -34,16 +41,26 @@ function getData(json, softwareSystem) {
         .catch(err => console.log(err));
     return JSON.stringify(response1Raw);
 }
-function parseToSend(functions) {
-    // read current config
-    var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-    var config = [];
-    // get active config
-    if (result.config[0] === undefined) {
-        config = [];
-    }
-    else {
-        config = result.config[0].config;
+function parseToSend(functions, mode) {
+    // switch case for both post datas
+    // 0 - data without config applied
+    // 1 - data with config applied
+    switch (mode) {
+        case 0:
+            var config = [];
+            break;
+        case 1:
+            // read current config
+            var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
+            var config = [];
+            // get active config
+            if (result.config[0] === undefined) {
+                config = [];
+            }
+            else {
+                config = result.config[0].config;
+            }
+            break;
     }
     // define collection for data
     var obj = {

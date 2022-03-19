@@ -20,8 +20,7 @@
 [X] 1.4.1 - parse methods & config for backend
 [X] 1.4.2 - send/receive JSON via backend api
 [X] 1.4.3 - Bugfixes (refresh DocumentProvider when changing files)
-[ ] 1.4.4 - send/receive 2 JSONs (for comparison, default send 2 with second set to 0 if no comparison wanted)
-            (will be used later in overview webview)
+[ ] 1.4.4 - send/receive 2 JSONs (for comparison, first is applied config, second is without any config, compare them)
 [ ] 1.4.5 - button to change software system
 1.5 - apply response
 [ ] - 1.5.1 - apply Respose data to each method

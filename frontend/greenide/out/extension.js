@@ -39,6 +39,8 @@ function activate(context) {
         // check for new csv and parse methods / config elements
         (0, startup_1.startup)();
         // get data from backend (IMPLEMENT WHEN READY)
+        // functions = runAnalysis(functions);
+        // TEST suite, replace with avoe when BACKEND READY
         (0, runAnalysis_1.runAnalysis)(functions);
         // TEST suite
         var response = JSON.parse((0, fs_1.readFileSync)('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/response.json', 'utf8'));

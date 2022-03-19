@@ -55,6 +55,9 @@ export function activate(context: vscode.ExtensionContext) {
         startup();
 
         // get data from backend (IMPLEMENT WHEN READY)
+        // functions = runAnalysis(functions);
+
+        // TEST suite, replace with avoe when BACKEND READY
         runAnalysis(functions);
 
         // TEST suite

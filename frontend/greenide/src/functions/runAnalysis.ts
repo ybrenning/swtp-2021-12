@@ -35,11 +35,19 @@ export function runAnalysis(functions: {
     // read defined software system
     var softwareSystem = fs.readFileSync(folder + '/greenide/system.json', 'utf8');
 
-    var json = parseToSend(functions);
+    var jsonDefault = parseToSend(functions,0);
+    var jsonApplied = parseToSend(functions,1);
 
-    var response1 = getData(json,softwareSystem);
+    // TEST suite
+    console.log('JSON1: DEFAULT');
+    console.log(jsonDefault);
+    console.log('JSON2: APPLIED');
+    console.log(jsonApplied);
 
-    return functionsNEW;
+    var responseDefault = getData(jsonDefault,softwareSystem);
+    var responseApplied = getData(jsonApplied,softwareSystem);
+
+    //return functionsNEW;
 }
 
 function getData(json: string, softwareSystem: string) {
@@ -66,17 +74,26 @@ function parseToSend(functions: {
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
-}[]) {
+}[], mode: number){
 
-    // read current config
-    var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-    var config = [];
+    // switch case for both post datas
+    // 0 - data without config applied
+    // 1 - data with config applied
+    switch (mode) {
 
-    // get active config
-    if (result.config[0] === undefined) {
-        config = [];
-    } else {
-        config = result.config[0].config;
+        case 0:
+            var config = [];
+            break;
+
+        case 1:
+            // read current config
+            var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
+            var config = [];
+
+            // get active config
+            if (result.config[0] === undefined) { config = []; } 
+            else { config = result.config[0].config; }
+            break;
     }
 
     // define collection for data
@@ -85,14 +102,8 @@ function parseToSend(functions: {
         config: [] as any
     };
 
-    for (let i = 0; i < config.length; i++) {
-        obj.config.push(config[i]);
-    }
-
-    for (let i = 0; i < functions.length; i++) {
-        obj.functions.push(functions[i].method);
-    }
-
+    for (let i = 0; i < config.length; i++) { obj.config.push(config[i]); }
+    for (let i = 0; i < functions.length; i++) { obj.functions.push(functions[i].method); }
     var json = JSON.stringify(obj,null,'\t');
 
     return json;
