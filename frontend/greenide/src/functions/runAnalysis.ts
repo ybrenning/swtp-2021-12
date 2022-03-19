@@ -2,6 +2,7 @@
 
 import * as vscode from 'vscode';
 import axios, { AxiosResponse } from 'axios';
+import { applyData } from './applyData';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
@@ -15,8 +16,8 @@ const fs = require('fs');
 export function runAnalysis(functions: { 
     name: string; 
     method: string; 
-    runtime: number;
-    energy: number;
+    runtime: number[],
+    energy: number[],
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
@@ -25,8 +26,8 @@ export function runAnalysis(functions: {
     var functionsNEW: { 
         name: string; 
         method: string; 
-        runtime: number;
-        energy: number;
+        runtime: number[],
+        energy: number[],
         kind: vscode.SymbolKind; 
         containerName: string; 
         location: vscode.Location;
@@ -38,14 +39,24 @@ export function runAnalysis(functions: {
     var jsonDefault = parseToSend(functions,0);
     var jsonApplied = parseToSend(functions,1);
 
-    // TEST suite
-    console.log('JSON1: DEFAULT');
-    console.log(jsonDefault);
-    console.log('JSON2: APPLIED');
-    console.log(jsonApplied);
-
     var responseDefault = getData(jsonDefault,softwareSystem);
     var responseApplied = getData(jsonApplied,softwareSystem);
+
+    // TEST suite, apply hardcode
+    responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
+    responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
+
+    // TEST suite
+    console.log('DATA DEFAULT');
+    console.log(responseDefault);
+    console.log('DATA APPLIED');
+    console.log(responseApplied);
+    
+    var functionsNEW = applyData(functions,responseDefault,responseApplied);
+
+    // TEST suite
+    console.log('APPLIED DATA');
+    console.log(functionsNEW);
 
     //return functionsNEW;
 }
@@ -69,8 +80,8 @@ function getData(json: string, softwareSystem: string) {
 function parseToSend(functions: { 
     name: string; 
     method: string; 
-    runtime: number;
-    energy: number;
+    runtime: number[],
+    energy: number[],
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;

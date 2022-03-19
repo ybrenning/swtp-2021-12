@@ -18,8 +18,8 @@ console.log(folder);
 var functions: { 
     name: string; 
     method: string; 
-    runtime: number;
-    energy: number;
+    runtime: number[];
+    energy: number[];
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
@@ -59,10 +59,6 @@ export function activate(context: vscode.ExtensionContext) {
 
         // TEST suite, replace with avoe when BACKEND READY
         runAnalysis(functions);
-
-        // TEST suite
-        var response = JSON.parse(readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/response.json', 'utf8'));
-        console.log(response);
 
         // side panel segments loading
         const homePromise = sidePanelHome();
@@ -179,7 +175,7 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
         return new Promise((resolve) => {
             foundMethods = [];
             // Redunant functions saved for iteration
-            var functionsR: {name: string; method: string; runtime: number; energy: number; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
+            var functionsR: {name: string; method: string; runtime: number[]; energy: number[]; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
             functionsR = [];
             functions = [];
             var containedKanzis = [];
@@ -278,8 +274,8 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + '.' + containedKanzis[temp][1] + '()',
                                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
-                                                        runtime: 0,
-                                                        energy: 0,
+                                                        runtime: [0,0],
+                                                        energy: [0,0],
                                                         kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
                                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
@@ -316,8 +312,8 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                         name: impKanzi + '()',
                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
-                                        runtime: 0,
-                                        energy: 0,
+                                        runtime: [0,0],
+                                        energy: [0,0],
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
                                         location: new vscode.Location(
