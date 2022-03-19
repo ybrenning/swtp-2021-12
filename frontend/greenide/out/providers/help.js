@@ -1,6 +1,6 @@
 "use strict";
-// provider for third tab in side panel, help
-// istructions on how to use greenIDE, commands, links etc.
+// Provider for third tab in side panel, help
+// instructions on how to use greenIDE, commands, links etc.
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.HelpProvider = void 0;
 const vscode = require("vscode");
@@ -28,7 +28,7 @@ class HelpItem extends vscode.TreeItem {
         // Set the label for each element
         super(label);
         this.contextValue = 'treeItem';
-        // depending on which item, execute different command
+        // Depending on which item, execute different command
         switch (nr) {
             case 0:
                 this.command = {

@@ -1,0 +1,14 @@
+{
+    "results": [
+        {
+            "function1": "kanzi.util.hash.XXHash32.hash",
+            "energy": 23,
+            "time": 42
+        },
+        {
+            "function2": "kanzi.util.hash.XXHash32.hash",
+            "energy": 25,
+            "time": 41
+        }
+    ]
+}

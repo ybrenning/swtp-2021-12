@@ -7,10 +7,10 @@
 import * as vscode from "vscode";
 import { getNonce } from "../getNonce";
 
-// the main webview Panel to work with
+// The main webview Panel to work with
 export class Overview {
 
-  // track the current panel. Only allow a single panel to exist at a time.
+  // Track the current panel. Only allow a single panel to exist at a time.
   public static currentPanel: Overview | undefined;
 
   public static readonly viewType = "green-ide";
@@ -19,29 +19,29 @@ export class Overview {
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
-  // technically activate webview panel for overview
+  // Technically activate webview panel for overview
   public static createOrShow(extensionUri: vscode.Uri) {
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
       : undefined;
 
-    // if we already have a panel, show it
+    // If we already have a panel, show it
     if (Overview.currentPanel) {
       Overview.currentPanel._panel.reveal(column);
       Overview.currentPanel._update();
       return;
     }
 
-    // otherwise, create a new panel
+    // Otherwise, create a new panel
     const panel = vscode.window.createWebviewPanel(
       Overview.viewType,
       "Data Overview",  // title of tab
       column || vscode.ViewColumn.One,
       {
-        // enable javascript in the webview
+        // Enable javascript in the webview
         enableScripts: true,
 
-        // and restrict the webview to only loading content from our extension's `media` directory.
+        // And restrict the webview to only loading content from our extension's `media` directory.
         localResourceRoots: [
           vscode.Uri.joinPath(extensionUri, "media"),
           vscode.Uri.joinPath(extensionUri, "out/compiled"),
@@ -49,31 +49,31 @@ export class Overview {
       }
     );
 
-    // execute set up webview panel
+    // Execute set up webview panel
     Overview.currentPanel = new Overview(panel, extensionUri);
   }
 
-  // kill webview panel
+  // Kill webview panel
   public static kill() {
     Overview.currentPanel?.dispose();
     Overview.currentPanel = undefined;
   }
 
-  // revive webview panel
+  // Revive webview panel
   public static revive(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     Overview.currentPanel = new Overview(panel, extensionUri);
   }
 
-  // constructor for webview panel
+  // Constructor for webview panel
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
     this._panel = panel;
     this._extensionUri = extensionUri;
 
-    // set the webview's initial HTML content
+    // Set the webview's initial HTML content
     this._update();
 
-    // listen for when the panel is disposed
-    // this happens when the user closes the panel or when the panel is closed programatically
+    // Listen for when the panel is disposed
+    // This happens when the user closes the panel or when the panel is closed programatically
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
 
     // // Handle messages from the webview
@@ -90,11 +90,11 @@ export class Overview {
     // );
   }
 
-  // close webview panel
+  // Close webview panel
   public dispose() {
     Overview.currentPanel = undefined;
 
-    // clean up our resources
+    // Clean up our resources
     this._panel.dispose();
 
     while (this._disposables.length) {
@@ -105,16 +105,15 @@ export class Overview {
     }
   }
 
-  // activate webview content, HTML
+  // Activate webview content, HTML
   private async _update() {
-
-    // set current webview
+    // Set current webview
     const webview = this._panel.webview;
 
-    // set HTML content for webview panel
+    // Set HTML content for webview panel
     this._panel.webview.html = this._getHtmlForWebview(webview);
 
-    // message handler
+    // Message handler
     webview.onDidReceiveMessage(async (data) => {
       switch (data.type) {
         case "onInfo": {
@@ -135,7 +134,7 @@ export class Overview {
     });
   }
 
-  // the HTML content, main functionality of webview panel
+  // The HTML content, main functionality of webview panel
   private _getHtmlForWebview(webview: vscode.Webview) {
 
     // Use a nonce to only allow specific scripts to be run

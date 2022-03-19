@@ -1,54 +1,63 @@
 // Provider to toggle highlight
-// highlights parsed location in code
+// Highlights parsed location in code
 
 import * as vscode from 'vscode';
 
-// colors for the highlight
-const green: string = '#018217';
-const yellow: string = '#ffec1c';
-const red: string = '#d40000';
+// Colors for the highlight
+const green: string = '#007512';
+const yellow: string = '#fbd304';
+const red: string = '#a80000';
 
 export class MethodHighlight {
-
     line: number;
     character: number;
     characterEND: number;
+    runtime: number;
+    energy: number;
     
-    constructor (line: number, character: number, characterEND: number) {
-
+    constructor (line: number, character: number, characterEND: number, runtime: number, energy: number) {
         this.line = line - 1;
         this.character = character;
         this.characterEND = characterEND;
-
+        this.runtime = runtime;
+        this.energy = energy;
         this.decorate();
     }
 
-    // does the syntax highlighting at provided location
+    // Does the syntax highlighting at provided location
     decorate() {
 
-        // TODO: implement from example online
+        // set color
+        var color;
+        if (this.runtime <= -16) {
+            color = green;
+        } else if (this.runtime > -16 && this.runtime < 8) {
+            color = yellow;
+        } else if (this.runtime >= 8) {
+            color = red;
+        }
 
-            // the type, what color and other stuff
-            var decorationType = vscode.window.createTextEditorDecorationType({
-                backgroundColor: yellow,
-            });
+        // The type, what color and other stuff
+        var decorationType = vscode.window.createTextEditorDecorationType({
+            backgroundColor: color,
+        });
 
-            // has to be an array
-            let decorationsArray: vscode.DecorationOptions[] = [];
+        // Has to be an array
+        let decorationsArray: vscode.DecorationOptions[] = [];
 
-            // range for decoration
-            let range = new vscode.Range(
-                new vscode.Position(this.line, this.character),
-                new vscode.Position(this.line, this.characterEND)
-            );
+        // Range for decoration
+        let range = new vscode.Range(
+            new vscode.Position(this.line, this.character),
+            new vscode.Position(this.line, this.characterEND)
+        );
 
-            // declara declaration unit
-            let decoration = { range };
+        // Declaration unit
+        let decoration = { range };
 
-            // add range to decorations
-            decorationsArray.push(decoration);
+        // Add range to decorations
+        decorationsArray.push(decoration);
 
-            // execute decoration
-            vscode.window.activeTextEditor?.setDecorations(decorationType , decorationsArray);
+        // Execute decoration
+        vscode.window.activeTextEditor?.setDecorations(decorationType , decorationsArray);
     }
 }

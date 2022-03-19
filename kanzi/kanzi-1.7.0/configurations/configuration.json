@@ -1,0 +1,61 @@
+{
+    "config": [
+        {
+            "id": 0,
+            "name": "Active",
+            "config": [
+                "NoTransform",
+                "Huffman",
+                "ANS0",
+                "ANS1",
+                "Range",
+                "FPAQ"
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Config 2",
+            "config": [
+                "Range",
+                "FPAQ"
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Config 3",
+            "config": [
+                "RANK"
+            ]
+        },
+        {
+            "id": 4,
+            "name": "Config 4",
+            "config": [
+                "ANS0",
+                "ANS1",
+                "Range"
+            ]
+        },
+        {
+            "id": 5,
+            "name": "Config 5",
+            "config": [
+                "Range",
+                "FPAQ",
+                "TPAQ"
+            ]
+        },
+        {
+            "id": 1,
+            "name": "Config 1",
+            "config": [
+                "NoTransform",
+                "Huffman",
+                "ANS0",
+                "ANS1",
+                "Range",
+                "FPAQ"
+            ]
+        }
+    ]
+}
