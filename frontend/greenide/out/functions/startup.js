@@ -51,7 +51,7 @@ async function formatInput(items, mode) {
     var objS = {
         system: ''
     };
-    objS.system = 'kanzidd';
+    objS.system = 'kanzi';
     var jsonS = JSON.stringify(objS, null, '\t');
     const writer = fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
     await writer;
