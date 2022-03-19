@@ -25,11 +25,11 @@
 1.5 - apply response
 [X] - 1.5.1 - apply Respose data to each method
 [X] - 1.5.2 - color code depending on method data
-[X] - 1.5.3 - Hover text with data
 1.6 - Overview webview
-[ ] - 1.6.1 - display all results in webview from side panel
-[ ] - 1.6.2 - display diagrams with distribution in webview
-[ ] - 1.6.3 - apply different configs to methods in webview
+[X] - 1.6.1 - Hover text with data
+[ ] - 1.6.2 - display all results in webview from side panel
+[ ] - 1.6.3 - display diagrams with distribution in webview
+[ ] - 1.6.4 - apply different configs to methods in webview
 1.7 - Cleanup and minor issues / tuning
 [ ] - 1.7.1 - Bugfixes:
           [ ] execute 'press refresh button' command aka greenIDE.run correctly
