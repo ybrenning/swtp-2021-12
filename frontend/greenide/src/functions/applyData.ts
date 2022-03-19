@@ -13,7 +13,7 @@ export function applyData(functions: {
     location: vscode.Location;
 }[], dataDefault: string, dataApplied: string) {
 
-    
+
 
     return functions;
 }

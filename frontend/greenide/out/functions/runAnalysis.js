@@ -4,7 +4,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.runAnalysis = void 0;
 const vscode = require("vscode");
 const axios_1 = require("axios");
-const applyData_1 = require("./applyData");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 // Performs analysis
@@ -27,9 +26,9 @@ function runAnalysis(functions) {
     var responseDefault = getData(jsonDefault, softwareSystem);
     var responseApplied = getData(jsonApplied, softwareSystem);
     // TEST suite, apply hardcode
-    responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
-    responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
-    var functionsNEW = (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
+    //responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
+    //responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
+    //var functionsNEW = applyData(functions,responseDefault,responseApplied);
     //return functionsNEW;
 }
 exports.runAnalysis = runAnalysis;

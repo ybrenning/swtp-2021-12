@@ -49,10 +49,10 @@ export function runAnalysis(functions: {
     var responseApplied = getData(jsonApplied,softwareSystem);
 
     // TEST suite, apply hardcode
-    responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
-    responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
+    //responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
+    //responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
 
-    var functionsNEW = applyData(functions,responseDefault,responseApplied);
+    //var functionsNEW = applyData(functions,responseDefault,responseApplied);
 
     //return functionsNEW;
 }
