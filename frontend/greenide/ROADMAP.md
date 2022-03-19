@@ -25,7 +25,7 @@
 1.5 - apply response
 [X] - 1.5.1 - apply Respose data to each method
 [X] - 1.5.2 - color code depending on method data
-[ ] - 1.5.3 - Hover text with data
+[X] - 1.5.3 - Hover text with data
 1.6 - Overview webview
 [ ] - 1.6.1 - display all results in webview from side panel
 [ ] - 1.6.2 - display diagrams with distribution in webview
