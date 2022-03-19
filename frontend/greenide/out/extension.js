@@ -1,6 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deactivate = exports.activate = void 0;
+exports.deactivate = exports.JavaDocumentSymbolProvider = exports.activate = void 0;
 const vscode = require("vscode");
 const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
@@ -11,11 +11,12 @@ const startup_1 = require("./functions/startup");
 const sidePanelConfig_1 = require("./functions/sidePanelConfig");
 const sidePanelSettings_1 = require("./functions/sidePanelSettings");
 const sidePanelHelp_1 = require("./functions/sidePanelHelp");
+const eventListener_1 = require("./functions/eventListener");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
 var functions = [];
 // TODO:
-// [ ] - fix documentsymbolprovider
+// [ ] - refresh method list when changing files or applying config (why doesn't 'greenIDE.run' work???)
 // [ ] - set focus to line in code, not just input
 // [ ] - shadow-implement backend data
 // This method is called when your extension is activated
@@ -32,10 +33,9 @@ function activate(context) {
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-        // TODO: try different vscode.Text... events if they work
-        const didChange = new vscode.EventEmitter();
-        didChange.fire;
+        // check for new csv and parse methods / config elements
         (0, startup_1.startup)();
+        // get data from backend
         (0, runAnalysis_1.runAnalysis)(functions);
         // side panel segments loading
         const homePromise = sidePanelHome();
@@ -101,13 +101,10 @@ function activate(context) {
         context.subscriptions.push(overviewEvent);
         context.subscriptions.push(homeTreeView);
     }
-    // Start DocumentSymbolProvider to find methods
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
+    (0, eventListener_1.eventListener)(context);
     // Start Hover Provider to create hovers
     context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
-    context.subscriptions.push(vscode.window.onDidChangeActiveTextEditor(() => {
-        new JavaDocumentSymbolProvider;
-    }));
 }
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
@@ -275,6 +272,7 @@ class JavaDocumentSymbolProvider {
         });
     }
 }
+exports.JavaDocumentSymbolProvider = JavaDocumentSymbolProvider;
 // This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
