@@ -68,4 +68,9 @@ class FunctionValueCalculatorService(
     fun parseFileToDB(softwareSystem: String) {
         Parser.parseFile(softwareSystem, repository)
     }
+
+    // deletes all entries in the database
+    fun clearDB() {
+        repository.deleteAll()
+    }
 }

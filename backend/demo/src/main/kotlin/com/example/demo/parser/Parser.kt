@@ -27,13 +27,17 @@ object Parser {
                 // create the map of the configuration names and values for the Line (entry)
                 val configMap = HashMap<String, Boolean>()
                 for (loopVar in 1..configurationNames.size - 3)  {
-                    configMap[configurationNames[loopVar]] = csvLineElements[loopVar].toBoolean()
+                    if(csvLineElements[loopVar].length == 1) {
+                        configMap[configurationNames[loopVar]] = csvLineElements[loopVar].toBoolean()
+                    }
                 }
+                //removes " from the function name string
+                var functionName = csvLineElements[0].substring(1,csvLineElements[0].length - 1)
 
                 repository.save(
                     DBEntity(
                         softwareSystem,
-                        csvLineElements[0],
+                        functionName,
                         configMap,
                         csvLineElements[csvLineElements.size-2].toDouble(),
                         csvLineElements[csvLineElements.size-1].toDouble()
