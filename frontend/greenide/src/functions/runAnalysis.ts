@@ -1,9 +1,10 @@
 // function for backend communication
 
 import * as vscode from 'vscode';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const fs = require('fs');
 
 // Performs analysis
 // Procedure order:
@@ -14,25 +15,85 @@ const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)
 export function runAnalysis(functions: { 
     name: string; 
     method: string; 
+    runtime: number;
+    energy: number;
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
 }[]) {
 
-    // read current config
-    const fs = require('fs');
-    var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-    var config = [];
-    var softwareSystem = '';
+    var functionsNEW: { 
+        name: string; 
+        method: string; 
+        runtime: number;
+        energy: number;
+        kind: vscode.SymbolKind; 
+        containerName: string; 
+        location: vscode.Location;
+    }[] = [];
 
-    // get softwareSystem
-    softwareSystem = result.system;
+    // read defined software system
+    var softwareSystem = fs.readFileSync(folder + '/greenide/system.json', 'utf8');
 
-    // get active config
-    if (result.config[0] === undefined) {
-        config = [];
-    } else {
-        config = result.config[0].config;
+    var jsonDefault = parseToSend(functions,0);
+    var jsonApplied = parseToSend(functions,1);
+
+    // TEST suite
+    console.log('JSON1: DEFAULT');
+    console.log(jsonDefault);
+    console.log('JSON2: APPLIED');
+    console.log(jsonApplied);
+
+    var responseDefault = getData(jsonDefault,softwareSystem);
+    var responseApplied = getData(jsonApplied,softwareSystem);
+
+    //return functionsNEW;
+}
+
+function getData(json: string, softwareSystem: string) {
+
+    // post values and save response 
+    var response1Raw;
+    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem + '/';
+    axios({
+        method: 'post',
+        url: urlPost,
+        data: json
+    })
+    .then(data=>(response1Raw=data))
+    .catch(err=>console.log(err));
+
+    return JSON.stringify(response1Raw);
+}
+
+function parseToSend(functions: { 
+    name: string; 
+    method: string; 
+    runtime: number;
+    energy: number;
+    kind: vscode.SymbolKind; 
+    containerName: string; 
+    location: vscode.Location;
+}[], mode: number){
+
+    // switch case for both post datas
+    // 0 - data without config applied
+    // 1 - data with config applied
+    switch (mode) {
+
+        case 0:
+            var config = [];
+            break;
+
+        case 1:
+            // read current config
+            var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
+            var config = [];
+
+            // get active config
+            if (result.config[0] === undefined) { config = []; } 
+            else { config = result.config[0].config; }
+            break;
     }
 
     // define collection for data
@@ -41,28 +102,9 @@ export function runAnalysis(functions: {
         config: [] as any
     };
 
-    for (let i = 0; i < config.length; i++) {
-        obj.config.push(config[i]);
-    }
-
-    for (let i = 0; i < functions.length; i++) {
-        obj.functions.push(functions[i].method);
-    }
-
+    for (let i = 0; i < config.length; i++) { obj.config.push(config[i]); }
+    for (let i = 0; i < functions.length; i++) { obj.functions.push(functions[i].method); }
     var json = JSON.stringify(obj,null,'\t');
 
-    // for message
-    // http postrequest for data, getrequest for functions
-    
-    // post 
-    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem + '/';
-    axios({
-        method: 'post',
-        url: urlPost,
-        data: json
-    })
-    .then(data=>console.log(data))
-    .catch(err=>console.log(err));
-
-
+    return json;
 }

@@ -1,0 +1,14 @@
+{
+    "results": [
+        {
+            "function1": "a",
+            "energy": 12,
+            "time": 9
+        },
+        {
+            "function2": "b",
+            "energy": 8,
+            "time": 13
+        }
+    ]
+}

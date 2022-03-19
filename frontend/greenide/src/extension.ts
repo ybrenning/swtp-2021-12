@@ -10,6 +10,7 @@ import { sidePanelConfigs } from './functions/sidePanelConfig';
 import { sidePanelSettings } from './functions/sidePanelSettings';
 import { sidePanelHelp } from './functions/sidePanelHelp';
 import { eventListener } from './functions/eventListener';
+import { readFileSync } from 'fs';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
@@ -17,12 +18,16 @@ console.log(folder);
 var functions: { 
     name: string; 
     method: string; 
+    runtime: number;
+    energy: number;
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
 }[] = [];
 
 // TODO:
+// [ ] - button to change software system
+// [ ] - send two datas to backend
 // [ ] - refresh method list when changing files or applying config (why doesn't 'greenIDE.run' work???)
 // [ ] - set focus to line in code, not just input
 // [ ] - shadow-implement backend data
@@ -49,17 +54,22 @@ export function activate(context: vscode.ExtensionContext) {
         // check for new csv and parse methods / config elements
         startup();
 
-        // get data from backend
+        // get data from backend (IMPLEMENT WHEN READY)
+        // functions = runAnalysis(functions);
+
+        // TEST suite, replace with avoe when BACKEND READY
         runAnalysis(functions);
 
+        // TEST suite
+        var response = JSON.parse(readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/response.json', 'utf8'));
+        console.log(response);
+
         // side panel segments loading
-
         const homePromise = sidePanelHome();
-
         const configsPromise = sidePanelConfigs(context);
         const settingsPromise = sidePanelSettings(context);
         const helpPromise = sidePanelHelp(context);
-
+        // ||
         await homePromise;
         await configsPromise;
         await settingsPromise;
@@ -80,7 +90,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         // Set name for first segment
         homeTreeView.title = 'GREENIDE';
-        homeTreeView.description = 'Refresh Methods:';
+        homeTreeView.description = 'Refresh GreenIDE:';
 
         // When clicking on a method from tree
         let clickEvent = vscode.commands.registerCommand('greenIDE-home.click', (functionI: { 
@@ -169,7 +179,7 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
         return new Promise((resolve) => {
             foundMethods = [];
             // Redunant functions saved for iteration
-            var functionsR: {name: string; method: string; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
+            var functionsR: {name: string; method: string; runtime: number; energy: number; kind: vscode.SymbolKind; containerName: string; location: vscode.Location;}[] = [];
             functionsR = [];
             functions = [];
             var containedKanzis = [];
@@ -268,6 +278,8 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
                                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + '.' + containedKanzis[temp][1] + '()',
                                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
+                                                        runtime: 0,
+                                                        energy: 0,
                                                         kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
                                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
@@ -304,6 +316,8 @@ export class JavaDocumentSymbolProvider implements vscode.DocumentSymbolProvider
                                         // name: line.text.substr(j-1, (k-1) - (j-1)),
                                         name: impKanzi + '()',
                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
+                                        runtime: 0,
+                                        energy: 0,
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
                                         location: new vscode.Location(
