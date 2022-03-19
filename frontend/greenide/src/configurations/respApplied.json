@@ -1,12 +1,12 @@
 {
     "results": [
         {
-            "function1": "a",
+            "function1": "kanzi.util.hash.XXHash32.hash",
             "energy": 12,
             "time": 9
         },
         {
-            "function2": "b",
+            "function2": "kanzi.util.hash.XXHash32.hash",
             "energy": 8,
             "time": 13
         }

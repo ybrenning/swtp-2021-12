@@ -4,6 +4,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyData = void 0;
 function applyData(functions, dataDefault, dataApplied) {
+    for (let i = 0; i < dataDefault.length; i++) {
+    }
     return functions;
 }
 exports.applyData = applyData;

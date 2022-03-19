@@ -13,6 +13,8 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
     constructor(functions: { 
         name: string; 
         method: string; 
+        runtime: number[],
+        energy: number[],
         kind: vscode.SymbolKind; 
         containerName: string; 
         location: vscode.Location; 
@@ -61,6 +63,8 @@ class HomeItem extends vscode.TreeItem {
     constructor(label: string, children?: HomeItem[], functionI?: { 
         name: string; 
         method: string; 
+        runtime: number[],
+        energy: number[],
         kind: vscode.SymbolKind; 
         containerName: string; 
         location: vscode.Location; 

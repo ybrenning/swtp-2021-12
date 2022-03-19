@@ -16,8 +16,8 @@ const fs = require('fs');
 export function runAnalysis(functions: { 
     name: string; 
     method: string; 
-    runtime: number;
-    energy: number;
+    runtime: number[],
+    energy: number[],
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
@@ -26,8 +26,8 @@ export function runAnalysis(functions: {
     var functionsNEW: { 
         name: string; 
         method: string; 
-        runtime: number;
-        energy: number;
+        runtime: number[],
+        energy: number[],
         kind: vscode.SymbolKind; 
         containerName: string; 
         location: vscode.Location;
@@ -40,19 +40,19 @@ export function runAnalysis(functions: {
     var jsonApplied = parseToSend(functions,1);
 
     // TEST suite
-    console.log('JSON1: DEFAULT');
+    console.log('DATA DEFAULT');
     console.log(jsonDefault);
-    console.log('JSON2: APPLIED');
+    console.log('DATA APPLIED');
     console.log(jsonApplied);
 
     var responseDefault = getData(jsonDefault,softwareSystem);
     var responseApplied = getData(jsonApplied,softwareSystem);
 
     // TEST suite, apply hardcode
-    //responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
-    //responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
+    responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
+    responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
 
-    //var functionsNEW = applyData(functions,responseDefault,responseApplied);
+    var functionsNEW = applyData(functions,responseDefault,responseApplied);
 
     //return functionsNEW;
 }
@@ -76,8 +76,8 @@ function getData(json: string, softwareSystem: string) {
 function parseToSend(functions: { 
     name: string; 
     method: string; 
-    runtime: number;
-    energy: number;
+    runtime: number[],
+    energy: number[],
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;

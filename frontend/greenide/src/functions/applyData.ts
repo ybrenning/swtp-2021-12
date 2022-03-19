@@ -6,14 +6,16 @@ import * as vscode from 'vscode';
 export function applyData(functions: { 
     name: string; 
     method: string; 
-    runtime: number;
-    energy: number;
+    runtime: number[],
+    energy: number[],
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
 }[], dataDefault: string, dataApplied: string) {
 
+    for (let i = 0; i < dataDefault.length; i++) {
 
+    }
 
     return functions;
 }
