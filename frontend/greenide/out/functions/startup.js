@@ -11,22 +11,22 @@ function startup() {
     var configItems = [];
     var locatorItems = [];
     // read provided csv
-    var document = fs.readFileSync(folder + '/greenide/csv/data.csv', 'utf-8');
-    document = document.split('\n');
+    var result = fs.readFileSync(folder + '/greenide/csv/data.csv', 'utf-8');
+    result = result.split('\n');
     // get values for configItems and locatorItems
-    configItems = getConfigItems(document[0]);
-    locatorItems = getLocatorItems(document);
+    configItems = getConfigItems(result[0]);
+    locatorItems = getLocatorItems(result);
     formatInput(configItems, 'config');
     formatInput(locatorItems, 'methods');
 }
 exports.startup = startup;
 // exctract the config items / top bar arguments from csv
-function getConfigItems(document) {
+function getConfigItems(result) {
     var items = [];
     // slice front and end from line
-    var startIndex = document.indexOf(',');
-    var lastIndex = document.indexOf('run_time(ms;<)');
-    var line = document.slice(startIndex + 1, lastIndex - 2);
+    var startIndex = result.indexOf(',');
+    var lastIndex = result.indexOf('run_time(ms;<)');
+    var line = result.slice(startIndex + 1, lastIndex - 2);
     // seperate each item from its comma, like real csv's
     items = line.split(',');
     for (let i = 0; i < items.length; i++) {
@@ -73,4 +73,84 @@ function formatInput(items, mode) {
 }
 // useless, just for reading file to work
 function callback(arg0, json, arg2, callback) { }
+// TODO: implementation when backend works, save response
+// function to parse provided csv data into seperate json files to read them later
+/*
+import axios from 'axios';
+import * as vscode from 'vscode';
+
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const fs = require('fs');
+const softwareSystem = 'kanzi';
+
+export function startup() {
+
+    // create items to parse into json
+    var configItems: string[] = [];
+    var document;
+
+    // get data from backend
+    const urlGet='https://swtp-2021-12-production.herokuapp.com/listOfFunctions/' + softwareSystem + '/';
+    axios.get(urlGet)
+    .then(data=>(document=data))
+    .catch(err=>console.log(err));
+
+    // read provided csv
+    var result = fs.readFileSync(folder + '/greenide/csv/data.csv', 'utf-8');
+    result = result.split('\n');
+
+    // get values for configItems
+    configItems = getConfigItems(result[0]);
+
+    // format configItems
+    formatInput(configItems,'config');
+    formatInput(document,'methods');
+}
+
+// exctract the config items / top bar arguments from csv
+function getConfigItems(document: string) {
+
+    var items: string[] = [];
+
+    // slice front and end from line
+    var startIndex = document.indexOf(',');
+    var lastIndex = document.indexOf('run_time(ms;<)');
+    var line = document.slice(startIndex+1,lastIndex-2);
+
+    // seperate each item from its comma, like real csv's
+    items = line.split(',');
+    for (let i = 0; i < items.length; i++) {
+        items[i] = items[i].slice(1,items[i].length-1);
+    }
+
+    return items;
+}
+
+function formatInput(items: any, mode: string) {
+
+    var objS = { system: 'kanzi'};
+    var jsonS = JSON.stringify(objS,null,'\t');
+    fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
+
+    if (mode.match('config')) {
+
+        var objC = {
+            items: [] as any
+        };
+        for (let i = 0; i < items.length; i++) {
+            objC.items.push(items[i]);
+        }
+
+        var jsonC = JSON.stringify(objC,null,'\t');
+        fs.writeFile(folder + '/greenide/configItems.json', jsonC, 'utf8', callback);
+    } else {
+
+        // parse response from server into locatorItems.json
+        var jsonM = JSON.stringify(document,null,'\t');
+        fs.writeFile(folder + '/greenide/locatorItems.json', jsonM, 'utf8', callback);
+    }
+}
+
+function callback(arg0: string, json: string, arg2: string, callback: any) { }
+*/ 
 //# sourceMappingURL=startup.js.map
