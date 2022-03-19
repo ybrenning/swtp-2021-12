@@ -4,7 +4,7 @@ import { Overview } from './webviews/overview';
 import { HomeProvider } from './providers/home';
 import { MethodHighlight } from './providers/highlight';
 import { runAnalysis } from './functions/runAnalysis';
-import { GoHoverProvider } from './providers/goHoverProvider';
+import { GoHoverProvider } from './providers/GoHoverProvider';
 import { startup } from './functions/startup';
 import { sidePanelConfigs } from './functions/sidePanelConfig';
 import { sidePanelSettings } from './functions/sidePanelSettings';

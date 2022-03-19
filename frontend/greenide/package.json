@@ -133,6 +133,7 @@
   "dependencies": {
     "axios": "^0.26.1",
     "csv-parser": "^3.0.0",
-    "line-reader": "^0.4.0"
+    "line-reader": "^0.4.0",
+    "xhr2": "^0.2.1"
   }
 }

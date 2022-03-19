@@ -6,7 +6,7 @@ const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
 const highlight_1 = require("./providers/highlight");
 const runAnalysis_1 = require("./functions/runAnalysis");
-const goHoverProvider_1 = require("./providers/goHoverProvider");
+const GoHoverProvider_1 = require("./providers/GoHoverProvider");
 const startup_1 = require("./functions/startup");
 const sidePanelConfig_1 = require("./functions/sidePanelConfig");
 const sidePanelSettings_1 = require("./functions/sidePanelSettings");
@@ -109,7 +109,7 @@ function activate(context) {
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     (0, eventListener_1.eventListener)(context);
     // Start Hover Provider to create hovers
-    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new goHoverProvider_1.GoHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
 }
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'

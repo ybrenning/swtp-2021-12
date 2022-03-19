@@ -153,11 +153,16 @@ function getConfigItems(document: string) {
     return items;
 }
 
-function formatInput(items: any, mode: string) {
+async function formatInput(items: any, mode: string) {
 
-    var objS = { system: 'kanzi'};
+    // declare software system, default for customer is kanzi, can be changed
+    var objS = {
+        system: '' as any
+    };
+    objS.system = 'kanzi';
     var jsonS = JSON.stringify(objS,null,'\t');
-    fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
+    const writer = fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
+    await writer;
 
     if (mode.match('config')) {
 
