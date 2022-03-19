@@ -21,7 +21,7 @@
 [X] 1.4.2 - send/receive JSON via backend api
 [X] 1.4.3 - Bugfixes (refresh DocumentProvider when changing files)
 [X] 1.4.4 - send/receive 2 JSONs (for comparison, first is applied config, second is without any config, compare them)
-[ ] 1.4.5 - button to change software system
+[X] 1.4.5 - button to change software system
 1.5 - apply response
 [ ] - 1.5.1 - apply Respose data to each method
 [ ] - 1.5.2 - color code depending on method data
