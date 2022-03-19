@@ -2,6 +2,7 @@
 
 import * as vscode from 'vscode';
 import axios, { AxiosResponse } from 'axios';
+import { applyData } from './applyData';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
@@ -46,6 +47,12 @@ export function runAnalysis(functions: {
 
     var responseDefault = getData(jsonDefault,softwareSystem);
     var responseApplied = getData(jsonApplied,softwareSystem);
+
+    // TEST suite, apply hardcode
+    responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
+    responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
+
+    var functionsNEW = applyData(functions,responseDefault,responseApplied);
 
     //return functionsNEW;
 }
