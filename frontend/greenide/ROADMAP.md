@@ -23,7 +23,7 @@
 [X] 1.4.4 - send/receive 2 JSONs (for comparison, first is applied config, second is without any config, compare them)
 [X] 1.4.5 - button to change software system
 1.5 - apply response
-[ ] - 1.5.1 - apply Respose data to each method
+[X] - 1.5.1 - apply Respose data to each method
 [ ] - 1.5.2 - color code depending on method data
 [ ] - 1.5.3 - bugfixes with highlight
     [ ] - 1.5.3.1 - reset highlights when clicking on item again / or maybe 'reset'-button
