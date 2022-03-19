@@ -39,20 +39,24 @@ export function runAnalysis(functions: {
     var jsonDefault = parseToSend(functions,0);
     var jsonApplied = parseToSend(functions,1);
 
-    // TEST suite
-    console.log('DATA DEFAULT');
-    console.log(jsonDefault);
-    console.log('DATA APPLIED');
-    console.log(jsonApplied);
-
     var responseDefault = getData(jsonDefault,softwareSystem);
     var responseApplied = getData(jsonApplied,softwareSystem);
 
     // TEST suite, apply hardcode
-    responseDefault = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json');
-    responseApplied = fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json');
+    responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
+    responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
 
+    // TEST suite
+    console.log('DATA DEFAULT');
+    console.log(responseDefault);
+    console.log('DATA APPLIED');
+    console.log(responseApplied);
+    
     var functionsNEW = applyData(functions,responseDefault,responseApplied);
+
+    // TEST suite
+    console.log('APPLIED DATA');
+    console.log(functionsNEW);
 
     //return functionsNEW;
 }

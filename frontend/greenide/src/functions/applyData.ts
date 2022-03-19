@@ -11,10 +11,21 @@ export function applyData(functions: {
     kind: vscode.SymbolKind; 
     containerName: string; 
     location: vscode.Location;
-}[], dataDefault: string, dataApplied: string) {
+}[], dataDefault: any, dataApplied: any) {
 
-    for (let i = 0; i < dataDefault.length; i++) {
+    // TEST suite
+    console.log('TEST PROVIDING DATA');
 
+    // apply default data from backend
+    for (let i = 0; i < dataDefault.results.length; i++) {
+        functions[i].runtime[0] = dataDefault.results[i].time;
+        functions[i].energy[0] = dataDefault.results[i].energy;
+    }
+
+    // apply from config applied data from backend
+    for (let i = 0; i < dataApplied.results.length; i++) {
+        functions[i].runtime[1] = dataApplied.results[i].time;
+        functions[i].energy[1] = dataApplied.results[i].energy;
     }
 
     return functions;
