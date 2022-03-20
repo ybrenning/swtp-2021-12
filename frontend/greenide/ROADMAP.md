@@ -42,5 +42,6 @@
     [X] use getFunctions() in other files so no need to provide functions
     [ ] make sidePanelHome.ts with use of getFunctions()
     [ ] make JavaDocumentSymbolProvider into new file
-    [ ] - 1.7.3 - rename all kanzi occurences to genereic method names
-    [ ] - 1.7.4 - Remove test cases / comments
+    [ ] Update Website
+    [ ] rename all kanzi occurences to genereic method names
+    [ ] Remove test cases / comments
