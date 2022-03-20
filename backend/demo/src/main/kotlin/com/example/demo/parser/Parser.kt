@@ -24,23 +24,32 @@ object Parser {
             if (i == 0) {
                 configurationNames = csvLineElements
             } else {
+                // removes " from the function name string
+                var functionName = csvLineElements[0]
+
                 // create the map of the configuration names and values for the Line (entry)
                 val configMap = HashMap<String, Boolean>()
                 for (loopVar in 1..configurationNames.size - 3)  {
-                    configMap[configurationNames[loopVar]] = csvLineElements[loopVar].toBoolean()
+                    // if length is 1 then it's a config
+                    if(csvLineElements[loopVar].length == 1) {
+                        configMap[configurationNames[loopVar]] = csvLineElements[loopVar].toBoolean()
+                    // else it's a parameter in the function name
+                    } else {
+                        functionName += csvLineElements[loopVar]
+                    }
                 }
 
                 repository.save(
                     DBEntity(
                         softwareSystem,
-                        csvLineElements[0],
+                        functionName.substring(1, functionName.length - 1),
                         configMap,
                         csvLineElements[csvLineElements.size-2].toDouble(),
                         csvLineElements[csvLineElements.size-1].toDouble()
                     )
                 )
             }
-
+            // required to check if it is the first line of the file or not
             i = 1
         }
     }

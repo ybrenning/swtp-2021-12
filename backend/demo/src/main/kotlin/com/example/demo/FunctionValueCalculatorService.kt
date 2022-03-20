@@ -24,11 +24,11 @@ class FunctionValueCalculatorService(
             var functionResultEnergy = 0.0
             var functionResultTime = 0.0
 
-            // repeat for each configuration returned from the database
+            // repeat for each configuration in the database
             for (functionConfigRaw in functionConfigsRaw) {
                 // repeat for every configuration that is requested
                 for (configToFind in configsToFind) {
-                    // is this config #requested AND #the one in this database entry
+                    // is this config {requested} AND {the one in this entry}
                     if (functionConfigRaw.configs[configToFind] == true) {
                         functionResultEnergy += functionConfigRaw.energy
                         functionResultTime += functionConfigRaw.time
@@ -37,7 +37,7 @@ class FunctionValueCalculatorService(
                 }
             }
 
-            // add the function with its calculated values to the return list
+            // add the function to the return list
             configuredFunctions.add(
                 ConfiguredFunction(
                     function,
@@ -46,15 +46,13 @@ class FunctionValueCalculatorService(
                 )
             )
         }
-
         return configuredFunctions
     }
 
-    // functions related to getting all available functions in the programs
     fun getAllFunctions(softwareSystem: String): ArrayList<String>? {
         val functionsNoDupes: ArrayList<String> = ArrayList()
         val functions: List<DBEntity> = repository.findBySoftwareSystem(softwareSystem)
-
+        // filter duplicate function names
         for (obj in functions) {
             if (!functionsNoDupes.contains(obj.functionName)) {
                 functionsNoDupes.add(obj.functionName)
@@ -64,8 +62,11 @@ class FunctionValueCalculatorService(
         return functionsNoDupes
     }
 
-    // function to connect to parser object
     fun parseFileToDB(softwareSystem: String) {
         Parser.parseFile(softwareSystem, repository)
+    }
+
+    fun clearDB() {
+        repository.deleteAll()
     }
 }

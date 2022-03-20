@@ -20,18 +20,24 @@ class ApplicationController(
 
     @GetMapping("/listOfFunctions/{softwareSystem}")
     fun functionListProvider(@PathVariable softwareSystem: String): ArrayList<String>? {
-        // return a list of all functions of the given program
         return functionService.getAllFunctions(softwareSystem)
     }
 
-    @PostMapping("/parseFile/{softwareSystem}")
-    fun parseFileToDB(@PathVariable softwareSystem:String) {
+    @GetMapping("/parseFile/{softwareSystem}")
+    fun parseFileToDB(@PathVariable softwareSystem:String): String {
         functionService.parseFileToDB(softwareSystem)
+        return "file parsed"
     }
 
-    @GetMapping("/test/")
+    @GetMapping("/test")
     fun connectTest(): String {
         println("test ping has been received")
         return "test received"
+    }
+
+    @GetMapping("/clearDB/confirm")
+    fun clearDB(): String {
+        functionService.clearDB()
+        return "database cleared"
     }
 }

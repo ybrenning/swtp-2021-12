@@ -8,4 +8,5 @@ class GreenIdeBackendApplication
 
 fun main(args: Array<String>) {
     runApplication<GreenIdeBackendApplication>(*args)
+
 }
