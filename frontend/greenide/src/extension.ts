@@ -26,13 +26,6 @@ var functions: {
     location: vscode.Location;
 }[] = [];
 
-// TODO:
-// [ ] - button to change software system
-// [ ] - send two datas to backend
-// [ ] - refresh method list when changing files or applying config (why doesn't 'greenIDE.run' work???)
-// [ ] - set focus to line in code, not just input
-// [ ] - shadow-implement backend data
-
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {

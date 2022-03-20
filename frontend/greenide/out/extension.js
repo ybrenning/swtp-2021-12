@@ -17,12 +17,6 @@ const getFolder_1 = require("./functions/getFolder");
 const folder = (0, getFolder_1.getFolder)();
 const fs = require('fs');
 var functions = [];
-// TODO:
-// [ ] - button to change software system
-// [ ] - send two datas to backend
-// [ ] - refresh method list when changing files or applying config (why doesn't 'greenIDE.run' work???)
-// [ ] - set focus to line in code, not just input
-// [ ] - shadow-implement backend data
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 async function activate(context) {
