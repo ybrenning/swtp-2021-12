@@ -8,22 +8,21 @@ const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)
 const fs = require('fs');
 function startup() {
     var softwareSystem = (0, getSystem_1.getSystem)();
-    /*var xmlRequest = require('xhr2');
+    var xmlRequest = require('xhr2');
     const http = new xmlRequest();
     const urlGet = 'https://swtp-2021-12-production.herokuapp.com/listOfFunctions/' + softwareSystem;
-
     http.open("GET", urlGet);
     http.send();
     http.onreadystatechange = () => {
-        formatInput(http.responseText,'methods');
-    };*/
+        formatInput(http.responseText, 'methods');
+    };
     // read provided csv
     var result = fs.readFileSync(folder + '/greenide/csv/data.csv', 'utf-8');
     result = result.split('\n');
-    // create items to parse into json
-    var locatorItems = [];
+    /*// create items to parse into json
+    var locatorItems: string[] = [];
     locatorItems = getLocatorItems(result);
-    formatInput(locatorItems, 'methods');
+    formatInput(locatorItems,'methods');*/
     // create items to parse into json
     var configItems = [];
     configItems = getConfigItems(result[0]);
@@ -68,29 +67,28 @@ async function formatInput(items, mode) {
         fs.writeFileSync(folder + '/greenide/configItems.json', jsonC, 'utf8');
     }
     else {
-        var objM = {
-            methods: []
+        // without backend
+        /*var objM = {
+            methods: [] as any
         };
         for (let i = 0; i < items.length; i++) {
             objM.methods.push(items[i]);
         }
-        var jsonM = JSON.stringify(objM, null, '\t');
-        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
-        /*var objM = {
-            methods: [] as any
+
+        var jsonM = JSON.stringify(objM,null,'\t');
+        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');*/
+        // with backend
+        var objM = {
+            methods: []
         };
-
         if (items.length > 0) {
-
             items = JSON.parse(items);
-
             for (let i = 0; i < items.length; i++) {
-                objM.methods.push(items[i]);
+                objM.methods.push(items[i] + '()');
             }
-
-            var jsonM = JSON.stringify(objM,null,'\t');
+            var jsonM = JSON.stringify(objM, null, '\t');
             fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
-        }*/
+        }
     }
 }
 // useless, just for reading file to work

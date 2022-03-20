@@ -10,7 +10,7 @@ export function startup() {
 
     var softwareSystem = getSystem();
 
-    /*var xmlRequest = require('xhr2');
+    var xmlRequest = require('xhr2');
     const http = new xmlRequest();
     const urlGet = 'https://swtp-2021-12-production.herokuapp.com/listOfFunctions/' + softwareSystem;
 
@@ -18,16 +18,16 @@ export function startup() {
     http.send();
     http.onreadystatechange = () => {
         formatInput(http.responseText,'methods');
-    };*/
+    };
 
     // read provided csv
     var result = fs.readFileSync(folder + '/greenide/csv/data.csv', 'utf-8');
     result = result.split('\n');
 
-    // create items to parse into json
+    /*// create items to parse into json
     var locatorItems: string[] = [];
     locatorItems = getLocatorItems(result);
-    formatInput(locatorItems,'methods');
+    formatInput(locatorItems,'methods');*/
 
     // create items to parse into json
     var configItems: string[] = [];
@@ -85,7 +85,8 @@ async function formatInput(items: any, mode: string) {
         fs.writeFileSync(folder + '/greenide/configItems.json', jsonC, 'utf8');
     } else {
 
-        var objM = {
+        // without backend
+        /*var objM = {
             methods: [] as any
         };
         for (let i = 0; i < items.length; i++) {
@@ -93,10 +94,10 @@ async function formatInput(items: any, mode: string) {
         }
 
         var jsonM = JSON.stringify(objM,null,'\t');
-        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
+        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');*/
 
-
-        /*var objM = {
+        // with backend
+        var objM = {
             methods: [] as any
         };
 
@@ -105,12 +106,12 @@ async function formatInput(items: any, mode: string) {
             items = JSON.parse(items);
 
             for (let i = 0; i < items.length; i++) {
-                objM.methods.push(items[i]);
+                objM.methods.push(items[i] + '()');
             }
 
             var jsonM = JSON.stringify(objM,null,'\t');
             fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
-        }*/
+        }
     }
 }
 
