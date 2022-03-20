@@ -34,6 +34,7 @@
           [ ] execute 'press refresh button' command aka greenIDE.run correctly
               when changing files & clicking on webview buttons so methods and config get
               refreshed without pressing the button in home-segment
+          [ ] fix folder location string for windows
           [ ] focus on line when clicking item in treeview
           [ ] make range for hoverprovoder correctly
           [ ] parse config elements from configItems.json into config webview

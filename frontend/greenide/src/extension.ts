@@ -13,9 +13,9 @@ import { eventListener } from './functions/eventListener';
 import { readFileSync } from 'fs';
 import { initiate } from './functions/initiate';
 import { getSystem } from './functions/getSystem';
+import { getFolder } from './functions/getFolder';
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
-console.log(folder);
+const folder = getFolder();
 const fs = require('fs');
 
 var functions: { 
@@ -38,6 +38,8 @@ var functions: {
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
+
+    console.log(folder);
 
     // create files and directories
     initiate();

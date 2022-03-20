@@ -13,8 +13,8 @@ const sidePanelSettings_1 = require("./functions/sidePanelSettings");
 const sidePanelHelp_1 = require("./functions/sidePanelHelp");
 const eventListener_1 = require("./functions/eventListener");
 const initiate_1 = require("./functions/initiate");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
-console.log(folder);
+const getFolder_1 = require("./functions/getFolder");
+const folder = (0, getFolder_1.getFolder)();
 const fs = require('fs');
 var functions = [];
 // TODO:
@@ -26,6 +26,7 @@ var functions = [];
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 async function activate(context) {
+    console.log(folder);
     // create files and directories
     (0, initiate_1.initiate)();
     // auto start extension
