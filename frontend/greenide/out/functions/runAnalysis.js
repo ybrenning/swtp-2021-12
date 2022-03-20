@@ -29,38 +29,39 @@ function runAnalysis(functions) {
     // check if backend reacted
     console.log(responseDefault);
     console.log(responseApplied);
-    // TEST suite, apply hardcode
-    responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
-    responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
-    // TEST suite
-    console.log('DATA DEFAULT');
-    console.log(responseDefault);
-    console.log('DATA APPLIED');
-    console.log(responseApplied);
-    //var functionsNEW = applyData(functions,responseDefault,responseApplied);
-    (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
-    //return functionsNEW;
+    if (responseDefault !== undefined && responseApplied !== undefined) {
+        (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
+    }
+    else {
+        // TEST suite, apply hardcode
+        responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
+        responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
+        //var functionsNEW = applyData(functions,responseDefault,responseApplied);
+        (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
+    }
 }
 exports.runAnalysis = runAnalysis;
 function getData(json, softwareSystem) {
     // post values and save response 
     json = JSON.stringify(JSON.parse(json));
-    // TEST suite
-    console.log('TEST SENDING');
-    console.log(json);
-    var xmlRequest = require('xhr2');
-    const http = new xmlRequest();
-    const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
-    http.open("POST", urlPost, true);
-    http.setRequestHeader('Content-Type', 'application/json');
-    http.setRequestHeader('Accept', 'application/json');
-    http.send(json);
-    http.onreadystatechange = () => {
-        if (http.responseText.length > 0) {
-            console.log(http.responseText);
-            return http.responseText;
-        }
-    };
+    if (json.length > 0) {
+        // TEST suite
+        console.log('TEST SENDING');
+        console.log(json);
+        var xmlRequest = require('xhr2');
+        const http = new xmlRequest();
+        const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+        http.open("POST", urlPost, true);
+        http.setRequestHeader('Content-Type', 'application/json');
+        http.setRequestHeader('Accept', 'application/json');
+        http.send(json);
+        http.onreadystatechange = () => {
+            if (http.responseText.length > 0) {
+                console.log(http.responseText);
+                return http.responseText;
+            }
+        };
+    }
 }
 function parseToSend(functions, mode) {
     // switch case for both post datas

@@ -118,6 +118,10 @@ export class Overview {
         // TEST suite
         console.log('MESSAGE FROM WEBVIEW:');
         console.log(message);
+
+        // Open webview 'ConfigMenu'
+        Overview.currentPanel?.dispose();
+        Overview.createOrShow(extensionUri);
       },
       undefined
     );
@@ -130,14 +134,27 @@ export class Overview {
     const nonce = getNonce();
 
     var functions: { 
-      name: string; 
-      method: string; 
-      runtime: number[];
-      energy: number[];
-      kind: vscode.SymbolKind; 
-      containerName: string; 
-      location: vscode.Location;
-  }[] = getFunctions();
+        name: string; 
+        method: string; 
+        runtime: number[];
+        energy: number[];
+        kind: vscode.SymbolKind; 
+        containerName: string; 
+        location: vscode.Location;
+    }[] = getFunctions();
+
+    var funcArr: string[][] = [];
+
+    // pasrse into array for HTML
+    for (let i = 0; i < functions.length; i++) {
+        // the name
+        funcArr[i][0] = functions[i].name;
+        // the default data
+        funcArr[i][1] = functions[i].runtime[0] + 'ms, ' + functions[i].energy[0] + 'mWs';
+        // the applied data
+        funcArr[i][2] = functions[i].runtime[1] + 'ms, ' + functions[i].energy[1] + 'mWs';
+        funcArr[i][3] = (functions[i].runtime[1] - functions[i].runtime[0]) + 'ms, ' + (functions[i].energy[1] - functions[i].energy[0]) + 'mWs';
+    }
 
     // Get path of css file to be used within the Webview's HTML
     const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
@@ -154,18 +171,73 @@ export class Overview {
     </head>
     <body>
 
-    <figure>
-    <span onclick="refresh()"><button> <strong>Refresh GreenIDE</strong> </button></span>
-    </figure>
+    <h2>GreenIDE Data Overview</h2>
+
+    <div id="my-table"></div>
+
+    <h3>TEST TABLE</h3>
+
+    <table>
+      <tr>
+        <th>Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Data With No Config&nbsp;&nbsp;</th>
+        <th>Data With Config&nbsp;&nbsp;</th>
+        <th>Difference</th>
+      </tr>
+      <tr>
+        <td>TEST</td>
+        <td>123</td>
+        <td>32</td>
+        <td>42</td>
+      </tr>
+      <tr>
+        <td>kanzi.function.ROLZCodec.<init></td>
+        <td>321</td>
+        <td>32</td>
+        <td>45</td>
+      </tr>
+    </table>
 
     </body>
 
     <script>
 
-    function loadConfig() {
-      const vscode = acquireVsCodeApi();
-      vscode.postMessage({text: 'Hello World'})
+    // dynamic function to cteate table out of 2d arrays
+    function createTable(element, tableData) {
+      
+      // creating table elements
+      var table = document.createElement('table');
+      // creating table body <tbody> element
+      var tableBody = document.createElement('tbody');
+
+      // creating rows based on first diamention datas
+      tableData.forEach(function(rowData) {
+        var row = document.createElement('tr');
+
+        // creating cells in each row based on second diamention datas
+        rowData.forEach(function(cellData) {
+          var cell = document.createElement('td');
+          // adding array item to it's cell
+          cell.appendChild(document.createTextNode(cellData));
+          // adding the cell to it's row
+          row.appendChild(cell);
+        });
+
+        // adding each row to table body
+        tableBody.appendChild(row);
+      });
+
+      // adding table body to table
+      table.appendChild(tableBody);
+      // adding table to document body
+      element.appendChild(table);
     }
+
+    // example
+    createTable(
+      document.getElementById('my-table'),
+      ${funcArr}
+    );
 
     </script>
     </html>`;

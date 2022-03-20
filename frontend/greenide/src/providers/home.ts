@@ -31,7 +31,7 @@ export class HomeProvider implements vscode.TreeDataProvider<HomeItem> {
             this.data = [
                 new HomeItem('Found Methods:', sendData),
                 new HomeItem('Highlight All Methods'),
-                new HomeItem('Detailed Statistics')
+                //new HomeItem('Detailed Statistics')
             ];
 
         } else {
@@ -85,12 +85,12 @@ class HomeItem extends vscode.TreeItem {
                 command: "greenIDE-home.click",
                 arguments: [functionI]
             };
-        } else if (label.match('Detailed Statistics')) {
+        } /*else if (label.match('Detailed Statistics')) {
             this.command = {
                 title: "Open Details",
                 command: "greenIDE-home.overview",
             };
-        } else if (label.match('Highlight All Methods')) {
+        }*/ else if (label.match('Highlight All Methods')) {
             this.command = {
                 title: "Highlight All Methods",
                 command: "greenIDE-home.clickAll",
