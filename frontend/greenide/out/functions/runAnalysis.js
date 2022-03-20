@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runAnalysis = void 0;
 const vscode = require("vscode");
-const axios_1 = require("axios");
 const applyData_1 = require("./applyData");
 const getSystem_1 = require("./getSystem");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
@@ -41,18 +40,33 @@ function runAnalysis(functions) {
 exports.runAnalysis = runAnalysis;
 function getData(json, softwareSystem) {
     // post values and save response 
-    var response1Raw;
-    const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+    /*var response1Raw;
+    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+
     // TEST suite
     console.log('URL ADDRESS');
     console.log(urlPost);
-    (0, axios_1.default)({
+
+    axios({
         method: 'post',
         url: urlPost,
         data: json
     })
-        .then(data => (response1Raw = data))
-        .catch(err => console.log(err));
+    .then(data=>(response1Raw=data))
+    .catch(err=>console.log(err));*/
+    json = JSON.stringify(json);
+    // TEST suite
+    console.log('TEST SENDING');
+    console.log(JSON.parse(json));
+    var xmlRequest = require('xhr2');
+    const http = new xmlRequest();
+    const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+    http.open("POST", urlPost);
+    http.send(json);
+    http.onreadystatechange = () => {
+        console.log(http.responseText);
+    };
+    var response1Raw = '';
     return JSON.stringify(response1Raw);
 }
 function parseToSend(functions, mode) {

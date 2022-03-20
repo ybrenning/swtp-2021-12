@@ -68,7 +68,7 @@ export function runAnalysis(functions: {
 function getData(json: string, softwareSystem: string) {
 
     // post values and save response 
-    var response1Raw;
+    /*var response1Raw;
     const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
 
     // TEST suite
@@ -81,7 +81,25 @@ function getData(json: string, softwareSystem: string) {
         data: json
     })
     .then(data=>(response1Raw=data))
-    .catch(err=>console.log(err));
+    .catch(err=>console.log(err));*/
+
+    json = JSON.stringify(json);
+
+    // TEST suite
+    console.log('TEST SENDING');
+    console.log(JSON.parse(json));
+
+    var xmlRequest = require('xhr2');
+    const http = new xmlRequest();
+    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+
+    http.open("POST", urlPost);
+    http.send(json);
+    http.onreadystatechange = () => {
+        console.log(http.responseText);
+    };
+
+    var response1Raw = '';
 
     return JSON.stringify(response1Raw);
 }

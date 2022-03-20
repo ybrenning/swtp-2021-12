@@ -27,12 +27,12 @@
 [X] - 1.5.2 - color code depending on method data
 1.6 - Overview webview
 [X] - 1.6.1 - Hover text with data
-[ ] - 1.6.2 - create webview for results from sidepanel
+[ ] - 1.6.2 - connect properly to backend
+[ ] - 1.6.3 - create webview for results from sidepanel
           [ ] column with functions
           [ ] column without config
           [ ] column with config
           [ ] difference in data
-[ ] - 1.6.3 - connect properly to backend
 1.7 - Cleanup and minor issues / tuning
 [ ] - 1.7.1 - Bugfixes:
           [ ] execute 'press refresh button' command aka greenIDE.run correctly
