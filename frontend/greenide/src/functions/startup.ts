@@ -1,11 +1,18 @@
 // function to parse provided csv data into seperate json files to read them later
 
 import * as vscode from 'vscode';
+import { getSystem } from './initiate';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 
 export function startup() {
+
+    // read defined software system
+    //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
+    //console.log(softwareSystem);
+
+    var softwareSystem = getSystem();
 
     // TODO: change to getrequest from backend when backend works
 
@@ -61,15 +68,6 @@ function getLocatorItems(document: string[]) {
 }
 
 async function formatInput(items: string[], mode: string) {
-
-    // declare software system, default for customer is kanzi, can be changed
-    var objS = {
-        system: '' as any
-    };
-    objS.system = 'kanzi';
-    var jsonS = JSON.stringify(objS,null,'\t');
-    const writer = fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
-    await writer;
 
     if (mode.match('config')) {
 

@@ -3,9 +3,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startup = void 0;
 const vscode = require("vscode");
+const initiate_1 = require("./initiate");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 function startup() {
+    // read defined software system
+    //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
+    //console.log(softwareSystem);
+    var softwareSystem = (0, initiate_1.getSystem)();
     // TODO: change to getrequest from backend when backend works
     // create items to parse into json
     var configItems = [];
@@ -47,14 +52,6 @@ function getLocatorItems(document) {
     return items.filter((item, index) => items.indexOf(item) === index);
 }
 async function formatInput(items, mode) {
-    // declare software system, default for customer is kanzi, can be changed
-    var objS = {
-        system: ''
-    };
-    objS.system = 'kanzi';
-    var jsonS = JSON.stringify(objS, null, '\t');
-    const writer = fs.writeFile(folder + '/greenide/system.json', jsonS, 'utf8', callback);
-    await writer;
     if (mode.match('config')) {
         var objC = {
             items: []

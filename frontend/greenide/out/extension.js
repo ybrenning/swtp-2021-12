@@ -12,8 +12,10 @@ const sidePanelConfig_1 = require("./functions/sidePanelConfig");
 const sidePanelSettings_1 = require("./functions/sidePanelSettings");
 const sidePanelHelp_1 = require("./functions/sidePanelHelp");
 const eventListener_1 = require("./functions/eventListener");
+const initiate_1 = require("./functions/initiate");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
+const fs = require('fs');
 var functions = [];
 // TODO:
 // [ ] - button to change software system
@@ -24,10 +26,7 @@ var functions = [];
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 function activate(context) {
-    // create needed directories
-    const fs = require('fs');
-    fs.mkdirSync(folder + '/greenide/', { recursive: true });
-    fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
+    (0, initiate_1.initiate)();
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
     // This line of code will only be executed once when your extension is activated

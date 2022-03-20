@@ -5,6 +5,7 @@ exports.runAnalysis = void 0;
 const vscode = require("vscode");
 const axios_1 = require("axios");
 const applyData_1 = require("./applyData");
+const initiate_1 = require("./initiate");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 // Performs analysis
@@ -14,9 +15,11 @@ const fs = require('fs');
 //  3. retreive analysis from backend,
 //  4. display results(Webview and syntax highlighting)
 function runAnalysis(functions) {
-    var functionsNEW = [];
     // read defined software system
-    var softwareSystem = fs.readFileSync(folder + '/greenide/system.json', 'utf8');
+    //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
+    //console.log(softwareSystem);
+    var softwareSystem = (0, initiate_1.getSystem)();
+    var functionsNEW = [];
     var jsonDefault = parseToSend(functions, 0);
     var jsonApplied = parseToSend(functions, 1);
     var responseDefault = getData(jsonDefault, softwareSystem);
@@ -30,16 +33,16 @@ function runAnalysis(functions) {
     console.log('DATA APPLIED');
     console.log(responseApplied);
     var functionsNEW = (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
-    // TEST suite
-    console.log('APPLIED DATA');
-    console.log(functionsNEW);
     //return functionsNEW;
 }
 exports.runAnalysis = runAnalysis;
 function getData(json, softwareSystem) {
     // post values and save response 
     var response1Raw;
-    const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem + '/';
+    const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+    // TEST suite
+    console.log('URL ADDRESS');
+    console.log(urlPost);
     (0, axios_1.default)({
         method: 'post',
         url: urlPost,

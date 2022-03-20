@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import axios, { AxiosResponse } from 'axios';
 import { applyData } from './applyData';
+import { getSystem } from './initiate';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
@@ -23,18 +24,21 @@ export function runAnalysis(functions: {
     location: vscode.Location;
 }[]) {
 
+    // read defined software system
+    //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
+    //console.log(softwareSystem);
+
+    var softwareSystem = getSystem();
+
     var functionsNEW: { 
         name: string; 
         method: string; 
         runtime: number[],
         energy: number[],
-        kind: vscode.SymbolKind; 
-        containerName: string; 
+        kind: vscode.SymbolKind;
+        containerName: string;
         location: vscode.Location;
     }[] = [];
-
-    // read defined software system
-    var softwareSystem = fs.readFileSync(folder + '/greenide/system.json', 'utf8');
 
     var jsonDefault = parseToSend(functions,0);
     var jsonApplied = parseToSend(functions,1);
@@ -54,10 +58,6 @@ export function runAnalysis(functions: {
     
     var functionsNEW = applyData(functions,responseDefault,responseApplied);
 
-    // TEST suite
-    console.log('APPLIED DATA');
-    console.log(functionsNEW);
-
     //return functionsNEW;
 }
 
@@ -65,7 +65,12 @@ function getData(json: string, softwareSystem: string) {
 
     // post values and save response 
     var response1Raw;
-    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem + '/';
+    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+
+    // TEST suite
+    console.log('URL ADDRESS');
+    console.log(urlPost);
+
     axios({
         method: 'post',
         url: urlPost,

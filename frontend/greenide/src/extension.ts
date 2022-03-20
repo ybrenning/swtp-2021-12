@@ -11,9 +11,11 @@ import { sidePanelSettings } from './functions/sidePanelSettings';
 import { sidePanelHelp } from './functions/sidePanelHelp';
 import { eventListener } from './functions/eventListener';
 import { readFileSync } from 'fs';
+import { initiate } from './functions/initiate';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
+const fs = require('fs');
 
 var functions: { 
     name: string; 
@@ -36,10 +38,7 @@ var functions: {
 // Your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
 
-    // create needed directories
-    const fs = require('fs');
-    fs.mkdirSync(folder + '/greenide/', { recursive: true });
-    fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
+    initiate();
 
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
@@ -50,7 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-        
+
         // check for new csv and parse methods / config elements
         startup();
 
