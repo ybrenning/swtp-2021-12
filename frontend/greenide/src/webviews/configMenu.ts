@@ -150,7 +150,6 @@ export class ConfigMenu {
     <figure>
     <h3>Change Config:</h3>
     <form>
-    <input class="configCheckbox" type="checkbox" name="root" /> root<br>
     <input class="configCheckbox" type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
     <br><input class="configCheckbox" type="checkbox" name="JOBS" /> JOBS</br>
     <input class="configCheckbox" type="checkbox" name="LEVEL" /> LEVEL

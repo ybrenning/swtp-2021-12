@@ -12,10 +12,10 @@ export class MethodHighlight {
     line: number;
     character: number;
     characterEND: number;
-    runtime: number;
-    energy: number;
+    runtime: number[];
+    energy: number[];
     
-    constructor (line: number, character: number, characterEND: number, runtime: number, energy: number) {
+    constructor (line: number, character: number, characterEND: number, runtime: number[], energy: number[]) {
         this.line = line - 1;
         this.character = character;
         this.characterEND = characterEND;
@@ -29,11 +29,11 @@ export class MethodHighlight {
 
         // set color
         var color;
-        if (this.runtime <= -16) {
+        if (this.runtime[1] < 20 && this.runtime[1] !== 0) {
             color = green;
-        } else if (this.runtime > -16 && this.runtime < 8) {
+        } else if ((this.runtime[1] >= 20 && this.runtime[1] < 50)  || this.runtime[1] === 0) {
             color = yellow;
-        } else if (this.runtime >= 8) {
+        } else if (this.runtime[1] >= 50) {
             color = red;
         }
 
