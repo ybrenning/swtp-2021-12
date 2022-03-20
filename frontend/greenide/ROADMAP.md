@@ -31,7 +31,7 @@
 [X] - 1.6.3 - Display applied data in Hover
 1.7 - Cleanup and minor issues / tuning
 [ ] - 1.7.1 - Bugfixes / Prepare Final:
-    [ ] execute 'press refresh button' command aka greenIDE.run correctly
+    [X] execute 'press refresh button' command aka greenIDE.run correctly
         when changing files & clicking on webview buttons so methods and config get
         refreshed without pressing the button in home-segment
     [X] fix folder location string for windows

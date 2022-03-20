@@ -68,6 +68,8 @@ async function activate(context) {
             // Execute vscode commandto jump to location at (line,character)
             const functionPosition = new vscode.Position(line, character);
             vscode.window.activeTextEditor.selections = [new vscode.Selection(functionPosition, functionPosition)];
+            var range = new vscode.Range(functionPosition, functionPosition);
+            vscode.window.activeTextEditor?.revealRange(range);
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
             // TEST suite see if arguments pass
             console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
