@@ -30,6 +30,10 @@ export function runAnalysis(functions: {
 
     var softwareSystem = getSystem();
 
+    // TEST suite
+    console.log('SWS IN RUNANA');
+    console.log(softwareSystem);
+
     var functionsNEW: { 
         name: string; 
         method: string; 

@@ -14,6 +14,10 @@ export function startup() {
 
     var softwareSystem = getSystem();
 
+    // TEST suite
+    console.log('SWS IN STARTUP');
+    console.log(softwareSystem);
+
     // TODO: change to getrequest from backend when backend works
 
     // create items to parse into json

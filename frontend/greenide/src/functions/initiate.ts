@@ -22,9 +22,6 @@ export function getSystem() {
 
     var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
     softwareSystem = softwareSystem.system;
-
-    console.log(softwareSystem);
-
     return softwareSystem;
 }
 

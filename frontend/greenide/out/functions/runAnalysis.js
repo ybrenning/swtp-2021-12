@@ -19,6 +19,9 @@ function runAnalysis(functions) {
     //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
     //console.log(softwareSystem);
     var softwareSystem = (0, initiate_1.getSystem)();
+    // TEST suite
+    console.log('SWS IN RUNANA');
+    console.log(softwareSystem);
     var functionsNEW = [];
     var jsonDefault = parseToSend(functions, 0);
     var jsonApplied = parseToSend(functions, 1);
