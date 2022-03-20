@@ -59,9 +59,7 @@ export async function activate(context: vscode.ExtensionContext) {
         //functions = runAnalysis(functions);
         runAnalysis(functions);
 
-        // TEST suite, replace with avoe when BACKEND READY
-        //await runAnalysis(functions);
-        //Promise.all([runAnalysis(functions)]);
+        console.log(functions);
 
         // side panel segments loading
         const homePromise = sidePanelHome();
@@ -118,8 +116,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 functionI.location.range.start.line,
                 functionI.location.range.start.character,
                 functionI.location.range.end.character,
-                functionI.runtime[1],
-                functionI.energy[1]
+                functionI.runtime,
+                functionI.energy
             );
 
             // Execute highlight with provided data
@@ -142,8 +140,8 @@ export async function activate(context: vscode.ExtensionContext) {
                     functions[i].location.range.start.line, 
                     functions[i].location.range.start.character, 
                     functions[i].location.range.end.character,
-                    functions[i].runtime[1],
-                    functions[i].energy[1]
+                    functions[i].runtime,
+                    functions[i].energy
                 );
 
                 testHighlight.decorate;
