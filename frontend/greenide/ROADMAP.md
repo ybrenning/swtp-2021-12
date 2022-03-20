@@ -28,7 +28,7 @@
 1.6 - Overview webview
 [X] - 1.6.1 - Hover text with data
 [X] - 1.6.2 - connect properly to backend
-[ ] - 1.6.3 - Display applied data in Hover
+[X] - 1.6.3 - Display applied data in Hover
 1.7 - Cleanup and minor issues / tuning
 [ ] - 1.7.1 - Bugfixes:
           [ ] execute 'press refresh button' command aka greenIDE.run correctly
