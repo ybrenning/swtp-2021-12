@@ -29,9 +29,9 @@ export class MethodHighlight {
 
         // set color
         var color;
-        if (this.runtime[1] < 20) {
+        if (this.runtime[1] < 20 && this.runtime[1] !== 0) {
             color = green;
-        } else if (this.runtime[1] >= 20 && this.runtime[1] < 50) {
+        } else if ((this.runtime[1] >= 20 && this.runtime[1] < 50)  || this.runtime[1] === 0) {
             color = yellow;
         } else if (this.runtime[1] >= 50) {
             color = red;
