@@ -28,5 +28,5 @@ export function applyData(functions: {
         functions[i].energy[1] = dataApplied.results[i].energy;
     }
 
-    return functions;
+    //return functions;
 }

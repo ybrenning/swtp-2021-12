@@ -56,11 +56,12 @@ export async function activate(context: vscode.ExtensionContext) {
         startup();
 
         // get data from backend (IMPLEMENT WHEN READY)
-        // functions = runAnalysis(functions);
+        //functions = runAnalysis(functions);
+        runAnalysis(functions);
 
         // TEST suite, replace with avoe when BACKEND READY
-        await runAnalysis(functions);
-        Promise.all([runAnalysis(functions)]);
+        //await runAnalysis(functions);
+        //Promise.all([runAnalysis(functions)]);
 
         // side panel segments loading
         const homePromise = sidePanelHome();

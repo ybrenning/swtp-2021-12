@@ -26,6 +26,9 @@ function runAnalysis(functions) {
     var jsonApplied = parseToSend(functions, 1);
     var responseDefault = getData(jsonDefault, softwareSystem);
     var responseApplied = getData(jsonApplied, softwareSystem);
+    // check if backend reacted
+    console.log(responseDefault);
+    console.log(responseApplied);
     // TEST suite, apply hardcode
     responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
     responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
@@ -34,40 +37,30 @@ function runAnalysis(functions) {
     console.log(responseDefault);
     console.log('DATA APPLIED');
     console.log(responseApplied);
-    var functionsNEW = (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
+    //var functionsNEW = applyData(functions,responseDefault,responseApplied);
+    (0, applyData_1.applyData)(functions, responseDefault, responseApplied);
     //return functionsNEW;
 }
 exports.runAnalysis = runAnalysis;
 function getData(json, softwareSystem) {
     // post values and save response 
-    /*var response1Raw;
-    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
-
-    // TEST suite
-    console.log('URL ADDRESS');
-    console.log(urlPost);
-
-    axios({
-        method: 'post',
-        url: urlPost,
-        data: json
-    })
-    .then(data=>(response1Raw=data))
-    .catch(err=>console.log(err));*/
-    json = JSON.stringify(json);
+    json = JSON.stringify(JSON.parse(json));
     // TEST suite
     console.log('TEST SENDING');
-    console.log(JSON.parse(json));
+    console.log(json);
     var xmlRequest = require('xhr2');
     const http = new xmlRequest();
     const urlPost = 'https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
-    http.open("POST", urlPost);
+    http.open("POST", urlPost, true);
+    http.setRequestHeader('Content-Type', 'application/json');
+    http.setRequestHeader('Accept', 'application/json');
     http.send(json);
     http.onreadystatechange = () => {
-        console.log(http.responseText);
+        if (http.responseText.length > 0) {
+            console.log(http.responseText);
+            return http.responseText;
+        }
     };
-    var response1Raw = '';
-    return JSON.stringify(response1Raw);
 }
 function parseToSend(functions, mode) {
     // switch case for both post datas
@@ -104,4 +97,6 @@ function parseToSend(functions, mode) {
     var json = JSON.stringify(obj, null, '\t');
     return json;
 }
+// For file reading, not purpose though
+function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=runAnalysis.js.map

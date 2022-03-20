@@ -38,10 +38,11 @@ async function activate(context) {
         // check for new csv and parse methods / config elements
         (0, startup_1.startup)();
         // get data from backend (IMPLEMENT WHEN READY)
-        // functions = runAnalysis(functions);
+        //functions = runAnalysis(functions);
+        (0, runAnalysis_1.runAnalysis)(functions);
         // TEST suite, replace with avoe when BACKEND READY
-        await (0, runAnalysis_1.runAnalysis)(functions);
-        Promise.all([(0, runAnalysis_1.runAnalysis)(functions)]);
+        //await runAnalysis(functions);
+        //Promise.all([runAnalysis(functions)]);
         // side panel segments loading
         const homePromise = sidePanelHome();
         const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);
