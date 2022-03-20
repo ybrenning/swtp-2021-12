@@ -20,7 +20,6 @@ class ApplicationController(
 
     @GetMapping("/listOfFunctions/{softwareSystem}")
     fun functionListProvider(@PathVariable softwareSystem: String): ArrayList<String>? {
-        // return a list of all functions of the given program
         return functionService.getAllFunctions(softwareSystem)
     }
 
