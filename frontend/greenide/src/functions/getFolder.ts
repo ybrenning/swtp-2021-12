@@ -9,7 +9,5 @@ export function getFolder() {
         folder = folder.substring(1);
     }
 
-    console.log(folder);
-
     return folder;
 }

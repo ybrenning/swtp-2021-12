@@ -1,11 +1,11 @@
 // function for backend communication
 
 import * as vscode from 'vscode';
-import axios, { AxiosResponse } from 'axios';
 import { applyData } from './applyData';
 import { getSystem } from './getSystem';
+import { getFolder } from './getFolder';
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 const fs = require('fs');
 
 // Performs analysis

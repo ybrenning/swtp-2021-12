@@ -4,8 +4,9 @@
 import * as vscode from 'vscode';
 import { ConfigsProvider } from '../providers/configs';
 import { ConfigMenu } from '../webviews/configMenu';
+import { getFolder } from './getFolder';
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 
 export async function sidePanelConfigs(context: vscode.ExtensionContext) {
     // Config data (default config 0)

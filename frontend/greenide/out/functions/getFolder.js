@@ -8,7 +8,6 @@ function getFolder() {
     if (!(os.platform().match('darwin'))) {
         folder = folder.substring(1);
     }
-    console.log(folder);
     return folder;
 }
 exports.getFolder = getFolder;

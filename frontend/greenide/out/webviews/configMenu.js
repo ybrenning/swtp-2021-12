@@ -6,9 +6,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigMenu = void 0;
 const vscode = require("vscode");
+const getFolder_1 = require("../functions/getFolder");
 const getNonce_1 = require("../getNonce");
 const configParser_1 = require("../providers/configParser");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = (0, getFolder_1.getFolder)();
 // The main webview Panel to work with
 class ConfigMenu {
     // Constructor for webview panel

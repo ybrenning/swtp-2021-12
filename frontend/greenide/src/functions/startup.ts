@@ -1,9 +1,9 @@
 // function to parse provided csv data into seperate json files to read them later
 
-import * as vscode from 'vscode';
+import { getFolder } from './getFolder';
 import { getSystem } from './getSystem';
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 const fs = require('fs');
 
 export function startup() {

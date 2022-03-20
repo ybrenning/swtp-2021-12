@@ -2,9 +2,9 @@
 // function to parse provided csv data into seperate json files to read them later
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startup = void 0;
-const vscode = require("vscode");
+const getFolder_1 = require("./getFolder");
 const getSystem_1 = require("./getSystem");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = (0, getFolder_1.getFolder)();
 const fs = require('fs');
 function startup() {
     var softwareSystem = (0, getSystem_1.getSystem)();

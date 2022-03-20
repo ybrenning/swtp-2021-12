@@ -2,10 +2,10 @@
 // function for backend communication
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.runAnalysis = void 0;
-const vscode = require("vscode");
 const applyData_1 = require("./applyData");
 const getSystem_1 = require("./getSystem");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const getFolder_1 = require("./getFolder");
+const folder = (0, getFolder_1.getFolder)();
 const fs = require('fs');
 // Performs analysis
 // Procedure order:

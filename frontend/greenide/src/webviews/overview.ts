@@ -5,10 +5,10 @@
 
 import * as vscode from "vscode";
 import { getFunctions } from "../extension";
+import { getFolder } from "../functions/getFolder";
 import { getNonce } from "../getNonce";
-import { ConfigParser } from "../providers/configParser";
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 
 // The main webview Panel to work with
 export class Overview {

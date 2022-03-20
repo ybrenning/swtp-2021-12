@@ -37,6 +37,7 @@ async function activate(context) {
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
         // check for new csv and parse methods / config elements
+        console.log("RUNNING");
         (0, startup_1.startup)();
         // get data from backend (IMPLEMENT WHEN READY)
         //functions = runAnalysis(functions);

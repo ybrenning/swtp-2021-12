@@ -4,10 +4,11 @@
 // - works with JSON to save configs (0 default/current, 1+ saved configs)
 
 import * as vscode from "vscode";
+import { getFolder } from "../functions/getFolder";
 import { getNonce } from "../getNonce";
 import { ConfigParser } from "../providers/configParser";
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 
 // The main webview Panel to work with
 export class ConfigMenu {

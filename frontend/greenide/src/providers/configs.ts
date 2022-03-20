@@ -1,7 +1,6 @@
 // Provider for second tab in side panel, configs
 // drop down / tree view for all methods to apply, save methods in favorites
 
-import { config } from 'process';
 import * as vscode from 'vscode';
 
 export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {

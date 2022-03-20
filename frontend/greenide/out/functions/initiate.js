@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.initiate = void 0;
-const vscode = require("vscode");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const getFolder_1 = require("./getFolder");
+const folder = (0, getFolder_1.getFolder)();
 const fs = require('fs');
 async function initiate() {
     // create needed directories

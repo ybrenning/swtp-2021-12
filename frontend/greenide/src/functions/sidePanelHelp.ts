@@ -3,7 +3,8 @@
 
 import * as vscode from 'vscode';
 import { HelpProvider } from '../providers/help';
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+import { getFolder } from './getFolder';
+const folder = getFolder();
 
 export async function sidePanelHelp(context: vscode.ExtensionContext) {
     // Creates tree view for fourth segment of side panel, get instructions, commands, help links etc

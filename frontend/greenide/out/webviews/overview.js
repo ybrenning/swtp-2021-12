@@ -7,8 +7,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Overview = void 0;
 const vscode = require("vscode");
 const extension_1 = require("../extension");
+const getFolder_1 = require("../functions/getFolder");
 const getNonce_1 = require("../getNonce");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = (0, getFolder_1.getFolder)();
 // The main webview Panel to work with
 class Overview {
     // Constructor for webview panel

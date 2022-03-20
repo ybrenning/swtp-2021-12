@@ -2,9 +2,9 @@
 // Parses received config settings from webview into proper JSON
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigParser = void 0;
-const vscode = require("vscode");
+const getFolder_1 = require("../functions/getFolder");
 const configMenu_1 = require("../webviews/configMenu");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = (0, getFolder_1.getFolder)();
 // The main webview Panel to work with
 class ConfigParser {
     // Receive call with ...
