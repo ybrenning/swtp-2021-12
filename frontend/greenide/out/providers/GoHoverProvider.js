@@ -46,4 +46,4 @@ class GoHoverProvider {
     }
 }
 exports.GoHoverProvider = GoHoverProvider;
-//# sourceMappingURL=goHoverProvider.js.map
+//# sourceMappingURL=GoHoverProvider.js.map

@@ -6,14 +6,16 @@ const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
 const highlight_1 = require("./providers/highlight");
 const runAnalysis_1 = require("./functions/runAnalysis");
-const goHoverProvider_1 = require("./providers/goHoverProvider");
+const GoHoverProvider_1 = require("./providers/GoHoverProvider");
 const startup_1 = require("./functions/startup");
 const sidePanelConfig_1 = require("./functions/sidePanelConfig");
 const sidePanelSettings_1 = require("./functions/sidePanelSettings");
 const sidePanelHelp_1 = require("./functions/sidePanelHelp");
 const eventListener_1 = require("./functions/eventListener");
+const initiate_1 = require("./functions/initiate");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
+const fs = require('fs');
 var functions = [];
 // TODO:
 // [ ] - button to change software system
@@ -23,11 +25,9 @@ var functions = [];
 // [ ] - shadow-implement backend data
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-function activate(context) {
-    // create needed directories
-    const fs = require('fs');
-    fs.mkdirSync(folder + '/greenide/', { recursive: true });
-    fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
+async function activate(context) {
+    // create files and directories
+    (0, initiate_1.initiate)();
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
     // This line of code will only be executed once when your extension is activated
@@ -38,9 +38,11 @@ function activate(context) {
         // check for new csv and parse methods / config elements
         (0, startup_1.startup)();
         // get data from backend (IMPLEMENT WHEN READY)
-        // functions = runAnalysis(functions);
-        // TEST suite, replace with avoe when BACKEND READY
+        //functions = runAnalysis(functions);
         (0, runAnalysis_1.runAnalysis)(functions);
+        // TEST suite, replace with avoe when BACKEND READY
+        //await runAnalysis(functions);
+        //Promise.all([runAnalysis(functions)]);
         // side panel segments loading
         const homePromise = sidePanelHome();
         const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);
@@ -109,7 +111,7 @@ function activate(context) {
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
     (0, eventListener_1.eventListener)(context);
     // Start Hover Provider to create hovers
-    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new goHoverProvider_1.GoHoverProvider()));
+    context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
 }
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'

@@ -103,47 +103,6 @@ class ConfigMenu {
     <link href="${stylesMainUri}" rel="stylesheet">
     <script nonce="${nonce}">
     </script>
-
-    <style>
-    ul, #myUL {
-      list-style-type: none;
-    }
-    
-    #myUL {
-      margin: 0;
-      padding: 0;
-    }
-    
-    .caret {
-      cursor: pointer;
-      -webkit-user-select: none; /* Safari 3.1+ */
-      -moz-user-select: none; /* Firefox 2+ */
-      -ms-user-select: none; /* IE 10+ */
-      user-select: none;
-    }
-    
-    .caret::before {
-      content: "\\25B7";
-      color: white;
-      display: inline-block;
-      margin-right: 6px;
-    }
-    
-    .caret-down::before {
-      -ms-transform: rotate(90deg); /* IE 9 */
-      -webkit-transform: rotate(90deg); /* Safari */'
-      transform: rotate(90deg);  
-    }
-    
-    .nested {
-      display: none;
-    }
-    
-    .active {
-      display: block;
-    }
-    </style>
-
     </head>
     <body>
     

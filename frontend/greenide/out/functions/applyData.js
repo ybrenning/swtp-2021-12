@@ -16,7 +16,7 @@ function applyData(functions, dataDefault, dataApplied) {
         functions[i].runtime[1] = dataApplied.results[i].time;
         functions[i].energy[1] = dataApplied.results[i].energy;
     }
-    return functions;
+    //return functions;
 }
 exports.applyData = applyData;
 //# sourceMappingURL=applyData.js.map
