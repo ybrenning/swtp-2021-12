@@ -12,6 +12,7 @@ import { sidePanelHelp } from './functions/sidePanelHelp';
 import { eventListener } from './functions/eventListener';
 import { readFileSync } from 'fs';
 import { initiate } from './functions/initiate';
+import { getSystem } from './functions/getSystem';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
@@ -36,8 +37,9 @@ var functions: {
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
+    // create files and directories
     initiate();
 
     // auto start extension
@@ -57,7 +59,8 @@ export function activate(context: vscode.ExtensionContext) {
         // functions = runAnalysis(functions);
 
         // TEST suite, replace with avoe when BACKEND READY
-        runAnalysis(functions);
+        await runAnalysis(functions);
+        Promise.all([runAnalysis(functions)]);
 
         // side panel segments loading
         const homePromise = sidePanelHome();

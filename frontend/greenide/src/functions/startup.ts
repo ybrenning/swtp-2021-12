@@ -1,7 +1,7 @@
 // function to parse provided csv data into seperate json files to read them later
 
 import * as vscode from 'vscode';
-import { getSystem } from './initiate';
+import { getSystem } from './getSystem';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
@@ -83,7 +83,7 @@ async function formatInput(items: string[], mode: string) {
         }
 
         var jsonC = JSON.stringify(objC,null,'\t');
-        fs.writeFile(folder + '/greenide/configItems.json', jsonC, 'utf8', callback);
+        fs.writeFileSync(folder + '/greenide/configItems.json', jsonC, 'utf8');
     } else {
 
         var objM = {
@@ -94,7 +94,7 @@ async function formatInput(items: string[], mode: string) {
         }
 
         var jsonM = JSON.stringify(objM,null,'\t');
-        fs.writeFile(folder + '/greenide/locatorItems.json', jsonM, 'utf8', callback);
+        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
     }
 }
 

@@ -25,7 +25,8 @@ var functions = [];
 // [ ] - shadow-implement backend data
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-function activate(context) {
+async function activate(context) {
+    // create files and directories
     (0, initiate_1.initiate)();
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
@@ -39,7 +40,8 @@ function activate(context) {
         // get data from backend (IMPLEMENT WHEN READY)
         // functions = runAnalysis(functions);
         // TEST suite, replace with avoe when BACKEND READY
-        (0, runAnalysis_1.runAnalysis)(functions);
+        await (0, runAnalysis_1.runAnalysis)(functions);
+        Promise.all([(0, runAnalysis_1.runAnalysis)(functions)]);
         // side panel segments loading
         const homePromise = sidePanelHome();
         const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);

@@ -5,7 +5,7 @@ exports.runAnalysis = void 0;
 const vscode = require("vscode");
 const axios_1 = require("axios");
 const applyData_1 = require("./applyData");
-const initiate_1 = require("./initiate");
+const getSystem_1 = require("./getSystem");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 // Performs analysis
@@ -18,7 +18,7 @@ function runAnalysis(functions) {
     // read defined software system
     //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
     //console.log(softwareSystem);
-    var softwareSystem = (0, initiate_1.getSystem)();
+    var softwareSystem = (0, getSystem_1.getSystem)();
     // TEST suite
     console.log('SWS IN RUNANA');
     console.log(softwareSystem);

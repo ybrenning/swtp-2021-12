@@ -3,14 +3,14 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.startup = void 0;
 const vscode = require("vscode");
-const initiate_1 = require("./initiate");
+const getSystem_1 = require("./getSystem");
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
 function startup() {
     // read defined software system
     //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
     //console.log(softwareSystem);
-    var softwareSystem = (0, initiate_1.getSystem)();
+    var softwareSystem = (0, getSystem_1.getSystem)();
     // TEST suite
     console.log('SWS IN STARTUP');
     console.log(softwareSystem);
@@ -63,7 +63,7 @@ async function formatInput(items, mode) {
             objC.items.push(items[i]);
         }
         var jsonC = JSON.stringify(objC, null, '\t');
-        fs.writeFile(folder + '/greenide/configItems.json', jsonC, 'utf8', callback);
+        fs.writeFileSync(folder + '/greenide/configItems.json', jsonC, 'utf8');
     }
     else {
         var objM = {
@@ -73,7 +73,7 @@ async function formatInput(items, mode) {
             objM.methods.push(items[i]);
         }
         var jsonM = JSON.stringify(objM, null, '\t');
-        fs.writeFile(folder + '/greenide/locatorItems.json', jsonM, 'utf8', callback);
+        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
     }
 }
 // useless, just for reading file to work
