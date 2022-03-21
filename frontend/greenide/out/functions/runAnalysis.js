@@ -26,7 +26,6 @@ exports.runAnalysis = runAnalysis;
 // Get data from backend via ajax post-request
 function getData(json, softwareSystem) {
     // post values and save response 
-    console.log(json);
     json = JSON.stringify(JSON.parse(json));
     // if json is correctly formatted ...
     if (json.length > 0) {
@@ -44,7 +43,6 @@ function getData(json, softwareSystem) {
         // listen for backend to receive data and continue
         http.onreadystatechange = () => {
             if (http.responseText.length > 0) {
-                console.log(http.responseText);
                 return http.responseText;
             }
         };

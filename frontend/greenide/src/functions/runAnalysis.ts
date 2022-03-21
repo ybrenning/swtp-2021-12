@@ -40,7 +40,6 @@ export function runAnalysis(functions: {
 function getData(json: string, softwareSystem: string) {
 
     // post values and save response 
-    console.log(json);
     json = JSON.stringify(JSON.parse(json));
 
     // if json is correctly formatted ...
@@ -64,7 +63,6 @@ function getData(json: string, softwareSystem: string) {
         // listen for backend to receive data and continue
         http.onreadystatechange = () => {
             if (http.responseText.length > 0) {
-                console.log(http.responseText);
                 return http.responseText;
             }
         };
