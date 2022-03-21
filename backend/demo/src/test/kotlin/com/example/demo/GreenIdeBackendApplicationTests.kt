@@ -11,7 +11,5 @@ class GreenIdeBackendApplicationTests {
 
     @Test
     fun contextLoads() {
-        assertEquals(0, 1 - 1)
     }
-
 }
