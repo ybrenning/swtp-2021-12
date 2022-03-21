@@ -22,8 +22,6 @@ async function activate(context) {
     (0, initiate_1.initiate)();
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "greenide" is now active!');
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
