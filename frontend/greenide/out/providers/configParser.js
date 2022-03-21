@@ -16,6 +16,10 @@ class ConfigParser {
         this.num = num;
         this.config = config;
         this.extensionUri = extensionUri;
+        if (config?.length === 0) {
+            console.log('TEST: NO CONFIG');
+            config = ['root'];
+        }
         // Depending on what mode (Apply, Delete, Load, Save)
         switch (mode) {
             // Apply this config

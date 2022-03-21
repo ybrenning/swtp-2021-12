@@ -24,9 +24,7 @@ export function applyData(functions: {
 
     // apply from config applied data from backend
     for (let i = 0; i < dataApplied.results.length; i++) {
-        functions[i].runtime[1] = dataApplied.results[i].time;
-        functions[i].energy[1] = dataApplied.results[i].energy;
+        functions[i].runtime[1] = dataDefault.results[i].time + dataApplied.results[i].time;
+        functions[i].energy[1] = dataDefault.results[i].energy + dataApplied.results[i].energy;
     }
-
-    return functions;
 }

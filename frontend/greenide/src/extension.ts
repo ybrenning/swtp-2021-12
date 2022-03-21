@@ -4,16 +4,19 @@ import { Overview } from './webviews/overview';
 import { HomeProvider } from './providers/home';
 import { MethodHighlight } from './providers/highlight';
 import { runAnalysis } from './functions/runAnalysis';
-import { GoHoverProvider } from './providers/goHoverProvider';
+import { GoHoverProvider } from './providers/GoHoverProvider';
 import { startup } from './functions/startup';
 import { sidePanelConfigs } from './functions/sidePanelConfig';
 import { sidePanelSettings } from './functions/sidePanelSettings';
 import { sidePanelHelp } from './functions/sidePanelHelp';
 import { eventListener } from './functions/eventListener';
 import { readFileSync } from 'fs';
+import { initiate } from './functions/initiate';
+import { getSystem } from './functions/getSystem';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 console.log(folder);
+const fs = require('fs');
 
 var functions: { 
     name: string; 
@@ -34,12 +37,10 @@ var functions: {
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
-    // create needed directories
-    const fs = require('fs');
-    fs.mkdirSync(folder + '/greenide/', { recursive: true });
-    fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
+    // create files and directories
+    initiate();
 
     // auto start extension
     vscode.commands.executeCommand('greenIDE.run');
@@ -50,15 +51,15 @@ export function activate(context: vscode.ExtensionContext) {
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-        
+
         // check for new csv and parse methods / config elements
         startup();
 
         // get data from backend (IMPLEMENT WHEN READY)
-        // functions = runAnalysis(functions);
-
-        // TEST suite, replace with avoe when BACKEND READY
+        //functions = runAnalysis(functions);
         runAnalysis(functions);
+
+        console.log(functions);
 
         // side panel segments loading
         const homePromise = sidePanelHome();
@@ -115,8 +116,8 @@ export function activate(context: vscode.ExtensionContext) {
                 functionI.location.range.start.line,
                 functionI.location.range.start.character,
                 functionI.location.range.end.character,
-                functionI.runtime[1],
-                functionI.energy[1]
+                functionI.runtime,
+                functionI.energy
             );
 
             // Execute highlight with provided data
@@ -139,8 +140,8 @@ export function activate(context: vscode.ExtensionContext) {
                     functions[i].location.range.start.line, 
                     functions[i].location.range.start.character, 
                     functions[i].location.range.end.character,
-                    functions[i].runtime[1],
-                    functions[i].energy[1]
+                    functions[i].runtime,
+                    functions[i].energy
                 );
 
                 testHighlight.decorate;

@@ -2,13 +2,13 @@
     "results": [
         {
             "function1": "kanzi.util.hash.XXHash32.hash",
-            "energy": 23,
-            "time": 42
+            "energy": 234,
+            "time": 422
         },
         {
             "function2": "kanzi.util.hash.XXHash32.hash",
-            "energy": 25,
-            "time": 41
+            "energy": 2572,
+            "time": 413
         }
     ]
 }

@@ -3,6 +3,7 @@
 import * as vscode from 'vscode';
 import axios, { AxiosResponse } from 'axios';
 import { applyData } from './applyData';
+import { getSystem } from './getSystem';
 
 const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 const fs = require('fs');
@@ -23,18 +24,25 @@ export function runAnalysis(functions: {
     location: vscode.Location;
 }[]) {
 
+    // read defined software system
+    //var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
+    //console.log(softwareSystem);
+
+    var softwareSystem = getSystem();
+
+    // TEST suite
+    console.log('SWS IN RUNANA');
+    console.log(softwareSystem);
+
     var functionsNEW: { 
         name: string; 
         method: string; 
         runtime: number[],
         energy: number[],
-        kind: vscode.SymbolKind; 
-        containerName: string; 
+        kind: vscode.SymbolKind;
+        containerName: string;
         location: vscode.Location;
     }[] = [];
-
-    // read defined software system
-    var softwareSystem = fs.readFileSync(folder + '/greenide/system.json', 'utf8');
 
     var jsonDefault = parseToSend(functions,0);
     var jsonApplied = parseToSend(functions,1);
@@ -42,39 +50,48 @@ export function runAnalysis(functions: {
     var responseDefault = getData(jsonDefault,softwareSystem);
     var responseApplied = getData(jsonApplied,softwareSystem);
 
-    // TEST suite, apply hardcode
-    responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
-    responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
-
-    // TEST suite
-    console.log('DATA DEFAULT');
+    // check if backend reacted
     console.log(responseDefault);
-    console.log('DATA APPLIED');
     console.log(responseApplied);
-    
-    var functionsNEW = applyData(functions,responseDefault,responseApplied);
 
-    // TEST suite
-    console.log('APPLIED DATA');
-    console.log(functionsNEW);
-
-    //return functionsNEW;
+    if (responseDefault !== undefined && responseApplied !== undefined) {
+        applyData(functions,responseDefault,responseApplied);
+    } else {
+        // TEST suite, apply hardcode
+        responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
+        responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
+        
+        //var functionsNEW = applyData(functions,responseDefault,responseApplied);
+        applyData(functions,responseDefault,responseApplied);
+    }
 }
 
 function getData(json: string, softwareSystem: string) {
 
     // post values and save response 
-    var response1Raw;
-    const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem + '/';
-    axios({
-        method: 'post',
-        url: urlPost,
-        data: json
-    })
-    .then(data=>(response1Raw=data))
-    .catch(err=>console.log(err));
+    json = JSON.stringify(JSON.parse(json));
 
-    return JSON.stringify(response1Raw);
+    if (json.length > 0) {
+
+        // TEST suite
+        console.log('TEST SENDING');
+        console.log(json);
+
+        var xmlRequest = require('xhr2');
+        const http = new xmlRequest();
+        const urlPost='https://swtp-2021-12-production.herokuapp.com/calculateValues/' + softwareSystem;
+
+        http.open("POST", urlPost, true);
+        http.setRequestHeader('Content-Type','application/json');
+        http.setRequestHeader('Accept','application/json');
+        http.send(json);
+        http.onreadystatechange = () => {
+            if (http.responseText.length > 0) {
+                console.log(http.responseText);
+                return http.responseText;
+            }
+        };
+    }
 }
 
 function parseToSend(functions: { 
@@ -119,3 +136,6 @@ function parseToSend(functions: {
 
     return json;
 }
+
+// For file reading, not purpose though
+function callback(arg0: string, json: any, arg2: string, callback: any) { }

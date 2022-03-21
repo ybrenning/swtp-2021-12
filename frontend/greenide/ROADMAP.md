@@ -27,9 +27,8 @@
 [X] - 1.5.2 - color code depending on method data
 1.6 - Overview webview
 [X] - 1.6.1 - Hover text with data
-[ ] - 1.6.2 - display all results in webview from side panel
-[ ] - 1.6.3 - display diagrams with distribution in webview
-[ ] - 1.6.4 - apply different configs to methods in webview
+[X] - 1.6.2 - connect properly to backend
+[ ] - 1.6.3 - Display applied data in Hover
 1.7 - Cleanup and minor issues / tuning
 [ ] - 1.7.1 - Bugfixes:
           [ ] execute 'press refresh button' command aka greenIDE.run correctly
@@ -37,6 +36,11 @@
               refreshed without pressing the button in home-segment
           [ ] focus on line when clicking item in treeview
           [ ] make range for hoverprovoder correctly
+          [ ] parse config elements from configItems.json into config webview
+          [ ] backend doesnt respond (Error 400)
 [ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
+          [ ] use getFunctions() in other files so no need to provide functions
+          [ ] make sidePanelHome.ts with use of getFunctions()
+          [ ] make JavaDocumentSymbolProvider into new file
 [ ] - 1.7.3 - rename all kanzi occurences to genereic method names
 [ ] - 1.7.4 - Remove test cases / comments

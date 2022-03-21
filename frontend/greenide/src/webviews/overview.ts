@@ -1,11 +1,14 @@
-// Webview Panel to see details of found methods
-// - see overview of energy / runtime
-// - diagram to see distribution between methods
-// - compare two files (two are sent, if no comparison, second is NULL)
-// - apply different configs to results, see difference in data
+// Webview Panel to work with configurations
+// - select config and apply as current config
+// - save favorites
+// - works with JSON to save configs (0 default/current, 1+ saved configs)
 
 import * as vscode from "vscode";
+import { getFunctions } from "../extension";
 import { getNonce } from "../getNonce";
+import { ConfigParser } from "../providers/configParser";
+
+const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 
 // The main webview Panel to work with
 export class Overview {
@@ -19,7 +22,7 @@ export class Overview {
   private readonly _extensionUri: vscode.Uri;
   private _disposables: vscode.Disposable[] = [];
 
-  // Technically activate webview panel for overview
+  // Technically activate webview panel for configs
   public static createOrShow(extensionUri: vscode.Uri) {
     const column = vscode.window.activeTextEditor
       ? vscode.window.activeTextEditor.viewColumn
@@ -28,14 +31,14 @@ export class Overview {
     // If we already have a panel, show it
     if (Overview.currentPanel) {
       Overview.currentPanel._panel.reveal(column);
-      Overview.currentPanel._update();
+      Overview.currentPanel._update(extensionUri);
       return;
     }
 
     // Otherwise, create a new panel
     const panel = vscode.window.createWebviewPanel(
       Overview.viewType,
-      "Data Overview",  // title of tab
+      "Config Menu",  // title of tab
       column || vscode.ViewColumn.One,
       {
         // Enable javascript in the webview
@@ -66,28 +69,16 @@ export class Overview {
 
   // Constructor for webview panel
   private constructor(panel: vscode.WebviewPanel, extensionUri: vscode.Uri) {
+
     this._panel = panel;
     this._extensionUri = extensionUri;
 
     // Set the webview's initial HTML content
-    this._update();
+    this._update(extensionUri);
 
     // Listen for when the panel is disposed
     // This happens when the user closes the panel or when the panel is closed programatically
     this._panel.onDidDispose(() => this.dispose(), null, this._disposables);
-
-    // // Handle messages from the webview
-    // this._panel.webview.onDidReceiveMessage(
-    //   (message) => {
-    //     switch (message.command) {
-    //       case "alert":
-    //         vscode.window.showErrorMessage(message.text);
-    //         return;
-    //     }
-    //   },
-    //   null,
-    //   this._disposables
-    // );
   }
 
   // Close webview panel
@@ -106,32 +97,34 @@ export class Overview {
   }
 
   // Activate webview content, HTML
-  private async _update() {
+  private async _update(extensionUri: vscode.Uri) {
+
     // Set current webview
     const webview = this._panel.webview;
 
     // Set HTML content for webview panel
     this._panel.webview.html = this._getHtmlForWebview(webview);
 
-    // Message handler
-    webview.onDidReceiveMessage(async (data) => {
-      switch (data.type) {
-        case "onInfo": {
-          if (!data.value) {
-            return;
-          }
-          vscode.window.showInformationMessage(data.value);
-          break;
-        }
-        case "onError": {
-          if (!data.value) {
-            return;
-          }
-          vscode.window.showErrorMessage(data.value);
-          break;
-        }
-      }
-    });
+    // TODO: implement:
+    // [X] - pressing on button to send checkboxed configs
+    // [X] - saving config in JSON (default is 0)
+    // [X] - new button to save favorite with name in JSON
+    // [ ] - new segment: dropdown menu with favorites & delete button
+    // Handle messages from the webview
+    
+    webview.onDidReceiveMessage(
+      message => {
+        
+        // TEST suite
+        console.log('MESSAGE FROM WEBVIEW:');
+        console.log(message);
+
+        // Open webview 'ConfigMenu'
+        Overview.currentPanel?.dispose();
+        Overview.createOrShow(extensionUri);
+      },
+      undefined
+    );
   }
 
   // The HTML content, main functionality of webview panel
@@ -140,94 +133,113 @@ export class Overview {
     // Use a nonce to only allow specific scripts to be run
     const nonce = getNonce();
 
+    var functions: { 
+        name: string; 
+        method: string; 
+        runtime: number[];
+        energy: number[];
+        kind: vscode.SymbolKind; 
+        containerName: string; 
+        location: vscode.Location;
+    }[] = getFunctions();
+
+    var funcArr: string[][] = [];
+
+    // pasrse into array for HTML
+    for (let i = 0; i < functions.length; i++) {
+        // the name
+        funcArr[i][0] = functions[i].name;
+        // the default data
+        funcArr[i][1] = functions[i].runtime[0] + 'ms, ' + functions[i].energy[0] + 'mWs';
+        // the applied data
+        funcArr[i][2] = functions[i].runtime[1] + 'ms, ' + functions[i].energy[1] + 'mWs';
+        funcArr[i][3] = (functions[i].runtime[1] - functions[i].runtime[0]) + 'ms, ' + (functions[i].energy[1] - functions[i].energy[0]) + 'mWs';
+    }
+
     // Get path of css file to be used within the Webview's HTML
     const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
     const stylesMainUri = webview.asWebviewUri(stylesPathMainPath);
 
     // Return HTML to be rendered within the Webview
     return `<!DOCTYPE html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<!--
-			Use a content security policy to only allow loading images from https or from our extension directory,
-			and only allow scripts that have a specific nonce.
-      -->
-      <meta http-equiv="Content-Security-Policy" content="img-src https: data:; style-src 'unsafe-inline' ${webview.cspSource}; script-src 'nonce-${nonce}';">
-			<meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <link href="${stylesMainUri}" rel="stylesheet">
-      <script nonce="${nonce}">
-      </script>
-		</head>
+    <html lang="en">
+    <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="${stylesMainUri}" rel="stylesheet">
+    <script nonce="${nonce}">
+    </script>
+    </head>
     <body>
-    
-    <h1> Welcome to GreenIDE. </h1>
 
-    <figure>
-      <p> <strong> Energy </strong> </p>
-      <img src="https://root.cern/doc/master/pict1_graph.C.png" width="300" />
-      <figcaption> Energy Total: 12374398274 mWs </figcaption>
-      <button> <strong> Rerun </strong> </button>
-    <p> <strong> Configuration settings: </strong> </p>
-    <form>
-    <input type="checkbox" name="root" /> root 
-    <br> </br>
-    <input type="checkbox" name="BLOCKSIZE" /> BLOCKSIZE
-    <br> </br>
-    <input type="checkbox" name="JOBS" /> JOBS 
-    <br> </br>
-    <input type="checkbox" name="LEVEL" /> LEVEL
-    <br> </br>
-    <input type="checkbox" name="CHECKSUM" /> CHECKSUM
-    <br> </br>
-    <input type="checkbox" name="SKIP" /> SKIP
-    <br> </br>
-    <input type="checkbox" name="NoTransform" /> NoTransform
-    <br> </br>
-    <input type="checkbox" name="Huffman" /> Huffman
-    <br> </br>
-    <input type="checkbox" name="ANS0" /> ANS0
-    <br> </br>
-    <input type="checkbox" name="ANS1" /> ANS1
-    <br> </br>
-    <input type="checkbox" name="Range" /> Range   
-    </form>
-    </figure>
+    <h2>GreenIDE Data Overview</h2>
 
-    <figure>
-    <p> <strong> Time </strong> </p>
-      <img src="https://root.cern/doc/master/pict1_bent.C.png" width="300" />
-      <figcaption> Time total: 739874192 ms </figcaption>
-      <button> <strong> Compare </strong> </button>
-    <form>
-    <br> </br>
-    <input type="checkbox" name="FPAQ" /> FPAQ 
-    <br> </br>
-    <input type="checkbox" name="TPAQ" /> TPAQ
-    <br> </br>
-    <input type="checkbox" name="CM" /> CM
-    <br> </br>
-    <input type="checkbox" name="NoEntropy" /> NoEntropy 
-    <br> </br>
-    <input type="checkbox" name="BWTS" /> BWTS
-    <br> </br>
-    <input type="checkbox" name="ROLZ" /> ROLZ
-    <br> </br>
-    <input type="checkbox" name="RLT" /> RLT
-    <br> </br>
-    <input type="checkbox" name="ZRLT" /> ZRLT
-    <br> </br>
-    <input type="checkbox" name="MTFT" /> MTFT
-    <br> </br>
-    <input type="checkbox" name="RANK" /> RANK
-    <br> </br>
-    <input type="checkbox" name="TEXT" /> TEXT
-    <br> </br>
-    <input type="checkbox" name="X86" /> X86
-    </form>
-    </figure>
+    <div id="my-table"></div>
 
-		</body>
-		</html>`;
+    <h3>TEST TABLE</h3>
+
+    <table>
+      <tr>
+        <th>Function&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+        <th>Data With No Config&nbsp;&nbsp;</th>
+        <th>Data With Config&nbsp;&nbsp;</th>
+        <th>Difference</th>
+      </tr>
+      <tr>
+        <td>TEST</td>
+        <td>123</td>
+        <td>32</td>
+        <td>42</td>
+      </tr>
+      <tr>
+        <td>kanzi.function.ROLZCodec.<init></td>
+        <td>321</td>
+        <td>32</td>
+        <td>45</td>
+      </tr>
+    </table>
+
+    </body>
+
+    <script>
+
+    // dynamic function to cteate table out of 2d arrays
+    function createTable(element, tableData) {
+      
+      // creating table elements
+      var table = document.createElement('table');
+      // creating table body <tbody> element
+      var tableBody = document.createElement('tbody');
+
+      // creating rows based on first diamention datas
+      tableData.forEach(function(rowData) {
+        var row = document.createElement('tr');
+
+        // creating cells in each row based on second diamention datas
+        rowData.forEach(function(cellData) {
+          var cell = document.createElement('td');
+          // adding array item to it's cell
+          cell.appendChild(document.createTextNode(cellData));
+          // adding the cell to it's row
+          row.appendChild(cell);
+        });
+
+        // adding each row to table body
+        tableBody.appendChild(row);
+      });
+
+      // adding table body to table
+      table.appendChild(tableBody);
+      // adding table to document body
+      element.appendChild(table);
+    }
+
+    // example
+    createTable(
+      document.getElementById('my-table'),
+      ${funcArr}
+    );
+
+    </script>
+    </html>`;
   }
 }

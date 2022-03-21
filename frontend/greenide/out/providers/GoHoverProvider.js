@@ -21,29 +21,22 @@ class GoHoverProvider {
                 if (line === functLine) {
                     // Range where hover is active
                     var range = new vscode.Range(new vscode.Position(functLine + 1, functChar), new vscode.Position(functLine + 1, functCharEND));
-                    var text = (functions[i].name + '  \n'
+                    var text = (functions[i].name + '\n\n'
+                        + 'Results without Config' + '  \n'
+                        + 'Runtime: ' + functions[i].runtime[0] + ' ms  \n'
+                        + 'Energy: ' + functions[i].energy[0] + ' mWs\n\n'
+                        + 'Results with Config' + '  \n'
                         + 'Runtime: ' + functions[i].runtime[1] + ' ms  \n'
-                        + 'Energy: ' + functions[i].energy[1] + ' mWs');
+                        + 'Energy: ' + functions[i].energy[1] + ' mWs\n\n'
+                        + 'Total Difference' + '  \n'
+                        + 'Runtime: ' + (functions[i].runtime[1] - functions[i].runtime[0]) + ' ms  \n'
+                        + 'Energy: ' + (functions[i].energy[1] - functions[i].energy[0]) + ' mWs');
                     // execute hover
                     resolve(new vscode.Hover(text, range));
                 }
             }
-            /*var displaytext: string = "";
-
-            // Determines what information to show and saves it to displaytext
-            var line = position.line + 1;
-
-            if (line === 29) {
-                displaytext = ('Energy: TEST 1');
-            };
-
-            if (line === 37) {
-                displaytext = ('Energy: TEST 2');
-            };
-
-            resolve(new vscode.Hover(displaytext));*/
         });
     }
 }
 exports.GoHoverProvider = GoHoverProvider;
-//# sourceMappingURL=goHoverProvider.js.map
+//# sourceMappingURL=GoHoverProvider.js.map
