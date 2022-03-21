@@ -5,7 +5,7 @@ const vscode = require("vscode");
 function getFolder() {
     var folder = vscode.workspace.workspaceFolders.map(folder => folder.uri.path)[0];
     const os = require('os');
-    if (!(os.platform().match('darwin'))) {
+    if ((os.platform().match('win32'))) {
         folder = folder.substring(1);
     }
     return folder;

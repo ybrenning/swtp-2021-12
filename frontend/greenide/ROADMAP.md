@@ -37,9 +37,8 @@
     [X] fix folder location string for windows
     [X] focus on line when clicking item in treeview
     [X] make range for hoverprovoder correctly
-    [ ] parse config elements from configItems.json into config webview
-    [ ] backend doesnt respond (Error 400)
+    [X] backend doesnt respond (Error 400)
     [X] use getFunctions() in other files so no need to provide functions
-    [ ] Update Website
+    [X] Update Website
     [ ] rename all kanzi occurences to genereic method names
     [ ] Remove test cases / comments
