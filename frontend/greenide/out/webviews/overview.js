@@ -82,9 +82,6 @@ class Overview {
         // [ ] - new segment: dropdown menu with favorites & delete button
         // Handle messages from the webview
         webview.onDidReceiveMessage(message => {
-            // TEST suite
-            console.log('MESSAGE FROM WEBVIEW:');
-            console.log(message);
             // Open webview 'ConfigMenu'
             Overview.currentPanel?.dispose();
             Overview.createOrShow(extensionUri);

@@ -3,10 +3,9 @@
 
 import * as vscode from 'vscode';
 import { HelpProvider } from '../providers/help';
-import { getFolder } from './getFolder';
-const folder = getFolder();
 
 export async function sidePanelHelp(context: vscode.ExtensionContext) {
+
     // Creates tree view for fourth segment of side panel, get instructions, commands, help links etc
     var helpTreeView = vscode.window.createTreeView("greenIDE-help", {
         treeDataProvider: new HelpProvider
@@ -17,7 +16,6 @@ export async function sidePanelHelp(context: vscode.ExtensionContext) {
 
     // Generic button action, provided link is opened
     let clickEvent = vscode.commands.registerCommand('greenIDE-help.click', (link: string) => {
-
         // Open the link when clicking item number nr
         vscode.env.openExternal(vscode.Uri.parse(link));
     });

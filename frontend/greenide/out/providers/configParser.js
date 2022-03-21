@@ -4,6 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ConfigParser = void 0;
 const getFolder_1 = require("../functions/getFolder");
 const configMenu_1 = require("../webviews/configMenu");
+const fs = require('fs');
 const folder = (0, getFolder_1.getFolder)();
 // The main webview Panel to work with
 class ConfigParser {
@@ -16,8 +17,8 @@ class ConfigParser {
         this.num = num;
         this.config = config;
         this.extensionUri = extensionUri;
+        // set default config if no config applied
         if (config?.length === 0) {
-            console.log('TEST: NO CONFIG');
             config = ['root'];
         }
         // Depending on what mode (Apply, Delete, Load, Save)
@@ -50,7 +51,6 @@ function applyConfig(config, extensionUri) {
     };
     // Make string for json
     var json;
-    const fs = require('fs');
     // Overwrite file / default config num 0
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
@@ -82,7 +82,6 @@ function applyConfig(config, extensionUri) {
 }
 // Delete this config number num
 function deleteConfig(num, extensionUri) {
-    const fs = require('fs');
     // Read file to get configs
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
@@ -113,7 +112,6 @@ function deleteConfig(num, extensionUri) {
 }
 // Load this config, set it as new config set number 0
 function loadConfig(num, extensionUri) {
-    const fs = require('fs');
     // Read file to get configs
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
@@ -149,7 +147,6 @@ function saveConfig(config, extensionUri) {
     };
     // Make string for json
     var json;
-    const fs = require('fs');
     // Overwrite file / default config num 0
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err, data) {
         if (err) {
@@ -157,7 +154,6 @@ function saveConfig(config, extensionUri) {
         }
         else {
             if (data.length !== 0) {
-                // TEST suite
                 var result = JSON.parse(data);
                 var ids = [];
                 var id = 0;
@@ -165,9 +161,6 @@ function saveConfig(config, extensionUri) {
                 for (let i = 0; i < Object.keys(result.config).length; i++) {
                     ids.push(result.config[i].id);
                 }
-                // TODO: does only save default value (0) for id, then the next time it works
-                // problem: ids list is compared with numbers, but all are different, so no new number
-                // assign id as smallest id not taken
                 for (let i = 0; i < Object.keys(result.config).length + 1; i++) {
                     if (!(ids.includes(i))) {
                         id = i;

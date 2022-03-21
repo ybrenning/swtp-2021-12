@@ -6,23 +6,24 @@ const getFolder_1 = require("./getFolder");
 const getSystem_1 = require("./getSystem");
 const folder = (0, getFolder_1.getFolder)();
 const fs = require('fs');
+// function checks if new csv file or any changes are applied when refreshing greenIDE
 function startup() {
     var softwareSystem = (0, getSystem_1.getSystem)();
+    // get functions list from backend
     var xmlRequest = require('xhr2');
     const http = new xmlRequest();
     const urlGet = 'https://swtp-2021-12-production.herokuapp.com/listOfFunctions/' + softwareSystem;
+    // prepare get-request
     http.open("GET", urlGet);
+    // send get-request
     http.send();
+    // apply data from backend
     http.onreadystatechange = () => {
         formatInput(http.responseText, 'methods');
     };
     // read provided csv
     var result = fs.readFileSync(folder + '/greenide/csv/data.csv', 'utf-8');
     result = result.split('\n');
-    /*// create items to parse into json
-    var locatorItems: string[] = [];
-    locatorItems = getLocatorItems(result);
-    formatInput(locatorItems,'methods');*/
     // create items to parse into json
     var configItems = [];
     configItems = getConfigItems(result[0]);
@@ -41,21 +42,12 @@ function getConfigItems(result) {
     for (let i = 0; i < items.length; i++) {
         items[i] = items[i].slice(1, items[i].length - 1);
     }
+    // returns saved items for configurations
     return items;
 }
-function getLocatorItems(document) {
-    var items = [];
-    // cut the first element, the function, from every line
-    for (let i = 1; i < document.length; i++) {
-        if (document[i].length !== 0) {
-            var index = document[i].indexOf(',');
-            var line = (document[i].slice(1, index - 1)) + '()';
-            items.push(line);
-        }
-    }
-    return items.filter((item, index) => items.indexOf(item) === index);
-}
+// format provided data from either csv or backend
 async function formatInput(items, mode) {
+    // format config elements
     if (mode.match('config')) {
         var objC = {
             items: []
@@ -63,34 +55,26 @@ async function formatInput(items, mode) {
         for (let i = 0; i < items.length; i++) {
             objC.items.push(items[i]);
         }
+        // parse coonfig items into file
         var jsonC = JSON.stringify(objC, null, '\t');
         fs.writeFileSync(folder + '/greenide/configItems.json', jsonC, 'utf8');
+        // else, format data from backend
     }
     else {
-        // without backend
-        /*var objM = {
-            methods: [] as any
-        };
-        for (let i = 0; i < items.length; i++) {
-            objM.methods.push(items[i]);
-        }
-
-        var jsonM = JSON.stringify(objM,null,'\t');
-        fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');*/
-        // with backend
         var objM = {
             methods: []
         };
+        // if backend sent data correctly ...
         if (items.length > 0) {
+            // format received items
             items = JSON.parse(items);
             for (let i = 0; i < items.length; i++) {
                 objM.methods.push(items[i] + '()');
             }
+            // parse items / functions into file
             var jsonM = JSON.stringify(objM, null, '\t');
             fs.writeFileSync(folder + '/greenide/locatorItems.json', jsonM, 'utf8');
         }
     }
 }
-// useless, just for reading file to work
-function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=startup.js.map

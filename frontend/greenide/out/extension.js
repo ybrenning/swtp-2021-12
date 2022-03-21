@@ -2,7 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFunctions = exports.deactivate = exports.JavaDocumentSymbolProvider = exports.activate = void 0;
 const vscode = require("vscode");
-const overview_1 = require("./webviews/overview");
 const home_1 = require("./providers/home");
 const highlight_1 = require("./providers/highlight");
 const runAnalysis_1 = require("./functions/runAnalysis");
@@ -15,12 +14,10 @@ const eventListener_1 = require("./functions/eventListener");
 const initiate_1 = require("./functions/initiate");
 const getFolder_1 = require("./functions/getFolder");
 const folder = (0, getFolder_1.getFolder)();
-const fs = require('fs');
 var functions = [];
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 async function activate(context) {
-    console.log(folder);
     // create files and directories
     (0, initiate_1.initiate)();
     // auto start extension
@@ -30,13 +27,9 @@ async function activate(context) {
     // start extension
     let disposable = vscode.commands.registerCommand('greenIDE.run', async () => {
         // The code you place here will be executed every time your command is executed
-        // check for new csv and parse methods / config elements
-        console.log("RUNNING");
         (0, startup_1.startup)();
-        // get data from backend (IMPLEMENT WHEN READY)
-        //functions = runAnalysis(functions);
+        // get data from backend and apply it to functions
         const anaPromise = (0, runAnalysis_1.runAnalysis)(functions);
-        console.log(functions);
         // side panel segments loading
         const homePromise = sidePanelHome();
         const configsPromise = (0, sidePanelConfig_1.sidePanelConfigs)(context);
@@ -49,6 +42,7 @@ async function activate(context) {
         await settingsPromise;
         await helpPromise;
     });
+    // async function resolving
     Promise.all([sidePanelHome(), (0, sidePanelConfig_1.sidePanelConfigs)(context), (0, sidePanelSettings_1.sidePanelSettings)(context), (0, sidePanelHelp_1.sidePanelHelp)(context)]);
     context.subscriptions.push(disposable);
     // This creates the side panel segment 'GreenIDE' where the user sees the found methods, 
@@ -72,9 +66,6 @@ async function activate(context) {
             var range = new vscode.Range(functionPosition, functionPosition);
             vscode.window.activeTextEditor?.revealRange(range);
             vscode.commands.executeCommand("workbench.action.focusActiveEditorGroup");
-            // TEST suite see if arguments pass
-            console.log('Method: ' + name + ' - Line: ' + (line + 1) + ', Position: ' + character);
-            console.log('');
             // Create Highlight object which stores provided data
             let testHighlight = new highlight_1.MethodHighlight(functionI.location.range.start.line, functionI.location.range.start.character, functionI.location.range.end.character, functionI.runtime, functionI.energy);
             // Execute highlight with provided data
@@ -82,30 +73,21 @@ async function activate(context) {
         });
         // When clicking on 'header', namely 'found methods'
         let clickEventAll = vscode.commands.registerCommand('greenIDE-home.clickAll', () => {
-            // TEST suite see if arguments pass
-            for (var j = 0; j < functions.length; j++) {
-                console.log('Method: ' + functions[j].name
-                    + ' - Line: ' + functions[j].location.range.start.line
-                    + ', Position: ' + functions[j].location.range.start.character);
-            }
             // Iterate over functions array to highlight each function with provided data
             for (var i = 0; i < functions.length; i++) {
                 // Highlight each element from functions[i] at it's proper location
                 let testHighlight = new highlight_1.MethodHighlight(functions[i].location.range.start.line, functions[i].location.range.start.character, functions[i].location.range.end.character, functions[i].runtime, functions[i].energy);
+                // Execute highlight with provided data
                 testHighlight.decorate;
             }
         });
-        // Button to open overview of methods & data, many many statistics
-        let overviewEvent = vscode.commands.registerCommand('greenIDE-home.overview', async () => {
-            // Open webview 'OverView'
-            overview_1.Overview.createOrShow(context.extensionUri);
-        });
         context.subscriptions.push(clickEvent);
         context.subscriptions.push(clickEventAll);
-        context.subscriptions.push(overviewEvent);
         context.subscriptions.push(homeTreeView);
     }
+    // add DocumentSymbolProvider to listening for execution
     context.subscriptions.push(vscode.languages.registerDocumentSymbolProvider({ language: "java" }, new JavaDocumentSymbolProvider()));
+    // add eventListener which reloads DocumentSymbolProvider when switching file tabs or opening new file
     (0, eventListener_1.eventListener)(context);
     // Start Hover Provider to create hovers
     context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
@@ -113,6 +95,7 @@ async function activate(context) {
 exports.activate = activate;
 // Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
 class JavaDocumentSymbolProvider {
+    // execute DocumentSymbolProvider
     provideDocumentSymbols(document, token) {
         // Use in iteration to find kanzis
         var foundMethods = [];
@@ -131,7 +114,7 @@ class JavaDocumentSymbolProvider {
             //   – KanzilistIMPwD: kanzilistIMP without duplicates
             // – kanzilistMET: all the methods
             // – kanzilist: the implementations and their belonging methods
-            // Full methodlist from CSV, to edit prefered methods: edit locatorList.json in workspace
+            // Full methodlist from backend, to edit prefered methods: edit locatorList.json in workspace
             const fs = require('fs');
             var data = JSON.parse(fs.readFileSync(folder + '/greenide/locatorItems.json', 'utf8'));
             var kanzilistFULL = [];
@@ -149,11 +132,9 @@ class JavaDocumentSymbolProvider {
             }
             // Purge duplicates in kanzilistIMP
             let kanzilistIMPwD = [];
-            kanzilistIMP.forEach((i) => {
-                if (!kanzilistIMPwD.includes(i)) {
-                    kanzilistIMPwD.push(i);
-                }
-            });
+            kanzilistIMP.forEach((i) => { if (!kanzilistIMPwD.includes(i)) {
+                kanzilistIMPwD.push(i);
+            } });
             // Two dimensional list of kanzi methods to find methods after implementation
             // kanzilist = [implemented][method]
             var kanzilist = [];
@@ -168,13 +149,11 @@ class JavaDocumentSymbolProvider {
                 var line = document.lineAt(i);
                 // loop 1: find kanzi implementations
                 for (var temp = 0; temp < kanzilist.length; temp++) {
-                    // if kanzi is in line ...
+                    // if kanzi is in line add it to containedMethods
                     if (line.text.includes('import ' + kanzilist[temp][0])) {
                         containedKanzis.push(kanzilist[temp]);
                     }
                 }
-                // TODO: fix kanzi finding
-                // Issue: second object in Hash32 too long and not correct
                 // Loop 2: find objects / methods from imported kanzi
                 for (var temp = 0; temp < containedKanzis.length; temp++) {
                     var impKanzi = containedKanzis[temp][0].slice(containedKanzis[temp][0].lastIndexOf('.') + 1, containedKanzis[temp][0].length);
@@ -190,9 +169,8 @@ class JavaDocumentSymbolProvider {
                                     do {
                                         k++;
                                     } while (!line.text.substring(j - k - 1, j - 3).includes(' '));
-                                    // Hash32 name = new hash32(99) // j = 16, k = 6 --> substring(16-6,16-2) = substring(11,15) = 'name'
-                                    var target = line.text.substring(j - k, j - 3);
                                     // search for target
+                                    var target = line.text.substring(j - k, j - 3);
                                     var iCopy = i + 1; // logically stay at line i but search in segment between brackets
                                     var bracketCounter = 0; // to count brackets for instance
                                     do {
@@ -202,7 +180,6 @@ class JavaDocumentSymbolProvider {
                                                 if (!document.lineAt(iCopy).text.substring(j2).includes(target + '.' + containedKanzis[temp][1] + '(')) {
                                                     symbols.push({
                                                         // Substring only grabbing kanzi method name without braces
-                                                        // name: line.text.substr(j-1, (k-1) - (j-1)),
                                                         name: impKanzi + '.' + containedKanzis[temp][1] + '()',
                                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
                                                         runtime: [0, 0],
@@ -235,7 +212,6 @@ class JavaDocumentSymbolProvider {
                                 if (!line.text.substring(j).includes(' new ' + impKanzi + '(')) {
                                     symbols.push({
                                         // Substring only grabbing kanzi method name without braces
-                                        // name: line.text.substr(j-1, (k-1) - (j-1)),
                                         name: impKanzi + '()',
                                         method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
                                         runtime: [0, 0],
@@ -244,6 +220,7 @@ class JavaDocumentSymbolProvider {
                                         containerName: containerNumber.toString(),
                                         location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impKanzi.length + 4)))
                                     });
+                                    // apply foundMethods with data
                                     foundMethods[containerNumber] = kanzilist[temp][1];
                                     containerNumber++;
                                     break;
@@ -268,9 +245,8 @@ class JavaDocumentSymbolProvider {
                         checkDup = true;
                     }
                 }
-                // if there was no duplicate while iterating in functionsWD ...
+                // if there was no duplicate while iterating in functionsWD add this element from functions to functionsWD
                 if (checkDup === false) {
-                    // ... add this element from functions to functionsWD
                     functions.push(functionsR[j]);
                 }
                 // reset checkDup for next iteration
@@ -284,10 +260,7 @@ exports.JavaDocumentSymbolProvider = JavaDocumentSymbolProvider;
 // This method is called when your extension is deactivated
 function deactivate() { }
 exports.deactivate = deactivate;
-function getFunctions() {
-    return functions;
-}
+// return functions for other methods
+function getFunctions() { return functions; }
 exports.getFunctions = getFunctions;
-// For file reading, not purpose though
-function callback(arg0, json, arg2, callback) { }
 //# sourceMappingURL=extension.js.map

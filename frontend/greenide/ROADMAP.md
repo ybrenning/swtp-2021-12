@@ -40,5 +40,13 @@
     [X] backend doesnt respond (Error 400)
     [X] use getFunctions() in other files so no need to provide functions
     [X] Update Website
-    [ ] rename all kanzi occurences to genereic method names
-    [ ] Remove test cases / comments
+    [ ] rename all kanzi occurences in extension.ts to genereic method names
+    [X] Remove test cases / comments
+        [X] - functions segment
+        [X] - providers segment
+        [X] - remove test segment and see if still works
+        [X] - remove types segment and see if still works
+        [X] - webviews
+        [X] - extension.ts
+        [X] - remove method_list.json and method_list.txt and see if still works
+    [ ] Try to catch errors with plain catch-case to make debug console clear

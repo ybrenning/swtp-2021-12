@@ -4,7 +4,7 @@
 import * as vscode from 'vscode';
 
 export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
-    
+
     onDidChangeTreeData?: vscode.Event<ConfigItem | null | undefined> | undefined;
 
     // Tree for config segment
@@ -12,15 +12,6 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
 
     // Set the tree elements for side panel
     constructor(config: string[]) {
-        // TODO: 
-        // [ ] - code to read config.json
-        // structure:
-        /*
-        [X] - active config gets number 0 and is displayed
-        [ ] - every saved config gets number 1 and up
-        [ ] - configs can be browsed in webview, maybe dropdown menu
-        [ ] - saved configs can be deleted with a button (command to remove whole block of number x in config.json)
-        */
 
         // read the config.json and get current active config elements
         var sendData = [];
@@ -36,16 +27,10 @@ export class ConfigsProvider implements vscode.TreeDataProvider<ConfigItem> {
             new ConfigItem('Open Config Menu')
         ];
     }
-    
-    getTreeItem(element: ConfigItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        return element;
-    }
-    
-    getChildren(element?: ConfigItem | undefined): vscode.ProviderResult<ConfigItem[]> {
-        if (element === undefined) {
-            return this.data;
-        }
 
+    getTreeItem(element: ConfigItem): vscode.TreeItem | Thenable<vscode.TreeItem> { return element; }
+    getChildren(element?: ConfigItem | undefined): vscode.ProviderResult<ConfigItem[]> {
+        if (element === undefined) { return this.data; }
         return element.children;
     }
 }
@@ -55,10 +40,7 @@ class ConfigItem extends vscode.TreeItem {
     children: ConfigItem[] | undefined;
 
     constructor(label: string, children?: ConfigItem[]) {
-        super(
-            label,
-            children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded
-        );
+        super(label, children === undefined ? vscode.TreeItemCollapsibleState.None : vscode.TreeItemCollapsibleState.Expanded);
 
         // Variables for each ConfigItem
         this.children = children;

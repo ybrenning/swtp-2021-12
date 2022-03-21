@@ -1,4 +1,6 @@
 "use strict";
+// listens if file tab was changed or new file was opened
+// simply refreshes new found methods in background
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eventListener = void 0;
 const vscode = require("vscode");

@@ -17,12 +17,8 @@ class SettingsProvider {
             new SettingsItem('Software System', 3)
         ];
     }
-    getTreeItem(element) {
-        return element;
-    }
-    getChildren() {
-        return this.data;
-    }
+    getTreeItem(element) { return element; }
+    getChildren() { return this.data; }
 }
 exports.SettingsProvider = SettingsProvider;
 // Class to create each item

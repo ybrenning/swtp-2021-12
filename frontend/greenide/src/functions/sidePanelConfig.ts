@@ -9,11 +9,9 @@ import { getFolder } from './getFolder';
 const folder = getFolder();
 
 export async function sidePanelConfigs(context: vscode.ExtensionContext) {
+
     // Config data (default config 0)
     var config: string[] = [];
-
-    // TEST suite
-    console.log('SIDEPANEL TEST');
 
     // Read current config
     const fs = require('fs');
@@ -21,12 +19,12 @@ export async function sidePanelConfigs(context: vscode.ExtensionContext) {
     // if file exists, get active config
     if (fs.existsSync(folder + '/greenide/configuration.json')) {
 
+        // read config.json and apply active config
         var data = fs.readFileSync(folder + '/greenide/configuration.json');
-        
         var result = JSON.parse(data);
         config = result.config[0].config;
 
-    // else create file
+        // else create file
     } else {
 
         // initiate file
@@ -36,8 +34,7 @@ export async function sidePanelConfigs(context: vscode.ExtensionContext) {
 
         // Set data for obj
         obj.config.push({ id: 0, name: 'Active', config: [] });
-
-        var json = JSON.stringify(obj,null,'\t');
+        var json = JSON.stringify(obj, null, '\t');
         fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
     }
 
@@ -51,7 +48,6 @@ export async function sidePanelConfigs(context: vscode.ExtensionContext) {
 
     // Button to open menu for configs, to select configs, save favorites or delete favorites
     let clickEvent = vscode.commands.registerCommand('greenIDE-config.menu', () => {
-
         // Open webview 'ConfigMenu'
         ConfigMenu.createOrShow(context.extensionUri);
     });

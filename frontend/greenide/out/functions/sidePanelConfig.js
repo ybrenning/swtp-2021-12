@@ -11,12 +11,11 @@ const folder = (0, getFolder_1.getFolder)();
 async function sidePanelConfigs(context) {
     // Config data (default config 0)
     var config = [];
-    // TEST suite
-    console.log('SIDEPANEL TEST');
     // Read current config
     const fs = require('fs');
     // if file exists, get active config
     if (fs.existsSync(folder + '/greenide/configuration.json')) {
+        // read config.json and apply active config
         var data = fs.readFileSync(folder + '/greenide/configuration.json');
         var result = JSON.parse(data);
         config = result.config[0].config;

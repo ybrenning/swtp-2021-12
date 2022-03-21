@@ -14,12 +14,8 @@ class HelpProvider {
             new HelpItem('[↪︎] Contact Us', 2)
         ];
     }
-    getTreeItem(element) {
-        return element;
-    }
-    getChildren() {
-        return this.data;
-    }
+    getTreeItem(element) { return element; }
+    getChildren() { return this.data; }
 }
 exports.HelpProvider = HelpProvider;
 // Class to create each item

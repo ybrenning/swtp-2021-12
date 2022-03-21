@@ -5,8 +5,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sidePanelHelp = void 0;
 const vscode = require("vscode");
 const help_1 = require("../providers/help");
-const getFolder_1 = require("./getFolder");
-const folder = (0, getFolder_1.getFolder)();
 async function sidePanelHelp(context) {
     // Creates tree view for fourth segment of side panel, get instructions, commands, help links etc
     var helpTreeView = vscode.window.createTreeView("greenIDE-help", {

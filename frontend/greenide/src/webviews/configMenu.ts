@@ -15,7 +15,6 @@ export class ConfigMenu {
 
   // Track the current panel. Only allow a single panel to exist at a time.
   public static currentPanel: ConfigMenu | undefined;
-
   public static readonly viewType = "green-ide";
 
   private readonly _panel: vscode.WebviewPanel;
@@ -105,16 +104,10 @@ export class ConfigMenu {
     // Set HTML content for webview panel
     this._panel.webview.html = this._getHtmlForWebview(webview);
 
-    // TODO: implement:
-    // [X] - pressing on button to send checkboxed configs
-    // [X] - saving config in JSON (default is 0)
-    // [X] - new button to save favorite with name in JSON
-    // [ ] - new segment: dropdown menu with favorites & delete button
     // Handle messages from the webview
-    
     webview.onDidReceiveMessage(
       message => {
-        new ConfigParser(extensionUri,message.command,message.num,message.text);
+        new ConfigParser(extensionUri, message.command, message.num, message.text);
       },
       undefined
     );

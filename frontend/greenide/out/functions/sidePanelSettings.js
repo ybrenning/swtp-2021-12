@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sidePanelSettings = void 0;
 const vscode = require("vscode");
 const settings_1 = require("../providers/settings");
-const getFolder_1 = require("./getFolder");
-const folder = (0, getFolder_1.getFolder)();
 async function sidePanelSettings(context) {
     // creates tree view for third segment of side panel
     var helpTreeView = vscode.window.createTreeView("greenIDE-settings", {

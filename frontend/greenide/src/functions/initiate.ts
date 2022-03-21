@@ -1,13 +1,13 @@
-import * as vscode from 'vscode';
+// initialization of needed directories when first starting greenIDE
+
 import { getFolder } from './getFolder';
+import fs = require('fs');
 
 const folder = getFolder();
-const fs = require('fs');
 
 export async function initiate() {
 
     // create needed directories
-    const fs = require('fs');
     fs.mkdirSync(folder + '/greenide/', { recursive: true });
     fs.mkdirSync(folder + '/greenide/csv/', { recursive: true });
 
@@ -16,9 +16,8 @@ export async function initiate() {
         system: '' as any
     };
     objS.system = 'kanzi';
-    var jsonS = JSON.stringify(objS,null,'\t');
+    var jsonS = JSON.stringify(objS, null, '\t');
 
+    // create system.json
     fs.writeFileSync(folder + '/greenide/system.json', jsonS, 'utf8');
 }
-
-function callback(arg0: string, jsonS: string, arg2: string, callback: any) { }

@@ -75,11 +75,6 @@ class ConfigMenu {
         const webview = this._panel.webview;
         // Set HTML content for webview panel
         this._panel.webview.html = this._getHtmlForWebview(webview);
-        // TODO: implement:
-        // [X] - pressing on button to send checkboxed configs
-        // [X] - saving config in JSON (default is 0)
-        // [X] - new button to save favorite with name in JSON
-        // [ ] - new segment: dropdown menu with favorites & delete button
         // Handle messages from the webview
         webview.onDidReceiveMessage(message => {
             new configParser_1.ConfigParser(extensionUri, message.command, message.num, message.text);
