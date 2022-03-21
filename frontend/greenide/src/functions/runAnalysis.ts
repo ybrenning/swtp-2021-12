@@ -47,6 +47,8 @@ export function runAnalysis(functions: {
     var jsonDefault = parseToSend(functions,0);
     var jsonApplied = parseToSend(functions,1);
 
+    // TODO: Apply Response Data, remove hardcode
+
     var responseDefault = getData(jsonDefault,softwareSystem);
     var responseApplied = getData(jsonApplied,softwareSystem);
 
@@ -55,13 +57,6 @@ export function runAnalysis(functions: {
     console.log(responseApplied);
 
     if (responseDefault !== undefined && responseApplied !== undefined) {
-        applyData(functions,responseDefault,responseApplied);
-    } else {
-        // TEST suite, apply hardcode
-        responseDefault = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respDefault.json', 'utf8'));
-        responseApplied = JSON.parse(fs.readFileSync('/Users/ferris/PECK/SWP/swtp-2021-12/frontend/greenide/src/configurations/respApplied.json', 'utf8'));
-        
-        //var functionsNEW = applyData(functions,responseDefault,responseApplied);
         applyData(functions,responseDefault,responseApplied);
     }
 }
@@ -105,7 +100,7 @@ function parseToSend(functions: {
     location: vscode.Location;
 }[], mode: number){
 
-    var config;
+    var configs;
 
     // switch case for both post datas
     // 0 - data without config applied
@@ -113,27 +108,27 @@ function parseToSend(functions: {
     switch (mode) {
 
         case 0:
-            config = ['root'];
+            configs = ['root'];
             break;
 
         case 1:
             // read current config
             var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-            config = [];
+            configs = [];
 
             // get active config
-            if (result.config[0] === undefined) { config = []; } 
-            else { config = result.config[0].config; }
+            if (result.config[0] === undefined) { configs = []; } 
+            else { configs = result.config[0].config; }
             break;
     }
 
     // define collection for data
     var obj = {
         functions: [] as any,
-        config: [] as any
+        configs: [] as any
     };
 
-    for (let i = 0; i < config.length; i++) { obj.config.push(config[i]); }
+    for (let i = 0; i < configs.length; i++) { obj.configs.push(configs[i]); }
     for (let i = 0; i < functions.length; i++) { obj.functions.push(functions[i].method); }
     var json = JSON.stringify(obj,null,'\t');
 

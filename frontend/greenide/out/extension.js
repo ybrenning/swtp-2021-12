@@ -35,7 +35,7 @@ async function activate(context) {
         (0, startup_1.startup)();
         // get data from backend (IMPLEMENT WHEN READY)
         //functions = runAnalysis(functions);
-        (0, runAnalysis_1.runAnalysis)(functions);
+        const anaPromise = (0, runAnalysis_1.runAnalysis)(functions);
         console.log(functions);
         // side panel segments loading
         const homePromise = sidePanelHome();
@@ -43,6 +43,7 @@ async function activate(context) {
         const settingsPromise = (0, sidePanelSettings_1.sidePanelSettings)(context);
         const helpPromise = (0, sidePanelHelp_1.sidePanelHelp)(context);
         // ||
+        await anaPromise;
         await homePromise;
         await configsPromise;
         await settingsPromise;

@@ -51,7 +51,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // get data from backend (IMPLEMENT WHEN READY)
         //functions = runAnalysis(functions);
-        runAnalysis(functions);
+        const anaPromise = runAnalysis(functions);
 
         console.log(functions);
 
@@ -61,6 +61,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const settingsPromise = sidePanelSettings(context);
         const helpPromise = sidePanelHelp(context);
         // ||
+        await anaPromise;
         await homePromise;
         await configsPromise;
         await settingsPromise;
