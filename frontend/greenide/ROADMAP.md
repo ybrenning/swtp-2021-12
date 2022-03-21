@@ -35,13 +35,11 @@
         when changing files & clicking on webview buttons so methods and config get
         refreshed without pressing the button in home-segment
     [X] fix folder location string for windows
-    [ ] focus on line when clicking item in treeview
+    [X] focus on line when clicking item in treeview
     [X] make range for hoverprovoder correctly
     [ ] parse config elements from configItems.json into config webview
     [ ] backend doesnt respond (Error 400)
     [X] use getFunctions() in other files so no need to provide functions
-    [ ] make sidePanelHome.ts with use of getFunctions()
-    [ ] make JavaDocumentSymbolProvider into new file
     [ ] Update Website
     [ ] rename all kanzi occurences to genereic method names
     [ ] Remove test cases / comments

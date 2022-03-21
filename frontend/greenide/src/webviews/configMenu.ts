@@ -128,8 +128,14 @@ export class ConfigMenu {
 
     // Read config JSON to display current configs
     const fs = require('fs');
+
+    // Read config JSON to display current configs
     var data = fs.readFileSync(folder + '/greenide/configuration.json', 'utf8');
     var configList = data;
+
+    // Read configItems JSON to display checkboxes
+    var data2 = fs.readFileSync(folder + '/greenide/configItems.json', 'utf8');
+    var configItems = data2;
 
     // Get path of css file to be used within the Webview's HTML
     const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
@@ -175,11 +181,16 @@ export class ConfigMenu {
     <br><input class="configCheckbox" type="checkbox" name="X86" /> X86</br>
     <br></br>
     </form>
+
+    <form id="checkList"></form>
+
     <span onclick="applyConfig()"><button> <strong>Apply This Configuration</strong> </button></span>
     <span onclick="saveConfig()"><button> <strong>Save This Configuration</strong> </button></span>
     </figure>
 
     <figure>
+
+    <div id="cboxes"></div>
 
     <h3>Available Configs:</h3>
 
@@ -202,8 +213,7 @@ export class ConfigMenu {
 
     <script>
 
-
-    var mainContainer = document.getElementById("target-id");
+    var mainContainer1 = document.getElementById("target-id");
     data = ${configList}
 
     for (var i = 0; i < data.config.length; i++) {
@@ -213,21 +223,13 @@ export class ConfigMenu {
         configItems.push(' ' + data.config[i].config[j]);
       }
       div.innerHTML = data.config[i].name + ':&nbsp;&nbsp;[' + configItems + ' ]';
-      mainContainer.appendChild(div);
+      mainContainer1.appendChild(div);
     }
-    
 
-    function applyConfig() {
-      var checkedValue = []; 
-      var inputElements = document.getElementsByClassName('configCheckbox');
-      for(var i=0; inputElements[i]; ++i){
-            if(inputElements[i].checked){
-                checkedValue.push(inputElements[i].name);
-            }
-      }
-      const vscode = acquireVsCodeApi();
-      vscode.postMessage({command: 'Apply', num: 0, text:checkedValue})
-    }
+    var mainContainer2 = document.getElementById("target-id");
+    elements = ${configItems}
+
+    // TODO: implement way to create list of checkboxes dynamically from configItems
 
     function saveConfig() {
       var checkedValue = []; 
