@@ -28,7 +28,11 @@ class FunctionValueCalculatorService(
             for (functionConfigRaw in functionConfigsRaw) {
                 // repeat for every configuration that is requested
                 for (configToFind in configsToFind) {
-                    // is this config {requested} AND {the one in this entry}
+                    //TODO: remove test
+                    println("-------------")
+                    println(configToFind)
+                    println(functionConfigRaw.configs[configToFind])
+                    // is this config {requested} AND {in this entry}
                     if (functionConfigRaw.configs[configToFind] == true) {
                         functionResultEnergy += functionConfigRaw.energy
                         functionResultTime += functionConfigRaw.time
