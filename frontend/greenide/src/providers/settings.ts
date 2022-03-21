@@ -2,11 +2,12 @@
 // Just two clickable elements to either parse another configItems.json or locatorItems.json
 
 import * as vscode from 'vscode';
+import { getFolder } from '../functions/getFolder';
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 
 export class SettingsProvider implements vscode.TreeDataProvider<SettingsItem> {
-    
+
     onDidChangeTreeData?: vscode.Event<SettingsItem | null | undefined> | undefined;
 
     // Tree for help segment
@@ -16,25 +17,22 @@ export class SettingsProvider implements vscode.TreeDataProvider<SettingsItem> {
     constructor() {
         // Create three items
         this.data = [
-            new SettingsItem('Config Elements',0),
-            new SettingsItem('Locator Elements',1),
-            new SettingsItem('Configurations',2),
-            new SettingsItem('Software System',3)
+            new SettingsItem('Config Elements', 0),
+            new SettingsItem('Locator Elements', 1),
+            new SettingsItem('Configurations', 2),
+            new SettingsItem('Software System', 3)
         ];
     }
-    
-    getTreeItem(element: SettingsItem): vscode.TreeItem | Thenable<vscode.TreeItem> {
-        return element;
-    }
-    
-    getChildren(): vscode.ProviderResult<SettingsItem[]> {
-        return this.data;
-    }
+
+    getTreeItem(element: SettingsItem): vscode.TreeItem | Thenable<vscode.TreeItem> { return element; }
+    getChildren(): vscode.ProviderResult<SettingsItem[]> { return this.data; }
 }
 
 // Class to create each item
 class SettingsItem extends vscode.TreeItem {
+
     constructor(label: string, nr: number) {
+
         // Set the label for each element
         super(label);
 

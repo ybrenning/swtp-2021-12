@@ -4,8 +4,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.applyData = void 0;
 function applyData(functions, dataDefault, dataApplied) {
-    // TEST suite
-    console.log('TEST PROVIDING DATA');
     // apply default data from backend
     for (let i = 0; i < dataDefault.results.length; i++) {
         functions[i].runtime[0] = dataDefault.results[i].time;

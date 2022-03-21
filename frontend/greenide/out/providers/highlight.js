@@ -19,18 +19,18 @@ class MethodHighlight {
     }
     // Does the syntax highlighting at provided location
     decorate() {
-        // set color
+        // set color depending on value
         var color;
-        if (this.runtime[1] < 20 && this.runtime[1] !== 0) {
+        if (this.runtime[1] < 20) {
             color = green;
         }
-        else if ((this.runtime[1] >= 20 && this.runtime[1] < 50) || this.runtime[1] === 0) {
+        else if (this.runtime[1] >= 20 && this.runtime[1] < 50) {
             color = yellow;
         }
         else if (this.runtime[1] >= 50) {
             color = red;
         }
-        // The type, what color and other stuff
+        // The type, what color is used
         var decorationType = vscode.window.createTextEditorDecorationType({
             backgroundColor: color,
         });

@@ -6,16 +6,16 @@ exports.sidePanelConfigs = void 0;
 const vscode = require("vscode");
 const configs_1 = require("../providers/configs");
 const configMenu_1 = require("../webviews/configMenu");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const getFolder_1 = require("./getFolder");
+const folder = (0, getFolder_1.getFolder)();
 async function sidePanelConfigs(context) {
     // Config data (default config 0)
     var config = [];
-    // TEST suite
-    console.log('SIDEPANEL TEST');
     // Read current config
     const fs = require('fs');
     // if file exists, get active config
     if (fs.existsSync(folder + '/greenide/configuration.json')) {
+        // read config.json and apply active config
         var data = fs.readFileSync(folder + '/greenide/configuration.json');
         var result = JSON.parse(data);
         config = result.config[0].config;

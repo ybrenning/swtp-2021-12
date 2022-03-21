@@ -5,10 +5,9 @@ import { getFunctions } from '../extension';
 
 export class GoHoverProvider implements vscode.HoverProvider {
     
-
+    // execute hovering field
     public provideHover(document: vscode.TextDocument, position: vscode.Position, token: vscode.CancellationToken): Thenable<vscode.Hover> {
 
-        
         var functions: { 
             name: string; 
             method: string; 
@@ -20,29 +19,29 @@ export class GoHoverProvider implements vscode.HoverProvider {
         }[] = getFunctions();
 
         // document: currently open document, position: current position of cursor
-        // Both change dynamically as the user interacts with VSC so the methods also have to be dynamic
         return new Promise((resolve) => {
 
+            // check line for functions comparison
             var line = position.line + 1;
 
-            // TEST suite
-            console.log('LINE FROM HOVERPROVIDER: ' + line);
-            console.log('LINE FROM FUNCTIONS: ' + functions[0].location.range.start.line);
-
+            // for every method, check location and execute hover if mouse is in line on method
             for (let i = 0; i < functions.length; i++) {
 
+                // shorten the data for better implementation
                 var functLine = functions[i].location.range.start.line;
                 var functChar = functions[i].location.range.start.character;
                 var functCharEND = functions[i].location.range.end.character;
 
+                // if mouse is in line
                 if (line === functLine) {
 
-                    // Range where hover is active
+                    // Range where hover is active (on the method)
                     var range = new vscode.Range(
                         new vscode.Position(functLine+1, functChar),
                         new vscode.Position(functLine+1, functCharEND)
                     );
 
+                    // text to display
                     var text = (functions[i].name + '\n\n'
                                 + 'Results without Config' + '  \n'
                                 + 'Runtime: ' + functions[i].runtime[0] + ' ms  \n'

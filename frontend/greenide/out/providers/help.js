@@ -11,15 +11,11 @@ class HelpProvider {
         this.data = [
             new HelpItem('[↪︎] GitLab', 0),
             new HelpItem('[↪︎] How To Use', 1),
-            new HelpItem('[↪︎] Contact', 2)
+            new HelpItem('[↪︎] Contact Us', 2)
         ];
     }
-    getTreeItem(element) {
-        return element;
-    }
-    getChildren() {
-        return this.data;
-    }
+    getTreeItem(element) { return element; }
+    getChildren() { return this.data; }
 }
 exports.HelpProvider = HelpProvider;
 // Class to create each item

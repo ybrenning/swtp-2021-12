@@ -4,7 +4,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.SettingsProvider = void 0;
 const vscode = require("vscode");
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const getFolder_1 = require("../functions/getFolder");
+const folder = (0, getFolder_1.getFolder)();
 class SettingsProvider {
     // Set the tree elements for side panel
     constructor() {
@@ -16,12 +17,8 @@ class SettingsProvider {
             new SettingsItem('Software System', 3)
         ];
     }
-    getTreeItem(element) {
-        return element;
-    }
-    getChildren() {
-        return this.data;
-    }
+    getTreeItem(element) { return element; }
+    getChildren() { return this.data; }
 }
 exports.SettingsProvider = SettingsProvider;
 // Class to create each item

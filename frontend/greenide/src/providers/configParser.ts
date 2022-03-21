@@ -1,9 +1,11 @@
 // Parses received config settings from webview into proper JSON
 
 import * as vscode from "vscode";
+import { getFolder } from "../functions/getFolder";
 import { ConfigMenu } from "../webviews/configMenu";
+const fs = require('fs');
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 
 // The main webview Panel to work with
 export class ConfigParser {
@@ -23,12 +25,13 @@ export class ConfigParser {
     // - Load config number num (Load,num)
     // - Save as new config (Save,Configs)
     constructor(extensionUri: vscode.Uri, mode: string, num?: number, config?: string[]) {
+
         this.num = num;
         this.config = config;
         this.extensionUri = extensionUri;
 
+        // set default config if no config applied
         if (config?.length === 0) {
-            console.log('TEST: NO CONFIG');
             config = ['root'];
         }
 
@@ -36,19 +39,19 @@ export class ConfigParser {
         switch (mode) {
             // Apply this config
             case 'Apply':
-                applyConfig(config,extensionUri);
+                applyConfig(config, extensionUri);
                 break;
             // Delete config number num
             case 'Delete':
-                deleteConfig(num,extensionUri);
+                deleteConfig(num, extensionUri);
                 break;
             // Load config number num
             case 'Load':
-                loadConfig(num,extensionUri);
+                loadConfig(num, extensionUri);
                 break;
             // Save this config as new set
             default:
-                saveConfig(config,extensionUri);
+                saveConfig(config, extensionUri);
                 break;
         }
     }
@@ -56,6 +59,7 @@ export class ConfigParser {
 
 // Apply provided config from checkboxes, set this as new configs set number 0
 function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
+
     // Define collection for data
     var obj = {
         config: [] as any
@@ -64,10 +68,9 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     // Make string for json
     var json: string;
 
-    const fs = require('fs');
-
     // Overwrite file / default config num 0
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
         if (err) {
             console.log(err);
         } else {
@@ -82,12 +85,12 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
                 result.config[0] = obj.config[0];
 
                 // Write new default config into file
-                json = JSON.stringify(result,null,'\t');
+                json = JSON.stringify(result, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             } else {
                 // Set data for obj
                 obj.config.push({ id: 0, name: 'Active', config: config });
-                json = JSON.stringify(obj,null,'\t');
+                json = JSON.stringify(obj, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
@@ -100,9 +103,10 @@ function applyConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
 
 // Delete this config number num
 function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
-    const fs = require('fs');
+
     // Read file to get configs
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
         if (err) {
             console.log(err);
         } else {
@@ -117,10 +121,10 @@ function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
                 throw new Error('Config Not Found');
             } else {
                 // Splice for 1 spot at found index
-                result.config.splice(index,1);
+                result.config.splice(index, 1);
 
                 // Translate to JSON and write into file
-                var json = JSON.stringify(result,null,'\t');
+                var json = JSON.stringify(result, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
         }
@@ -133,7 +137,6 @@ function deleteConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
 // Load this config, set it as new config set number 0
 function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
-    const fs = require('fs');
 
     // Read file to get configs
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
@@ -154,10 +157,10 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
                 result.config[0] = { id: 0, name: 'Active', config: result.config[index].config };
 
                 // Translate to JSON and write into file
-                var json = JSON.stringify(result,null,'\t');
+                var json = JSON.stringify(result, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
-        } 
+        }
     });
 
     // Open webview 'ConfigMenu'
@@ -167,6 +170,7 @@ function loadConfig(num: number | undefined, extensionUri: vscode.Uri) {
 
 // Save the provided config
 function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
+
     // Define collection for data
     var obj = {
         config: [] as any
@@ -175,15 +179,13 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
     // Make string for json
     var json: string;
 
-    const fs = require('fs');
-
     // Overwrite file / default config num 0
     fs.readFile(folder + '/greenide/configuration.json', 'utf8', function readFileCallback(err: any, data: string) {
+
         if (err) {
             console.log(err);
         } else {
             if (data.length !== 0) {
-                // TEST suite
                 var result = JSON.parse(data);
                 var ids: number[] = [];
                 var id: number = 0;
@@ -192,11 +194,7 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
                 for (let i = 0; i < Object.keys(result.config).length; i++) {
                     ids.push(result.config[i].id);
                 }
-
-                // TODO: does only save default value (0) for id, then the next time it works
-                // problem: ids list is compared with numbers, but all are different, so no new number
-                // assign id as smallest id not taken
-                for (let i = 0; i < Object.keys(result.config).length+1; i++) {
+                for (let i = 0; i < Object.keys(result.config).length + 1; i++) {
                     if (!(ids.includes(i))) {
                         id = i;
                     }
@@ -213,17 +211,17 @@ function saveConfig(config: string[] | undefined, extensionUri: vscode.Uri) {
                 obj.config.push({ id: id, name: name, config: config });
 
                 // Write new default config into file
-                json = JSON.stringify(obj,null,'\t');
+                json = JSON.stringify(obj, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             } else {
                 // Set data for obj
                 obj.config.push({ id: 0, name: 'Active', config: config });
                 obj.config.push({ id: 1, name: 'Config 1', config: config });
 
-                json = JSON.stringify(obj,null,'\t');
+                json = JSON.stringify(obj, null, '\t');
                 fs.writeFile(folder + '/greenide/configuration.json', json, 'utf8', callback);
             }
-        }   
+        }
     });
 
     // Open webview 'ConfigMenu'

@@ -4,17 +4,17 @@
 // - works with JSON to save configs (0 default/current, 1+ saved configs)
 
 import * as vscode from "vscode";
+import { getFolder } from "../functions/getFolder";
 import { getNonce } from "../getNonce";
 import { ConfigParser } from "../providers/configParser";
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
+const folder = getFolder();
 
 // The main webview Panel to work with
 export class ConfigMenu {
 
   // Track the current panel. Only allow a single panel to exist at a time.
   public static currentPanel: ConfigMenu | undefined;
-
   public static readonly viewType = "green-ide";
 
   private readonly _panel: vscode.WebviewPanel;
@@ -104,16 +104,10 @@ export class ConfigMenu {
     // Set HTML content for webview panel
     this._panel.webview.html = this._getHtmlForWebview(webview);
 
-    // TODO: implement:
-    // [X] - pressing on button to send checkboxed configs
-    // [X] - saving config in JSON (default is 0)
-    // [X] - new button to save favorite with name in JSON
-    // [ ] - new segment: dropdown menu with favorites & delete button
     // Handle messages from the webview
-    
     webview.onDidReceiveMessage(
       message => {
-        new ConfigParser(extensionUri,message.command,message.num,message.text);
+        new ConfigParser(extensionUri, message.command, message.num, message.text);
       },
       undefined
     );
@@ -127,6 +121,12 @@ export class ConfigMenu {
 
     // Read config JSON to display current configs
     const fs = require('fs');
+
+    // Read config JSON to display current configs
+    var data = fs.readFileSync(folder + '/greenide/configuration.json', 'utf8');
+    var configList = data;
+
+    // Read configItems JSON to display checkboxes
     var data = fs.readFileSync(folder + '/greenide/configuration.json', 'utf8');
     var configList = data;
 
@@ -174,6 +174,9 @@ export class ConfigMenu {
     <br><input class="configCheckbox" type="checkbox" name="X86" /> X86</br>
     <br></br>
     </form>
+
+    <form id="checkList"></form>
+
     <span onclick="applyConfig()"><button> <strong>Apply This Configuration</strong> </button></span>
     <span onclick="saveConfig()"><button> <strong>Save This Configuration</strong> </button></span>
     </figure>
@@ -202,7 +205,7 @@ export class ConfigMenu {
     <script>
 
 
-    var mainContainer = document.getElementById("target-id");
+    var mainContainer1 = document.getElementById("target-id");
     data = ${configList}
 
     for (var i = 0; i < data.config.length; i++) {
@@ -212,7 +215,7 @@ export class ConfigMenu {
         configItems.push(' ' + data.config[i].config[j]);
       }
       div.innerHTML = data.config[i].name + ':&nbsp;&nbsp;[' + configItems + ' ]';
-      mainContainer.appendChild(div);
+      mainContainer1.appendChild(div);
     }
     
 
