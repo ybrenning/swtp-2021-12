@@ -15,7 +15,7 @@ export class HelpProvider implements vscode.TreeDataProvider<HelpItem> {
         this.data = [
             new HelpItem('[↪︎] GitLab', 0),
             new HelpItem('[↪︎] How To Use', 1),
-            new HelpItem('[↪︎] Contact', 2)
+            new HelpItem('[↪︎] Contact Us', 2)
         ];
     }
     
