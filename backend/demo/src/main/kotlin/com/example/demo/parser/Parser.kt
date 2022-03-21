@@ -15,19 +15,23 @@ object Parser {
     fun parseFile(softwareSystem: String, repository: Repository) {
         val csvFilePath = "$csvFileFolder$softwareSystem.csv"
         var csvLineElements: List<String>
-        lateinit var configurationNames: List<String>
+        val configurationNames = mutableListOf<String>()
         var i = 0
 
         File(csvFilePath).forEachLine {
             csvLineElements = it.split(",")
-            // check for first line and create the configuration names list from it
+            // on first pass saves the names of the configurations
             if (i == 0) {
-                configurationNames = csvLineElements
+                for (loopVar in csvLineElements.indices) {
+                    // removes " at start and end from the config name string
+                    var lineElement: String = csvLineElements[loopVar].substring(1, csvLineElements[loopVar].length -2)
+                    configurationNames.add(loopVar, lineElement)
+                }
             } else {
-                // removes " from the function name string
-                var functionName = csvLineElements[0]
+                // removes " at start and end from the function name string
+                var functionName = csvLineElements[0].substring(1, csvLineElements[0].length -2)
 
-                // create the map of the configuration names and values for the Line (entry)
+                // create map of the configuration names and values per entry
                 val configMap = HashMap<String, Boolean>()
                 for (loopVar in 1..configurationNames.size - 3)  {
                     // if length is 1 then it's a config
