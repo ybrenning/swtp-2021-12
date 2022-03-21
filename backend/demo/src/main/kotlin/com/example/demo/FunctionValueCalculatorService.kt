@@ -40,7 +40,7 @@ class FunctionValueCalculatorService(
                     }
                 }
             }
-cd C:/GreenIDE/swtp-2021-12
+
             // add the function to the return list
             configuredFunctions.add(
                 ConfiguredFunction(
