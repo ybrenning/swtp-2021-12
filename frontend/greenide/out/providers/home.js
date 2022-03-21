@@ -28,9 +28,7 @@ class HomeProvider {
             ];
         }
     }
-    getTreeItem(element) {
-        return element;
-    }
+    getTreeItem(element) { return element; }
     getChildren(element) {
         if (element === undefined) {
             return this.data;
@@ -53,12 +51,7 @@ class HomeItem extends vscode.TreeItem {
                 command: "greenIDE-home.click",
                 arguments: [functionI]
             };
-        } /*else if (label.match('Detailed Statistics')) {
-            this.command = {
-                title: "Open Details",
-                command: "greenIDE-home.overview",
-            };
-        }*/
+        }
         else if (label.match('Highlight All Methods')) {
             this.command = {
                 title: "Highlight All Methods",

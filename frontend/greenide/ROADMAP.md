@@ -28,19 +28,25 @@
 1.6 - Overview webview
 [X] - 1.6.1 - Hover text with data
 [X] - 1.6.2 - connect properly to backend
-[ ] - 1.6.3 - Display applied data in Hover
+[X] - 1.6.3 - Display applied data in Hover
 1.7 - Cleanup and minor issues / tuning
-[ ] - 1.7.1 - Bugfixes:
-          [ ] execute 'press refresh button' command aka greenIDE.run correctly
-              when changing files & clicking on webview buttons so methods and config get
-              refreshed without pressing the button in home-segment
-          [ ] focus on line when clicking item in treeview
-          [ ] make range for hoverprovoder correctly
-          [ ] parse config elements from configItems.json into config webview
-          [ ] backend doesnt respond (Error 400)
-[ ] - 1.7.2 - Refactoring / outsource functionalities to new classes
-          [ ] use getFunctions() in other files so no need to provide functions
-          [ ] make sidePanelHome.ts with use of getFunctions()
-          [ ] make JavaDocumentSymbolProvider into new file
-[ ] - 1.7.3 - rename all kanzi occurences to genereic method names
-[ ] - 1.7.4 - Remove test cases / comments
+[ ] - 1.7.1 - Bugfixes / Prepare Final:
+    [X] execute 'press refresh button' command aka greenIDE.run correctly
+        when changing files & clicking on webview buttons so methods and config get
+        refreshed without pressing the button in home-segment
+    [X] fix folder location string for windows
+    [X] focus on line when clicking item in treeview
+    [X] make range for hoverprovoder correctly
+    [X] backend doesnt respond (Error 400)
+    [X] use getFunctions() in other files so no need to provide functions
+    [X] Update Website
+    [X] rename all kanzi occurences in extension.ts to genereic method names
+    [X] Remove test cases / comments
+        [X] - functions segment
+        [X] - providers segment
+        [X] - remove test segment and see if still works
+        [X] - remove types segment and see if still works
+        [X] - webviews
+        [X] - extension.ts
+        [X] - remove method_list.json and method_list.txt and see if still works
+    [ ] Try to catch errors with plain catch-case to make debug console clear

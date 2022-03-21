@@ -7,15 +7,6 @@ const vscode = require("vscode");
 class ConfigsProvider {
     // Set the tree elements for side panel
     constructor(config) {
-        // TODO: 
-        // [ ] - code to read config.json
-        // structure:
-        /*
-        [X] - active config gets number 0 and is displayed
-        [ ] - every saved config gets number 1 and up
-        [ ] - configs can be browsed in webview, maybe dropdown menu
-        [ ] - saved configs can be deleted with a button (command to remove whole block of number x in config.json)
-        */
         // read the config.json and get current active config elements
         var sendData = [];
         for (var j = 0; j < config.length; j++) {
@@ -29,9 +20,7 @@ class ConfigsProvider {
             new ConfigItem('Open Config Menu')
         ];
     }
-    getTreeItem(element) {
-        return element;
-    }
+    getTreeItem(element) { return element; }
     getChildren(element) {
         if (element === undefined) {
             return this.data;

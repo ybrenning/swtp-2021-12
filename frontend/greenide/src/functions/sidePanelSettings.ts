@@ -2,9 +2,9 @@
 
 import * as vscode from 'vscode';
 import { SettingsProvider } from '../providers/settings';
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
 
 export async function sidePanelSettings(context: vscode.ExtensionContext) {
+
     // creates tree view for third segment of side panel
     var helpTreeView = vscode.window.createTreeView("greenIDE-settings", {
         treeDataProvider: new SettingsProvider
@@ -16,11 +16,10 @@ export async function sidePanelSettings(context: vscode.ExtensionContext) {
 
     // Generic button action, provided document is oepned
     let clickEvent = vscode.commands.registerCommand('greenIDE-settings.click', (openPath: string) => {
-
         // Open the link when clicking item number nr
         vscode.workspace.openTextDocument(openPath).then(doc => {
             vscode.window.showTextDocument(doc);
-          });
+        });
     });
 
     context.subscriptions.push(clickEvent);

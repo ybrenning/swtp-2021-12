@@ -3,18 +3,15 @@
 
 import * as vscode from 'vscode';
 
-export function applyData(functions: { 
-    name: string; 
-    method: string; 
+export function applyData(functions: {
+    name: string;
+    method: string;
     runtime: number[],
     energy: number[],
-    kind: vscode.SymbolKind; 
-    containerName: string; 
+    kind: vscode.SymbolKind;
+    containerName: string;
     location: vscode.Location;
 }[], dataDefault: any, dataApplied: any) {
-
-    // TEST suite
-    console.log('TEST PROVIDING DATA');
 
     // apply default data from backend
     for (let i = 0; i < dataDefault.results.length; i++) {

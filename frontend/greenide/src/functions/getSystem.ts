@@ -1,13 +1,15 @@
-// helping function to provide current software system
+// helping function to provide wanted software system
 
-import * as vscode from 'vscode';
+import { getFolder } from './getFolder';
+import fs = require('fs');
 
-const folder = vscode.workspace.workspaceFolders?.map(folder => folder.uri.path)[0];
-const fs = require('fs');
+const folder = getFolder();
 
 export function getSystem() {
 
+    // read softwareSystem from json, change json file to change software system
     var softwareSystem = JSON.parse(fs.readFileSync(folder + '/greenide/system.json', 'utf8'));
 
+    // return as export to get in any file
     return softwareSystem.system;
 }
