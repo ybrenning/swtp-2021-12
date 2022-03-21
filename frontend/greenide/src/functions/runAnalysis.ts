@@ -69,6 +69,7 @@ export function runAnalysis(functions: {
 function getData(json: string, softwareSystem: string) {
 
     // post values and save response 
+    console.log(json);
     json = JSON.stringify(JSON.parse(json));
 
     if (json.length > 0) {
@@ -104,19 +105,21 @@ function parseToSend(functions: {
     location: vscode.Location;
 }[], mode: number){
 
+    var config;
+
     // switch case for both post datas
     // 0 - data without config applied
     // 1 - data with config applied
     switch (mode) {
 
         case 0:
-            var config = [];
+            config = ['root'];
             break;
 
         case 1:
             // read current config
             var result = JSON.parse(fs.readFileSync(folder + '/greenide/configuration.json', 'utf8'));
-            var config = [];
+            config = [];
 
             // get active config
             if (result.config[0] === undefined) { config = []; } 

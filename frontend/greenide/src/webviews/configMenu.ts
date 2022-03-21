@@ -134,8 +134,8 @@ export class ConfigMenu {
     var configList = data;
 
     // Read configItems JSON to display checkboxes
-    var data2 = fs.readFileSync(folder + '/greenide/configItems.json', 'utf8');
-    var configItems = data2;
+    var data = fs.readFileSync(folder + '/greenide/configuration.json', 'utf8');
+    var configList = data;
 
     // Get path of css file to be used within the Webview's HTML
     const stylesPathMainPath = vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css');
@@ -190,8 +190,6 @@ export class ConfigMenu {
 
     <figure>
 
-    <div id="cboxes"></div>
-
     <h3>Available Configs:</h3>
 
     <div id="target-id"></div>
@@ -213,6 +211,7 @@ export class ConfigMenu {
 
     <script>
 
+
     var mainContainer1 = document.getElementById("target-id");
     data = ${configList}
 
@@ -225,11 +224,19 @@ export class ConfigMenu {
       div.innerHTML = data.config[i].name + ':&nbsp;&nbsp;[' + configItems + ' ]';
       mainContainer1.appendChild(div);
     }
+    
 
-    var mainContainer2 = document.getElementById("target-id");
-    elements = ${configItems}
-
-    // TODO: implement way to create list of checkboxes dynamically from configItems
+    function applyConfig() {
+      var checkedValue = []; 
+      var inputElements = document.getElementsByClassName('configCheckbox');
+      for(var i=0; inputElements[i]; ++i){
+            if(inputElements[i].checked){
+                checkedValue.push(inputElements[i].name);
+            }
+      }
+      const vscode = acquireVsCodeApi();
+      vscode.postMessage({command: 'Apply', num: 0, text:checkedValue})
+    }
 
     function saveConfig() {
       var checkedValue = []; 
