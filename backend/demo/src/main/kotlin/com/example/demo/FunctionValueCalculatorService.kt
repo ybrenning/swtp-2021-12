@@ -9,30 +9,23 @@ import org.springframework.stereotype.Service
 class FunctionValueCalculatorService(
     val repository: Repository
 ) {
-    // functions related to calculating the required values from the given configurations
-
     fun calcFunctionValues(
         softwareSystem: String,
-        functionsToFind: ArrayList<String>,
+        requestedFunctions: ArrayList<String>,
         configsToFind: ArrayList<String>
     ): ArrayList<ConfiguredFunction> {
         val configuredFunctions: ArrayList<ConfiguredFunction> = ArrayList()
 
-        // repeat for all functions that are requested
-        for (function in functionsToFind) {
+        for (function in requestedFunctions) {
             val functionConfigsRaw: List<DBEntity> = repository.findByFunctionName(function)
             var functionResultEnergy = 0.0
             var functionResultTime = 0.0
 
-            // repeat for each configuration in the database
+            // for every configuration in the database
             for (functionConfigRaw in functionConfigsRaw) {
-                // repeat for every configuration that is requested
+                // and every requested configuration
                 for (configToFind in configsToFind) {
-                    //TODO: remove test
-                    println("-------------")
-                    println(configToFind)
-                    println(functionConfigRaw.configs[configToFind])
-                    // is this config {requested} AND {in this entry}
+                    // compare these two and only add if the requested is the one in the current entry
                     if (functionConfigRaw.configs[configToFind] == true) {
                         functionResultEnergy += functionConfigRaw.energy
                         functionResultTime += functionConfigRaw.time
@@ -40,8 +33,6 @@ class FunctionValueCalculatorService(
                     }
                 }
             }
-
-            // add the function to the return list
             configuredFunctions.add(
                 ConfiguredFunction(
                     function,
@@ -62,15 +53,10 @@ class FunctionValueCalculatorService(
                 functionsNoDupes.add(obj.functionName)
             }
         }
-
         return functionsNoDupes
     }
 
     fun parseFileToDB(softwareSystem: String) {
         Parser.parseFile(softwareSystem, repository)
-    }
-
-    fun clearDB() {
-        repository.deleteAll()
     }
 }
