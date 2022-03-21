@@ -93,11 +93,11 @@ async function activate(context) {
     context.subscriptions.push(vscode.languages.registerHoverProvider({ language: "java" }, new GoHoverProvider_1.GoHoverProvider()));
 }
 exports.activate = activate;
-// Implementation of documentSymbolProvider to find all parts of code containing 'kanzi.'
+// Implementation of documentSymbolProvider to find all parts of code containing methods from locatorItems.json
 class JavaDocumentSymbolProvider {
     // execute DocumentSymbolProvider
     provideDocumentSymbols(document, token) {
-        // Use in iteration to find kanzis
+        // Use in iteration to find methods
         var foundMethods = [];
         return new Promise((resolve) => {
             foundMethods = [];
@@ -105,65 +105,65 @@ class JavaDocumentSymbolProvider {
             var functionsR = [];
             functionsR = [];
             functions = [];
-            var containedKanzis = [];
+            var containedMethods = [];
             var symbols = [];
             var containerNumber = 0;
-            // SEVERAL KANZI LISTS TO OPERATE
-            // – kanzilistFULL: original kanzi list, imported from file (e.g. JSON)
-            // – kanzilistIMP: sliced off after last dot to find implementations
-            //   – KanzilistIMPwD: kanzilistIMP without duplicates
-            // – kanzilistMET: all the methods
-            // – kanzilist: the implementations and their belonging methods
+            // SEVERAL METHOD LISTS TO OPERATE
+            // – methodlistFULL: original method list, imported from file (e.g. JSON)
+            // – methodlistIMP: sliced off after last dot to find implementations
+            //   – methodlistIMPwD: methodlistIMP without duplicates
+            // – methodlistMET: all the methods
+            // – methodlist: the implementations and their belonging methods
             // Full methodlist from backend, to edit prefered methods: edit locatorList.json in workspace
             const fs = require('fs');
             var data = JSON.parse(fs.readFileSync(folder + '/greenide/locatorItems.json', 'utf8'));
-            var kanzilistFULL = [];
+            var methodlistFULL = [];
             for (var n1 = 0; n1 < data.methods.length; n1++) {
-                kanzilistFULL[n1] = JSON.stringify(data.methods[n1]);
+                methodlistFULL[n1] = JSON.stringify(data.methods[n1]);
             }
             // First sublist: slice at the last dot to check for implemenation
             // Second sublist: take second part after slice for methods
-            var kanzilistIMP = []; // names for implementation
-            var kanzilistMET = []; // names for methods
-            for (var n2 = 0; n2 < kanzilistFULL.length; n2++) {
-                var index = kanzilistFULL[n2].lastIndexOf('.');
-                kanzilistIMP[n2] = kanzilistFULL[n2].slice(1, index);
-                kanzilistMET[n2] = kanzilistFULL[n2].slice(index + 1, kanzilistFULL[n2].length - 3);
+            var methodlistIMP = []; // names for implementation
+            var methodlistMET = []; // names for methods
+            for (var n2 = 0; n2 < methodlistFULL.length; n2++) {
+                var index = methodlistFULL[n2].lastIndexOf('.');
+                methodlistIMP[n2] = methodlistFULL[n2].slice(1, index);
+                methodlistMET[n2] = methodlistFULL[n2].slice(index + 1, methodlistFULL[n2].length - 3);
             }
-            // Purge duplicates in kanzilistIMP
-            let kanzilistIMPwD = [];
-            kanzilistIMP.forEach((i) => { if (!kanzilistIMPwD.includes(i)) {
-                kanzilistIMPwD.push(i);
+            // Purge duplicates in methodlistIMP
+            let methodlistIMPwD = [];
+            methodlistIMP.forEach((i) => { if (!methodlistIMPwD.includes(i)) {
+                methodlistIMPwD.push(i);
             } });
-            // Two dimensional list of kanzi methods to find methods after implementation
-            // kanzilist = [implemented][method]
-            var kanzilist = [];
-            for (var k = 0; k < kanzilistIMP.length; k++) {
-                kanzilist.push([kanzilistIMP[k], kanzilistMET[k]]);
+            // Two dimensional list of methods to find methods after implementation
+            // methodlist = [implemented][method]
+            var methodlist = [];
+            for (var k = 0; k < methodlistIMP.length; k++) {
+                methodlist.push([methodlistIMP[k], methodlistMET[k]]);
             }
             // MECHANIC
-            // Find "kanzi." in document/code
+            // Find method in document/code
             // for each line in code
             for (var i = 0; i < document.lineCount; i++) {
                 // current line
                 var line = document.lineAt(i);
-                // loop 1: find kanzi implementations
-                for (var temp = 0; temp < kanzilist.length; temp++) {
-                    // if kanzi is in line add it to containedMethods
-                    if (line.text.includes('import ' + kanzilist[temp][0])) {
-                        containedKanzis.push(kanzilist[temp]);
+                // loop 1: find method implementations
+                for (var temp = 0; temp < methodlist.length; temp++) {
+                    // if method is in line add it to containedMethods
+                    if (line.text.includes('import ' + methodlist[temp][0])) {
+                        containedMethods.push(methodlist[temp]);
                     }
                 }
-                // Loop 2: find objects / methods from imported kanzi
-                for (var temp = 0; temp < containedKanzis.length; temp++) {
-                    var impKanzi = containedKanzis[temp][0].slice(containedKanzis[temp][0].lastIndexOf('.') + 1, containedKanzis[temp][0].length);
-                    // if kanzi is used ...
-                    if (line.text.includes(' new ' + impKanzi + '(')) {
-                        // if kanzi is a renamed object ...
-                        if (line.text.includes('= new ' + impKanzi + '(')) {
+                // Loop 2: find objects / methods from imported method
+                for (var temp = 0; temp < containedMethods.length; temp++) {
+                    var impMeth = containedMethods[temp][0].slice(containedMethods[temp][0].lastIndexOf('.') + 1, containedMethods[temp][0].length);
+                    // if method is used ...
+                    if (line.text.includes(' new ' + impMeth + '(')) {
+                        // if method is a renamed object ...
+                        if (line.text.includes('= new ' + impMeth + '(')) {
                             // mark location of method
                             for (var j = 0; j < line.text.length; j++) {
-                                if (!line.text.substring(j).includes('= new ' + impKanzi + '(')) {
+                                if (!line.text.substring(j).includes('= new ' + impMeth + '(')) {
                                     var k = 3;
                                     // check where name starts
                                     do {
@@ -175,20 +175,20 @@ class JavaDocumentSymbolProvider {
                                     var bracketCounter = 0; // to count brackets for instance
                                     do {
                                         // search for method application, like target.hash(0)
-                                        if (document.lineAt(iCopy).text.includes(target + '.' + containedKanzis[temp][1] + '(')) {
+                                        if (document.lineAt(iCopy).text.includes(target + '.' + containedMethods[temp][1] + '(')) {
                                             for (var j2 = 0; j2 < document.lineAt(iCopy).text.length; j2++) {
-                                                if (!document.lineAt(iCopy).text.substring(j2).includes(target + '.' + containedKanzis[temp][1] + '(')) {
+                                                if (!document.lineAt(iCopy).text.substring(j2).includes(target + '.' + containedMethods[temp][1] + '(')) {
                                                     symbols.push({
-                                                        // Substring only grabbing kanzi method name without braces
-                                                        name: impKanzi + '.' + containedKanzis[temp][1] + '()',
-                                                        method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
+                                                        // Substring only grabbing method name without braces
+                                                        name: impMeth + '.' + containedMethods[temp][1] + '()',
+                                                        method: containedMethods[temp][0] + '.' + containedMethods[temp][1],
                                                         runtime: [0, 0],
                                                         energy: [0, 0],
                                                         kind: vscode.SymbolKind.Object,
                                                         containerName: containerNumber.toString(),
-                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedKanzis[temp][1]).length - 1)))
+                                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(iCopy + 1, j2 + target.length), new vscode.Position(iCopy + 1, j2 + (target + '.' + containedMethods[temp][1]).length - 1)))
                                                     });
-                                                    foundMethods[containerNumber] = kanzilist[temp][1];
+                                                    foundMethods[containerNumber] = methodlist[temp][1];
                                                     containerNumber++;
                                                     break;
                                                 }
@@ -209,19 +209,19 @@ class JavaDocumentSymbolProvider {
                         else {
                             // mark location of method
                             for (var j = 0; j < line.text.length; j++) {
-                                if (!line.text.substring(j).includes(' new ' + impKanzi + '(')) {
+                                if (!line.text.substring(j).includes(' new ' + impMeth + '(')) {
                                     symbols.push({
-                                        // Substring only grabbing kanzi method name without braces
-                                        name: impKanzi + '()',
-                                        method: containedKanzis[temp][0] + '.' + containedKanzis[temp][1],
+                                        // Substring only grabbing method name without braces
+                                        name: impMeth + '()',
+                                        method: containedMethods[temp][0] + '.' + containedMethods[temp][1],
                                         runtime: [0, 0],
                                         energy: [0, 0],
                                         kind: vscode.SymbolKind.Method,
                                         containerName: containerNumber.toString(),
-                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impKanzi.length + 4)))
+                                        location: new vscode.Location(document.uri, new vscode.Range(new vscode.Position(i + 1, j + 4), new vscode.Position(i + 1, j + impMeth.length + 4)))
                                     });
                                     // apply foundMethods with data
-                                    foundMethods[containerNumber] = kanzilist[temp][1];
+                                    foundMethods[containerNumber] = methodlist[temp][1];
                                     containerNumber++;
                                     break;
                                 }
@@ -230,7 +230,7 @@ class JavaDocumentSymbolProvider {
                     }
                 }
             }
-            // Save symbols (all kanzi methods with metadata)
+            // Save symbols (all methods with metadata)
             functionsR = symbols;
             // checkmark for iteration to eliminate duplicates
             var checkDup = false;

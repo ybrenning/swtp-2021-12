@@ -40,7 +40,7 @@
     [X] backend doesnt respond (Error 400)
     [X] use getFunctions() in other files so no need to provide functions
     [X] Update Website
-    [ ] rename all kanzi occurences in extension.ts to genereic method names
+    [X] rename all kanzi occurences in extension.ts to genereic method names
     [X] Remove test cases / comments
         [X] - functions segment
         [X] - providers segment
