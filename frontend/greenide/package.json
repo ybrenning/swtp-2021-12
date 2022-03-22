@@ -1,6 +1,8 @@
 {
   "name": "greenide",
   "displayName": "GreenIDE",
+  "license": "SEE LICENSE IN LICNSE",
+  "publisher": "EonarSoftworks",
   "repository": {
     "type": "git",
     "url": "https://git.informatik.uni-leipzig.de/swtp-21-22/swt-p-ws-2020-2021/swtp-2021-12"
