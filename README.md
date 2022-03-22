@@ -10,6 +10,6 @@ manage the configurations for these methods.
 In order to install GreenIDE, download the 
 [latest version of GreenIDE](https://drive.google.com/file/d/10HPE-9hsGQCsyXlGjxFhBHA7fYD9QPvR/view).
 
-Install the downloaded file using `code --install-extension myextension.vsix`.
+Install the downloaded file using `code --install-extension greenide-0.1.2.vsix`.
 
 For specific instructions on how to use, read the [help section](https://sites.google.com/view/eonar/help) of our homepage.
