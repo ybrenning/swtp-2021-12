@@ -35,15 +35,18 @@ class ApplicationControllerTests @Autowired constructor( ) {
             functionService.getAllFunctions(Mockito.anyString())
         ).thenReturn(mockFunctionList)
 
-
         val requestBuilder: RequestBuilder = MockMvcRequestBuilders.get("/listOfFunctions/kanzi").accept(MediaType.APPLICATION_JSON)
         val result: MvcResult = mockMvc.perform(requestBuilder).andReturn()
 
         val expected = arrayListOf<String>("kanzi.Global.computeHistogramOrder0","kanzi.Memory\$BigEndian.writeLong64","kanzi.app.Kanzi.processCommandLine")
-        assertEquals(expected.toList(), result.response.contentAsString.split(","))
+        val actual: List<String> = result.response.contentAsString.split(",")
+        val actualNew: MutableList<String> = mutableListOf()
+        for (e in actual) {
+            actualNew += e.replace("\"", "")
+                .replace("]", "")
+                .replace("[", "")
+        }
 
-        //TODO: fix the format of the returned string. i cant be bothered
-        // problem 1: the actual list has additional " in it somehow
-        // problem 2: the list is somehow in another object
+        assertEquals(expected.toList(), actualNew)
     }
 }
