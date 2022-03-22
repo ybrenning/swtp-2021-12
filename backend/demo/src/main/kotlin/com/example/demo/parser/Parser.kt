@@ -30,7 +30,7 @@ object Parser {
             } else {
                 var functionName = csvLineElements[0]
 
-                // create map of the configuration names and values per entry
+                // create map of the configuration names and values per .csv entry
                 val configMap = HashMap<String, Boolean>()
                 for (loopVar in 1..configurationNames.size - 3)  {
                     // if length is 1 then it's a config

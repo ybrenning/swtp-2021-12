@@ -14,7 +14,6 @@ class ApplicationController(
         @PathVariable softwareSystem: String,
         @RequestBody request: Request
     ): ArrayList<ConfiguredFunction> {
-        // return the calculated values for the provided functions of the specified program
         return functionService.calcFunctionValues(softwareSystem, request.functions, request.configs)
     }
 
@@ -33,11 +32,5 @@ class ApplicationController(
     fun connectTest(): String {
         println("test ping has been received")
         return "test received"
-    }
-
-    @GetMapping("/clearDB/confirm")
-    fun clearDB(): String {
-        functionService.clearDB()
-        return "database cleared"
     }
 }
