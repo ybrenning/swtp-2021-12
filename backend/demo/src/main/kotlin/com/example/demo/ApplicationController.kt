@@ -23,9 +23,9 @@ class ApplicationController(
     }
 
     @GetMapping("/parseFile/{softwareSystem}")
-    fun parseFileToDB(@PathVariable softwareSystem:String): String {
+    fun parseFileToDB(@PathVariable softwareSystem:String) {
         functionService.parseFileToDB(softwareSystem)
-        return "file parsed"
+        println("file parsed")
     }
 
     @GetMapping("/test")
